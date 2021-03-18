@@ -4,7 +4,7 @@
     text-decoration: none;
 }
 body{
-    background-color: #edf2f3;
+    background-color: #252525;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;
 }
@@ -14,10 +14,10 @@ body{
 }
 
 #up_panel{
-    height: 54px;
-    background-color: #dbdfdf;
-    box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.16);
-    filter: blur(2px);
+    height: 60px;
+    background-color: #ca9308;
+    box-shadow: 0px 5px 6px rgba(56, 51, 31, 0.16);
+    /*filter: blur(2px);*/
 }
 
 .logo{
