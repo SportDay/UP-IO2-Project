@@ -1,183 +1,21 @@
 *{
     margin: 0;
-    padding:0;
-    background-color: #edf2f3;
-}
-
-#up_panel{
-    height: 54px;
-    background-color: #dbdfdf;
-    box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.16);
-    filter: blur(2px);
-}
-
-.logo{
-    position: absolute;
-    top: 8px;
-    left: 20px;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.16);
-}
-
-#test{
-    overflow: visible;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-
-}
-
-#box1{
-    width: 600px;
-    height: 625px;
-    border-radius: 40px;
-    background-color: #5289b5;
-    box-shadow:  5px 5px 10px #46749a,
-                -5px -5px 10px #5e9ed0;
-}
-
-:-ms-input-placeholder, ::-ms-input-placeholder{ /* Internet Explorer 10-11 */
-    text-align: center;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 21px;
-    color: #AFD8F2;
-}
-
-
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    text-align: center;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 21px;
-    color: #AFD8F2;
-}
-
-.input, .btn_button{
-    outline: none;
-    position: absolute;
-    text-align: center;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 21px;
-    color: #AFD8F2;
-    border-color: transparent;
-    border-radius: 40px;
-    background-color: #5289b5;
-    box-shadow:  5px 5px 10px rgba(0, 0, 0, 0.18),
-                -5px -5px 10px #6ba2ce;
-
-}
-
-#box_title{
-    position: absolute;
-    text-align: center;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 33px;
-    background: transparent;
-    color: #AFD8F2;
-    top: 32px;
-    left: 157px;
-}
-
-#btn_lost{
-    font-size: 15px;
-    width: 225px;
-    height: 30px;
-    left: 50px;
-    top: 398px;
-}
-
-#btn_new{
-    font-size: 15px;
-    width: 225px;
-    height: 30px;
-    right: 50px;
-    top: 398px;
-}
-
-#btn_connexion:active{
-    box-shadow: inset 10px 10px 20px #111d23,
-    inset -10px -10px 20px #2d4d5f;
-    color: #3e75a1;
-}
-
-#btn_new:active, #btn_lost:active{
-    box-shadow: inset 5px 5px 20px #2c4a62,
-                inset -5px -5px 20px #78c8ff;
-    color: #91bad4;
-}
-
-#probleme{
-    position: absolute;
-}
-
-.problemmail, #copyright{
-    text-align: center;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 10px;
-    background: transparent;
-    color: #AFD8F2;
-    top: 440px;
-    left: 166px;
+    padding: 0;
     text-decoration: none;
 }
 
-#copyright{
-    position: absolute;
-    top: 604px;
-    left: 231px;
-    font-size: 8px;
+p {
+    /* nothing */
 }
 
-#email_input{
-    width: 466px;
-    height: 50px;
-    left: 50px;
-    top: 149px;
-    padding: 0px 15px;
+body{
+    background-color: #252525;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
 }
 
-#password_input{
-    width: 466px;
-    height: 50px;
-    left: 50px;
-    top: 232px;
-    padding: 0px 15px;
-}
-
-#btn_connexion{
-    width: 500px;
-    height: 50px;
-    left: 50px;
-    top: 315px;
-    background: #1F3541;
-    box-shadow:  5px 5px 10px rgba(0, 0, 0, 0.18),
-                            -5px -5px 10px #6ba2ce;
-    color: #5289B5;
-}
-
-
-#down_panel{
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 64px;
-    background-color: #dbdfdf;
-    box-shadow: 0px -5px 6px rgba(0, 0, 0, 0.16);
-    filter: blur(2px);
-    text-align: center;
+#up_panel{
+    height: 60px;
+    background-color: #ca9308;
+    box-shadow: 0px 5px 6px rgba(56, 51, 31, 0.16);
 }
