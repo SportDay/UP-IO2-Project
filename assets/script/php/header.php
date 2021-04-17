@@ -36,10 +36,9 @@
     ?>>
     <!-- additionnal css and style -->
     <?php 
-      if (isset($global_params["css_add"])) {
-        echo "<link rel=\"stylesheet\" type=\"text/css\" href=" . 
-        $global_params["root_public"] . "assets/css/" . $global_params["css_add"];
-      }
+      if (isset($global_params["css_add"]))
+        foreach($global_params["css_add"] as $css)
+          echo "<link rel=\"stylesheet\" type=\"text/css\" href=" . $global_params["root_public"] . "assets/css/" . $css;
 
       //if (isset($global_params["style"]))
     ?>
