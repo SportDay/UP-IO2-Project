@@ -1,16 +1,14 @@
+/*------------ PRINCIPAL ------------*/
+
 *{
     text-decoration: none;
 }
 
-p {
-    /* nothing */
-	color: white;
-}
-
 body{
-    background-color: #252525;
+    background-color: #14141a;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;
+    margin:0%;
 }
 
 
@@ -24,21 +22,40 @@ body{
     text-align: center;
     height: 80px;
     
-    color:rgb(10, 10, 10);
-    background-color: #c0c0c0;
+    background-color: #ffc38a;
     box-shadow: 0px 5px 26px rgba(19, 19, 19, 0.712);
+}
+
+#up_panel p, #up_panel h1, #up_panel h2, #up_panel pre {
+    color:rgb(10, 10, 10);
 }
 
 #mid_panel{
     text-align: center;
+    
+    margin-top: 7em;
     margin-left: auto;
     margin-right: auto;
-    width: 6em;
+    margin-bottom: 2em;
+    
+    width: 80%;
+
+    padding-top: 1em;
+    padding-bottom: 1em;
+
+    /*-------------------------------*/
+
+    border-radius: 5px;
+    background-color:rgb(59, 61, 63);
+    border: solid rgb(209, 176, 115);
+}
+
+#mid_panel p, #mid_panel pre, #mid_panel h1, #mid_panel h2{
+    color:rgb(241, 210, 163);
 }
 
 #down_panel {
-    color:rgb(10, 10, 10);
-	background-color: #c0c0c0;
+    background-color: #ffc38a;
     
     padding-top: 1em;
     padding-bottom: 1em;
@@ -46,8 +63,40 @@ body{
     bottom: 0px;
     left: 0px;
     right: 0px;
-    
-    margin-bottom: 0;
+    width: 100%;
+
+    position:fixed;
+
+    margin-bottom: 0%;
 
     text-align: center;
+}
+
+#down_panel p, #down_panel pre, #down_panel h1, #down_panel h2{
+    color:rgb(10, 10, 10);
+}
+
+/*--------------- SECONDAIRE -------------*/
+
+.containers_three_left_00 {
+    text-align: left;
+    float:left; 
+    /*background:Red;*/
+    width:15%;
+}
+.containers_three_mid_00 {
+    float:left; 
+    /*background:Green;*/
+    width:70%;
+}
+.containers_three_right_00 {
+    float:right;
+    /*background:blue;*/
+    width:15%;
+}
+
+/*----------- SPECIFIQUE ---------------*/
+
+.image_001 img{
+    border: 5px solid rgb(10, 10, 10);
 }
