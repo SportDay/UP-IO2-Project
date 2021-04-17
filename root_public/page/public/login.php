@@ -3,7 +3,7 @@
   "root_public" => "../../",
   "title"       => "Connection",
   "css"         => "all.css",
-  "css_add"     => "login.css",
+  "css_add"     => ["login.css"],
   "redirect"    => FALSE
 ];?>
 <!-- ------------------------------------------ -->
