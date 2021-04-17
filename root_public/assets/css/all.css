@@ -9,8 +9,8 @@ body{
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;
     margin:0%;
+    height:100%;
 }
-
 
 #up_panel{
     top: 0px;
@@ -28,6 +28,7 @@ body{
 
 #up_panel p, #up_panel h1, #up_panel h2, #up_panel pre {
     color:rgb(10, 10, 10);
+    white-space: normal;
 }
 
 #mid_panel{
@@ -52,6 +53,7 @@ body{
 
 #mid_panel p, #mid_panel pre, #mid_panel h1, #mid_panel h2{
     color:rgb(241, 210, 163);
+    white-space: normal;
 }
 
 #down_panel {
@@ -65,8 +67,6 @@ body{
     right: 0px;
     width: 100%;
 
-    position:fixed;
-
     margin-bottom: 0%;
 
     text-align: center;
@@ -74,6 +74,7 @@ body{
 
 #down_panel p, #down_panel pre, #down_panel h1, #down_panel h2{
     color:rgb(10, 10, 10);
+    white-space: normal;
 }
 
 /*--------------- SECONDAIRE -------------*/
