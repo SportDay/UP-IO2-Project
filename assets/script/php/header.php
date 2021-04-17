@@ -1,11 +1,17 @@
 <?php
+  if (!isset($global_params["root_public"]))
+  {
+    echo "ERROR: public root is not set";
+    separator();
+    quit();
+  }
+
   if (isset($global_params["redirect"]) && $global_params["redirect"])
   {
     // si l'utilisateur n'est pas connecté on head vers la page de connection
     // header($global_params["root_public"] + "page/public/login")
     // eventuellement avec un q?= de la page actuel pour pouvoir être redirigé ici ensuite
   }
-
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +19,7 @@
 <head>
     
     <meta charset="utf-8">
+    <link rel="icon" href=<?php echo $global_params["root_public"] . "/assets/image/logo.ico" ; ?> />
     <title>
       <?php
         if (isset($global_params["title"])) 
@@ -39,9 +46,25 @@
     <!-- HEADER -->
     <!-- ------------------------------------------ -->
 
-      <h1>Page : <?php echo $global_params["title"]; ?></h1>
-      
+    <div class="containers_three_left_00">
+      <div style="padding-left:10px">
+      <img 
+        class="image_001"
+        src=<?php echo $global_params["root_public"] . "assets/image/logo.jpg" ?> 
+        alt="Harry Play, Role Potter"
+        width="80" height="80"
+        ></div>
+        
+    </div>
+
+    <div class="containers_three_mid_00">
+      <h1><?php echo $global_params["title"]; ?></h1>
+    </div>
+
+    <div class="containers_three_right_00">
+      <p>Icone Utilisateur + Menu deroulant</p>
+    </div>
+
     <!-- ------------------------------------------ -->
     </div> </header>
-    <?php padding(3); ?>
     <div id = "mid_panel">
