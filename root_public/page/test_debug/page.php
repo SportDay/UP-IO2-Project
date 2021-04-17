@@ -1,15 +1,10 @@
 <?php $global_params = [
   "root"        => "../../",
   "root_public" => "../",
-  "title"       => "Admin",
+  "title"       => "accueil",
   "css"         => "all.css",
-  "redirect"    => TRUE
+  "redirect"    => FALSE
 ];?>
-
-<?php
-    // INCLURE UN CODE DE REDIRECTION SI COMPTE NON ADMIN
-?>
-
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>

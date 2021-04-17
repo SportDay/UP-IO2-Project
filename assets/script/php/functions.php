@@ -1,5 +1,8 @@
 <?php
 
+    ////////////////////////
+    // Fonctions de mise en page
+
     function write($text){
         echo "<p>$text</p>";
     }
@@ -17,5 +20,9 @@
             echo "<br>";
         echo "</p>";
     }
+
+    //////////////////////////////////
+    // Fonctions d'action utilisateur
+    // exemple : Connection, Deconnection, Verification Connection, etc ...
 
 ?>
