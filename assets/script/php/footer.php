@@ -1,6 +1,7 @@
 </div>
-<footer>
-  <div id= "down_panel">
+</div>
+<footer id= "down_panel">
+  <div >
 
       <h2>Down Panel</h2>
 
@@ -16,5 +17,6 @@
   -->
 
 </footer>
+</div>
 </body>
 </html>

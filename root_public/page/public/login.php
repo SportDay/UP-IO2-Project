@@ -19,50 +19,41 @@
 <button onclick="document.getElementById('login').style.display='block'" style="width:auto;">Se connecter</button>
 
 
-<div id="login" class="modal">
+<div id="login" class="reg_log_model">
     <form class="modal-content animate" action="/action_page.php" method="post">
-        <div class="container">
-            <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close Modal">&times;</span>
-            <label for="nick" ><b>Nickname</b></label>
-            <input type="text" placeholder="Nickname" name="nick" >
+        <div class="reg_log_form_container">
+            <span onclick="document.getElementById('login').style.display='none'" class="close" title="Fermer">&times;</span>
+            <label class="form_title" for="nickname"><b>Nickname</b></label>
+            <input type="text" placeholder="Nickname" name="nickname" >
 
-            <label for="psw"><b>Mot de passe</b></label>
-            <input type="password" placeholder="Mot de passe" name="psw">
+            <label class="form_title" for="password"><b>Mot de passe</b></label>
+            <input type="password" placeholder="Mot de passe" name="password">
 
             <button type="submit">Se connecter</button>
-            <label >
-                <input type="checkbox" checked="checked" name="remember" > Se souvenir de moi?
+            <label style="color:white;">Se souvenir de moi?
+                <input type="checkbox" checked="checked" name="remember" >
             </label>
-        </div>
-
-        <div class="container">
+            <br>
             <button type="button" onclick="document.getElementById('login').style.display='none'" class="cancelbtn">Annuler</button>
         </div>
     </form>
 </div>
 
-<div id="register" class="modal">
+<div id="register" class="reg_log_model">
     <form class="modal-content animate" action="/action_page.php" method="post">
-            <div class="container">
-                <span onclick="document.getElementById('login').style.display='none'" class="close" title="Close Modal">&times;</span>
-                <label for="nick" ><b>Nickname</b></label>
-                <input type="text" placeholder="Nickname" name="nick" >
+            <div class="reg_log_form_container">
+                <span onclick="document.getElementById('register').style.display='none'" class="close" title="Fermer">&times;</span>
+                <label class="form_title" for="nickname"><b>Nickname</b></label>
+                <input type="text" placeholder="Nickname" name="nickname" >
 
-                <label for="psw" ><b>Mot de passe</b></label>
-                <input type="password" placeholder="Mot de passe" name="psw" >
-
-                <label for="secret" ><b>Cle secrete (permet de modifier le mot de passe)</b></label>
-                <input type="password" placeholder="Cle secrete" name="secret" >
+                <label class="form_title" for="password"><b>Mot de passe</b></label>
+                <input type="password" placeholder="Mot de passe" name="password">
 
                 <button type="submit">S'inscrire</button>
-            </div>
 
-            <div class="container" >
                 <button type="button" onclick="document.getElementById('register').style.display='none'" class="cancelbtn">Annuler</button>
             </div>
   </div>
-
-
   <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
 

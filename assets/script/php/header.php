@@ -19,7 +19,7 @@
 <head>
     
     <meta charset="utf-8">
-    <link rel="icon" href=<?php echo $global_params["root_public"] . "/assets/image/logo.ico" ; ?> />
+    <link rel="icon" href=<?php echo $global_params["root_public"] . "/assets/image/logo-rond.ico" ; ?> />
     <title>
       <?php
         if (isset($global_params["title"])) 
@@ -71,3 +71,5 @@
     <!-- ------------------------------------------ -->
     </div> </header>
     <div id = "mid_panel">
+        <div id = "mid_container">
+            <div id = "mid_content">
