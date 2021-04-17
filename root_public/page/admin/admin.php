@@ -1,6 +1,6 @@
 <?php $global_params = [
-  "root"        => "../../",
-  "root_public" => "../",
+  "root"        => "../../../",
+  "root_public" => "../../",
   "title"       => "Admin",
   "css"         => "all.css",
   "redirect"    => TRUE
