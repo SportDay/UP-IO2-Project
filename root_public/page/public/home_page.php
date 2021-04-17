@@ -25,8 +25,6 @@
   <pre>
     Chaque compte possède une partie ...
   </pre>
-  
-  
 
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
