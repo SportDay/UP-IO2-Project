@@ -13,13 +13,14 @@
 
 ?>
 <!-- ------------------------------------------ -->
-
+    <div id = "mid_content">
   <?php
 
       for ($i = 0; $i < 50; $i++)
         write("test : " . $i);
 
   ?>
+    </div>
 
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>

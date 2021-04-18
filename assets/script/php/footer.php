@@ -1,5 +1,4 @@
 </div>
-</div>
 <footer id= "down_panel">
   <div >
 

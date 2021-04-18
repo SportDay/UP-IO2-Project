@@ -14,7 +14,7 @@
 
 ?>
 <!-- ------------------------------------------ -->
-
+<div id = "mid_content">
 <button onclick="document.getElementById('register').style.display='block'" style="width:auto;">S'inscire</button>
 <button onclick="document.getElementById('login').style.display='block'" style="width:auto;">Se connecter</button>
 
@@ -54,6 +54,7 @@
                 <button type="button" onclick="document.getElementById('register').style.display='none'" class="cancelbtn">Annuler</button>
             </div>
   </div>
+</div>
   <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
 

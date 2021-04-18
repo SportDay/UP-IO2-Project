@@ -72,4 +72,3 @@
     </div> </header>
     <div id = "mid_panel">
         <div id = "mid_container">
-            <div id = "mid_content">
