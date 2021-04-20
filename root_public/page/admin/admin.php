@@ -47,10 +47,7 @@
                                 <input type="hidden" name="def_ban_user" value="user_id">
                                 <button class="btn_def_ban_user" type="submit">Ban définitif</button>
                             </form>
-                            <form action="/tmp_ban_user.php" method="post">
-                                <input type="hidden" name="tmp_ban_user" value="user_id">
-                                <button class="btn_tmp_ban_user" type="submit">Ban temporaire</button>
-                            </form>
+                            <button class="btn_tmp_ban_user" onclick="document.getElementById('tmp_ban').style.display='block'" type="submit">Ban temporaire</button>
                         </div>
                     </div>
                 </div>
@@ -94,10 +91,7 @@
                                 <input type="hidden" name="def_ban_user" value="user_id">
                                 <button class="btn_def_ban_user" type="submit">Ban définitif</button>
                             </form>
-                            <form action="/tmp_ban_user.php" method="post">
-                                <input type="hidden" name="tmp_ban_user" value="user_id">
-                                <button class="btn_tmp_ban_user" type="submit">Ban temporaire</button>
-                            </form>
+                            <button class="btn_tmp_ban_user" onclick="document.getElementById('tmp_ban').style.display='block'" type="submit">Ban temporaire</button>
                         </div>
                     </div>
                 </div>
@@ -113,8 +107,24 @@
                     </dfn>
                 </div>
         </div>
+    <div id="tmp_ban" class="tmp_ban_model">
+        <form class="modal-content animate" action="/tmp_ban_user.php" method="post">
+            <div class="tmp_ban_form_container">
+                <span onclick="document.getElementById('tmp_ban').style.display='none'" class="close" title="Fermer">&times;</span>
+                <label class="form_title" for="ban_time"><b>Temps de ban en minute</b></label>
+                <input type="hidden" name="tmp_ban_user" value="user_id">
+                <input type="text" placeholder="1j = 1440m" name="ban_time" >
+                <button class="ban_user_temp" style="width: auto;" type="submit">Bannir</button>
+                <button type="submit" style="width: auto; background-color: red;" class="ban_user_temp" onclick="document.getElementById('tmp_ban').style.display='none'" class="cancelbtn">Annuler</button>
+            </div>
+    </div>
 
-
-
+    <script>
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('tmp_ban')) {
+                document.getElementById('tmp_ban').style.display = "none";
+            }
+        }
+    </script>
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
