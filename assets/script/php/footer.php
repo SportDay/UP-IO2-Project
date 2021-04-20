@@ -7,7 +7,6 @@
       <!-- Ca pourrait être cool de mettre des citations aléatoires sur l'univers -->
       <!-- Il faut faire figurer les copyrights, page legal, etc.. -->
 
-
   </div>
 
   <!-- 
