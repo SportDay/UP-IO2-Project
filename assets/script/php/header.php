@@ -19,7 +19,7 @@
 <head>
     
     <meta charset="utf-8">
-    <link rel="icon" href=<?php echo $global_params["root_public"] . "/assets/image/logo.ico" ; ?> />
+    <link rel="icon" href=<?php echo $global_params["root_public"] . "/assets/image/logo-rond.ico" ; ?> />
     <title>
       <?php
         if (isset($global_params["title"])) 
@@ -38,7 +38,7 @@
     <?php 
       if (isset($global_params["css_add"]))
         foreach($global_params["css_add"] as $css)
-          echo "<link rel=\"stylesheet\" type=\"text/css\" href=" . $global_params["root_public"] . "assets/css/" . $css;
+          echo "<link rel=\"stylesheet\" type=\"text/css\" href=" . $global_params["root_public"] . "assets/css/" . $css.">";
 
       //if (isset($global_params["style"]))
     ?>
@@ -71,3 +71,4 @@
     <!-- ------------------------------------------ -->
     </div> </header>
     <div id = "mid_panel">
+        <div id = "mid_container">
