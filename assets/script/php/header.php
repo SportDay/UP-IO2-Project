@@ -38,7 +38,7 @@
     <?php 
       if (isset($global_params["css_add"]))
         foreach($global_params["css_add"] as $css)
-          echo "<link rel=\"stylesheet\" type=\"text/css\" href=" . $global_params["root_public"] . "assets/css/" . $css;
+          echo "<link rel=\"stylesheet\" type=\"text/css\" href=" . $global_params["root_public"] . "assets/css/" . $css.">";
 
       //if (isset($global_params["style"]))
     ?>

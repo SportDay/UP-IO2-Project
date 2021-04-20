@@ -25,10 +25,11 @@
     background: #555;
 }
 
+
+
 body{
     background-color: #14141a;
     -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;
     margin:0%;
     height:100%;
 }
@@ -50,6 +51,13 @@ body{
 #up_panel p, #up_panel h1, #up_panel h2, #up_panel pre {
     color:rgb(10, 10, 10);
     white-space: normal;
+}
+
+.border{
+    padding: 20px 20px;
+    border-radius: 5px;
+    background-color:rgb(59, 61, 63);
+    border: solid rgb(209, 176, 115);
 }
 
 #mid_content{
@@ -107,6 +115,8 @@ body{
     white-space: normal;
 }
 
+
+
 /*--------------- SECONDAIRE -------------*/
 
 .containers_three_left_00 {
@@ -125,6 +135,8 @@ body{
     /*background:blue;*/
     width:15%;
 }
+
+
 
 /*----------- SPECIFIQUE ---------------*/
 
