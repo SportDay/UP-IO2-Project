@@ -110,7 +110,7 @@ body{
     text-align: center;
 }
 
-#down_panel p, #down_panel pre, #down_panel h1, #down_panel h2{
+#down_panel p, #down_panel pre, #down_panel h1, #down_panel h5{
     color:rgb(10, 10, 10);
     white-space: normal;
 }

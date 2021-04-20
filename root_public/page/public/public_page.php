@@ -18,7 +18,7 @@
     <div style="text-align: center; margin: 7em auto 1em;">
     <div id="search_container">
         <form action="/search.php" method="get">
-            <input id="search_input" type="search" placeholder="Recherche">
+            <input id="search_input" type="search" autocomplete="off" placeholder="Recherche">
         </form>
     </div>
     </div>
@@ -41,7 +41,7 @@
         ?>
         <form action="/chng_desc.php" method="post">
         <div class="container_desc border" style="border-radius: 15px">
-            <input type="text" maxlength="124" style="color: white; font-size: 20px; background-color: transparent; outline: none; border: none; margin-right: 20px" placeholder="Votre Description">
+            <input type="text" maxlength="50" style="color: white; font-size: 20px; background-color: transparent; outline: none; border: none; margin-right: 20px" placeholder="Votre Description">
             <dfn title="Voulez-vous signaler?">
                 <div class="btn_report" style="grid-area: desc_report;">
                     <a href="#" class="report_ref">
@@ -55,7 +55,9 @@
                     <form id="form_post_add" action="/add_post.php" method="post">
                         <textarea id="post_add" name="post_content" form="form_post_add" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
                         <button id="submit_add" type="submit">Poster</button>
+                        <button id="inpirate" onclick="inspiration()">Inspiration</button>
                     </form>
+
                 </div>
         <?php
             }else{

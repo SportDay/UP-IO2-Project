@@ -1,0 +1,53 @@
+#mid_content{
+    margin-top: 20px;
+}
+
+.info_profile {
+    display: grid;
+    grid-template-columns: auto auto auto 32px;
+    grid-template-rows: auto auto;
+    gap: 20px 20px;
+    grid-template-areas:
+    "profile_nickname profile_espece profile_classe user_menu"
+    "profile_titre profile_nlikes . .";
+}
+
+.user_menu{
+    grid-area: user_menu;
+   /*position: relative;*/
+    display: inline-block;
+}
+
+.user_menu_content{
+    display: none;
+    position: absolute;
+    padding: 5px 5px;
+    color: #f1f1f1;
+    width: auto;
+    z-index: 1;
+}
+
+.user_menu:hover .user_menu_content {
+    display: block;
+}
+
+.btn_menu_user{
+    margin-left: auto;
+    margin-right: auto;
+    background-color: transparent;
+    color: #FFC38A;
+    border: none;
+}
+
+.btn_ignr_user,.btn_def_ban_user, .btn_tmp_ban_user, .btn_ignr_post, .btn_sup_post{
+    width: 125px;
+    height: 30px;
+    background-color: #FFC38A;
+    color: black;
+    cursor: pointer;
+    border: solid transparent;
+    border-radius: 5px;
+}
+.btn_def_ban_user, .btn_tmp_ban_user, .btn_sup_post{
+    margin-top: 5px;
+}
