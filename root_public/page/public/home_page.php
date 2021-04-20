@@ -13,7 +13,7 @@
 
 ?>
 <!-- ------------------------------------------ -->
-
+    <div id = "mid_content">
   <h1>Harry Potter | Role Play</h1>
   <?php separator(); ?>
   <pre>
@@ -25,6 +25,7 @@
   <pre>
     Chaque compte possède une partie ...
   </pre>
+    </div>
 
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
