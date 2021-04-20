@@ -5,7 +5,7 @@ use reseau;
 drop table if exists users;
  
 CREATE TABLE `users` (
-`id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `username` varchar(64) DEFAULT NULL,
 `password` varchar(64) DEFAULT NULL,
 `publicname` varchar(64) DEFAULT NULL,
@@ -17,13 +17,13 @@ CREATE TABLE `users` (
 `bannedto` varchar(64) DEFAULT NULL,
 `admin` varchar(64) DEFAULT FALSE,
 PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 
 drop table if exists posts;
  
 CREATE TABLE `posts` (
-`id` int(11) NOT NULL AUTO_INCREMENT,
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 `userid` varchar(64) DEFAULT NULL,
 `reported` varchar(64) DEFAULT FALSE,
 `reportnum` varchar(64) DEFAULT 0,
@@ -32,5 +32,6 @@ CREATE TABLE `posts` (
 `content` varchar(64) DEFAULT NULL,
 `likenum` varchar(64) DEFAULT 0,
 `reponseId` varchar(64) DEFAULT -1,
-PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+PRIMARY KEY (`id`),
+FOREIGN KEY (userid) REFERENCES users(id)
+) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
