@@ -15,7 +15,7 @@
 ?>
 <!-- ------------------------------------------ -->
 
-    <div style="text-align: center; margin: 7em auto 1em;">
+    <div style="text-align: center; margin-bottom: 1em;">
         <div id="search_container">
             <form action="/search.php" method="get">
                 <input id="search_input" type="search" autocomplete="off" placeholder="Recherche">

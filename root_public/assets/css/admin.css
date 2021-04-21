@@ -103,11 +103,11 @@ input[type=text]:focus{
 }
 
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: white;
+    color: black;
 }
 
 ::-ms-input-placeholder { /* Microsoft Edge */
-    color: white;
+    color: black;
 }
 
 .tmp_ban_form_container {

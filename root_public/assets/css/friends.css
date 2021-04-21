@@ -1,0 +1,16 @@
+.info_profile {
+    display: grid;
+    grid-template-columns: auto auto auto 32px;
+    grid-template-rows: auto auto;
+    gap: 20px 20px;
+    grid-template-areas:
+    "profile_nickname profile_espece profile_classe user_menu"
+    "profile_titre profile_nlikes espace2 msg_img";
+}
+
+.msg_img{
+    grid-area: msg_img;
+}
+.espace2{
+    grid-area: espace2;
+}

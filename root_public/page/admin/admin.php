@@ -21,7 +21,7 @@
 
 ?>
 <!-- ------------------------------------------ -->
-    <div style="text-align: center; margin: 7em auto 1em;"></div>
+
     <div id = "mid_content" class="posts_and_user" style="text-align: initial;">
             <div class="posts">
                 <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
@@ -115,7 +115,7 @@
                 <input type="hidden" name="tmp_ban_user" value="user_id">
                 <input type="text" placeholder="1j = 1440m" name="ban_time" >
                 <button class="ban_user_temp" style="width: auto;" type="submit">Bannir</button>
-                <button type="submit" style="width: auto; background-color: red;" class="ban_user_temp" onclick="document.getElementById('tmp_ban').style.display='none'" class="cancelbtn">Annuler</button>
+                <button type="button" style="width: auto; background-color: red;" class="ban_user_temp" onclick="document.getElementById('tmp_ban').style.display='none'" class="cancelbtn">Annuler</button>
             </div>
     </div>
 

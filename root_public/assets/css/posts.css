@@ -51,7 +51,7 @@
 }
 
 #post_add{
-    border-radius: 20px;
+    border-radius: 15px;
     background: #3B3D3F;
     box-shadow: inset 5px 5px 10px #333436,
     inset -5px -5px 10px #434648;
@@ -64,6 +64,12 @@
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     box-sizing:border-box;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
+}
+
+#post_add::-webkit-scrollbar {
+    display: none;
 }
 
 #submit_add, #inpirate{
