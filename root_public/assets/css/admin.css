@@ -1,5 +1,59 @@
+#mid_content{
+    margin-top: 20px;
+}
 
-input[type=text], input[type=password] {
+.info_profile {
+    display: grid;
+    grid-template-columns: auto auto auto 32px;
+    grid-template-rows: auto auto;
+    gap: 20px 20px;
+    grid-template-areas:
+    "profile_nickname profile_espece profile_classe user_menu"
+    "profile_titre profile_nlikes . .";
+}
+
+.user_menu{
+    grid-area: user_menu;
+   /*position: relative;*/
+    display: inline-block;
+}
+
+.user_menu_content{
+    display: none;
+    position: absolute;
+    padding: 5px 5px;
+    color: #f1f1f1;
+    width: auto;
+    z-index: 1;
+}
+
+.user_menu:hover .user_menu_content {
+    display: block;
+}
+
+.btn_menu_user{
+    margin-left: auto;
+    margin-right: auto;
+    background-color: transparent;
+    color: #FFC38A;
+    border: none;
+}
+
+.btn_ignr_user,.btn_def_ban_user, .btn_tmp_ban_user, .btn_ignr_post, .btn_sup_post{
+    width: 125px;
+    height: 30px;
+    background-color: #FFC38A;
+    color: black;
+    cursor: pointer;
+    border: solid transparent;
+    border-radius: 5px;
+}
+
+.btn_def_ban_user, .btn_tmp_ban_user, .btn_sup_post{
+    margin-top: 5px;
+}
+
+input[type=text] {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -9,16 +63,16 @@ input[type=text], input[type=password] {
     box-sizing: border-box;
 }
 
-input:focus{
+input[type=text]:focus{
     outline: none;
     border: solid rgb(209, 176, 115);
 }
 
 
-button {
+.ban_user_temp {
     background-color: #FFC38A;
     color: black;
-    padding: 14px 20px;
+    padding: 7px 13px;
     margin: 8px 0;
     cursor: pointer;
     width: 100%;
@@ -31,7 +85,7 @@ button {
     color: white;
 }
 
-button:hover {
+.ban_user_temp:hover {
     opacity: 0.9;
 }
 
@@ -56,7 +110,7 @@ button:hover {
     color: black;
 }
 
-.reg_log_form_container {
+.tmp_ban_form_container {
     position: relative;
     padding: 16px;
     background-color: #3B3D3F;
@@ -64,14 +118,9 @@ button:hover {
     border-radius: 5px;
 }
 
-span.psw {
-    float: right;
-    padding-top: 16px;
-}
-
 /* The Modal (background) */
 
-.reg_log_model {
+.tmp_ban_model {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -81,13 +130,13 @@ span.psw {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     /*background-color: rgba(255,255,255,0.2); /* Black w/ opacity */
-    padding-top: 60px;
+    text-align: center;
 }
 
 /* Modal Content/Box */
 .modal-content {
     margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-    width: 40%; /* Could be more or less, depending on screen size */
+    width: 350px; /* Could be more or less, depending on screen size */
 }
 
 

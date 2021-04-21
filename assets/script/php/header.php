@@ -51,12 +51,13 @@
 
     <div class="containers_three_left_00">
       <div style="padding-left:10px">
+          <a href="../../../root_public/page/public/home_page.php">
       <img 
         class="image_001"
         src=<?php echo $global_params["root_public"] . "assets/image/logo.jpg" ?> 
         alt="Harry Play, Role Potter"
         width="80" height="80"
-        ></div>
+        ></a></div>
         
     </div>
 
@@ -72,3 +73,4 @@
     </div> </header>
     <div id = "mid_panel">
         <div id = "mid_container">
+            <div style="text-align: center; margin: 7em auto 1em;"></div>
