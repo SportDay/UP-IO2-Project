@@ -88,7 +88,7 @@ function menu_when_not_connected () {
                 var data = new FormData();
                 data.append("username", nickname.value);
                 data.append("password", password.value);
-                data.append("remember", remember.value);
+                data.append("remember", remember.checked);
                 //////////
 
                 var xmlhttp = new XMLHttpRequest();
@@ -96,22 +96,33 @@ function menu_when_not_connected () {
                 xmlhttp.open('POST', '../../assets/script/php/login.php');
                 xmlhttp.send( data );
 
-                xmlhttp.addEventListener('load', (e) => {
-                    alert(e.reponseText);
-	                //var o = JSON.parse(e.responseText);
+                xmlhttp.onreadystatechange = function () {
+                    var DONE = 4; // readyState 4 means the request is done.
+                    var OK = 200; // status 200 is a successful return.
+                    
+                    if (xmlhttp.readyState === DONE)
+                        if (xmlhttp.status === OK)
+                        {
+                            alert(xmlhttp.responseText);
 
-                    if (true) {
-                        password.value = "";
-                        debug.innerHTML = "La connection a échoué.";
-                        debug.style.display = "block";
-                    }
-                    else {
-                        debug.innerHTML = "Connection réussis.";
-                        debug.style.display = "block";
-                        redirection();
-                    }
-
-                }, false);
+                            return;
+                            if (xmlhttp.responseText) {
+                                debug.innerHTML = "Connection réussie.";
+                                debug.style.display = "block";
+                                redirection();
+                            }
+                            else {
+                                password.value = "";
+                                debug.innerHTML = "La connection a échoué.";
+                                debug.style.display = "block";
+                            }
+                        }
+                        else
+                        {
+                            debug.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                            debug.style.display = "block";
+                        }
+                }
             }
 
             function register() {
@@ -119,13 +130,43 @@ function menu_when_not_connected () {
                 password = document.getElementById("register_password");
                 debug    = document.getElementById("register_error");
 
-                // RATE
-                password.value = "";
-                debug   .innerHTML = "La création de compte à échoué.";
-                debug.style.display = "block";
+                var data = new FormData();
+                data.append("username", nickname.value);
+                data.append("password", password.value);
+                //////////
 
-                // REUSSIS
-                redirection();
+                var xmlhttp = new XMLHttpRequest();
+                
+                xmlhttp.open('POST', '../../assets/script/php/register.php');
+                xmlhttp.send( data );
+
+                xmlhttp.onreadystatechange = function () {
+                    var DONE = 4; // readyState 4 means the request is done.
+                    var OK = 200; // status 200 is a successful return.
+                    
+                    if (xmlhttp.readyState === DONE)
+                        if (xmlhttp.status === OK)
+                        {
+                            alert(xmlhttp.responseText);
+
+                            return;
+                            if (xmlhttp.responseText) {
+                                debug.innerHTML = "Création de compte réussie.";
+                                debug.style.display = "block";
+                                redirection();
+                            }
+                            else {
+                                password.value = "";
+                                debug   .innerHTML = "La création de compte à échoué.";
+                                debug.style.display = "block";
+                            }
+                        }
+                        else
+                        {
+                            debug.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                            debug.style.display = "block";
+                        }
+                }
             }
 
             ////////////////////////
@@ -151,18 +192,20 @@ function menu_when_not_connected () {
                 return otp;
             }
 
-        </script>
 
+            // ouvrir la petite fenetre de connection
+            <?php if (isset($_GET["to_connect"])){
+                ?>document.getElementById('login').style.display='block';<?php
+            } ?>
+
+        </script>
     <?php
-    
-    if (isset($_GET["to_connect"])) {
-        ?> <script type="text/javascript">
-            document.getElementById('login').style.display='block';
-        </script> <?php
-    }
 }
 
 function menu_when_connected () {
+    // SOMMAIRE des choses à faire
+    // main_page | my_profile | params | likes | match | disconnect
+
     ?>
         
     <?php

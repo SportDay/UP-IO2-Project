@@ -41,6 +41,25 @@
         }
     }
 
-    require($global_params["root"] . "assets/script/php/security.php");
-    require($global_params["root"] . "assets/script/php/modules.php");
+    ////////
+
+    function isValideName($str)) {
+        // longueur et charactère
+        return false;
+    }
+
+    function isValidePassword ($str) {
+        // longueur et charactères
+        return false;
+    }
+
+    function hashPassword ($pass, $row) {
+        // concatener le mot de passe avec des informations de la base de donnée
+        // utiliser le hash de php
+
+        $pass .= $row["creation_date"] . $row["username"];
+    
+        return password_hash($pass, PASSWORD_DEFAULT);
+    }
+
 ?>

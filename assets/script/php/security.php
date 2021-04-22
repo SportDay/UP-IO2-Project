@@ -1,5 +1,4 @@
 <?php
-    /////////////
 
     function simple_disconnect () {
         session_unset();

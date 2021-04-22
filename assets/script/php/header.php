@@ -1,4 +1,6 @@
 <?php
+  require($global_params["root"] . "assets/script/php/security.php");
+  require($global_params["root"] . "assets/script/php/modules.php");
 
   // IMPERATIF POUR LE FONCTIONNEMENT DU HEADER
   if (!isset($global_params["root_public"]) || !isset($global_params["root"]))
