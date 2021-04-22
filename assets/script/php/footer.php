@@ -2,10 +2,11 @@
 <footer id= "down_panel">
   <div >
 
-      <h2>Down Panel</h2>
+      <h5>Copyright &copy; <?= Date("Y")?></h5>
 
       <!-- Ca pourrait être cool de mettre des citations aléatoires sur l'univers -->
       <!-- Il faut faire figurer les copyrights, page legal, etc.. -->
+
 
   </div>
 

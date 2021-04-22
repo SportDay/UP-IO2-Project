@@ -49,7 +49,8 @@ body{
 }
 
 #up_panel p, #up_panel h1, #up_panel h2, #up_panel pre {
-    color:rgb(10, 10, 10);
+    color:rgb(27, 28, 29);
+    font-family: Sans-serif	;
     white-space: normal;
 }
 
@@ -63,10 +64,10 @@ body{
 #mid_content{
     text-align: center;
 
-    margin-top: 7em;
+    margin-top: 20px;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 2em;
+    margin-bottom: 20px;
 
 
     width: 80%;
@@ -105,17 +106,25 @@ body{
     right: 0px;
     width: 100%;
     flex-shrink: 0;
-    margin-bottom: 0%;
+    margin-top: auto;
+    margin-bottom: 0;
 
     text-align: center;
 }
 
-#down_panel p, #down_panel pre, #down_panel h1, #down_panel h2{
+#down_panel p, #down_panel pre, #down_panel h1, #down_panel h5{
     color:rgb(10, 10, 10);
     white-space: normal;
 }
 
-
+.btn_button_btn{
+    width: auto;
+    border: solid transparent;
+    border-radius: 5px;
+    background-color: #FFC38A;
+    color: black;
+    cursor: pointer;
+}
 
 /*--------------- SECONDAIRE -------------*/
 
@@ -123,19 +132,18 @@ body{
     text-align: left;
     float:left; 
     /*background:Red;*/
-    width:15%;
+    width:30%;
 }
 .containers_three_mid_00 {
     float:left; 
     /*background:Green;*/
-    width:70%;
+    width:40%;
 }
 .containers_three_right_00 {
     float:right;
     /*background:blue;*/
-    width:15%;
+    width:30%;
 }
-
 
 
 /*----------- SPECIFIQUE ---------------*/

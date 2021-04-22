@@ -21,6 +21,10 @@
         echo "</p>";
     }
 
+    function newline_split($str) {
+        // utilise ça si tu dois split par ligne, trop de problème d'encodage sinon
+        return preg_split("/\r\n|\n|\r/", $str);
+    }
 
     function consoleLog($succes = null, $code = null){
         if($code != null && $succes != null){
@@ -31,10 +35,12 @@
                 <?php
             }else if ($succes === false){
                  ?>
-                    <script>console.log("<?echo $name . " ERROR: ". " $code!";?>");</script>
+                    <script>console.log("<? echo $name . " ERROR: ". " $code!";?>");</script>
                 <?php
             }
         }
     }
 
+    require($global_params["root"] . "assets/script/php/security.php");
+    require($global_params["root"] . "assets/script/php/modules.php");
 ?>

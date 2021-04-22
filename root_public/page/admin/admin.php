@@ -3,14 +3,9 @@
   "root_public" => "../../",
   "title"       => "Admin",
   "css"         => "all.css",
-  "redirect"    => TRUE
+  "redirect"    => TRUE,
+  "admin_req"   => TRUE
 ];?>
-
-<?php
-    // INCLURE UN CODE DE REDIRECTION SI COMPTE NON ADMIN
-    // if (!not_admin)
-    //    header(accueil)
-?>
 
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
