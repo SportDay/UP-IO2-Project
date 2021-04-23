@@ -81,7 +81,7 @@
     $_SESSION["admin"]          = $result["admin"];
 
     $_SESSION["enable_public"]  = $result["enable_public"];
-    $_SESSION["public_name"]    = $result["public_image"];
+    $_SESSION["public_name"]    = $result["public_name"];
     $_SESSION["public_image"]   = $result["public_image"];
 
     $_SESSION["init_time"]      = time();

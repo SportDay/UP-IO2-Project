@@ -54,14 +54,14 @@
         if (strlen($str) > 16 || strlen($str) < 2) 
             return false;
         
-        return !(preg_match("/^[\w]*$/", $str) === 0);
+        return !(preg_match("/^[\w]*$/", $str) === 0); // alphanumérique et tiret underscore
     }
 
     function isValidePassword ($str) {
         // longueur et charactères
         if (strlen($str) > 26 || strlen($str) < 6) return false;
 
-        return !(preg_match("/^[A-z!?\-\*\+\(\)\|\[\]@0-9]*$/" , $str) === 0);
+        return !(preg_match("/^[A-z!?\-\*\+\(\)\|\[\]@0-9]*$/" , $str) === 0); // alphanumérique et -_+()[]
         return // version qui force l'utilisateur à compliquer le mdp
             !(preg_match("/^[A-z!?\-\*\+\(\)\|\[\]@0-9]*$/" , $str) === 0) &&
             !(preg_match("/[A-z]/"                          , $str) === 0) &&
@@ -73,11 +73,11 @@
         // concatener le mot de passe avec des informations de la base de donnée
         // utiliser le hash de php
         $pass .= $row["id"] . $row["creation_date"] . $pass . $row["username"]; // SALT
-        return md5($pass);
+        return md5($pass); // changer ça en SHA
         //return password_hash($pass, PASSWORD_DEFAULT);
     }
 
-    function randomString($length=20) {
+    function randomString($length=20) { // mettre en 80 par défaut ??? var(128)
         //return bin2hex(random_bytes($length)); // faudrait peut être passer en base64??
         return base64_encode(random_bytes($length)) ;/* str_replace( 
             ["=" , "/"], ["-", "_"],
@@ -87,7 +87,7 @@
 
     function getImagePath($image) {
         $folder = $GLOBALS["global_params"]["root_public"] . "assets/profile/";
-        $path   = $folder . "test" . $image . ".jpg";
+        $path   = $folder . "profile_" . $image . ".jpg";
 
         if (file_exists($path))
             return $path;

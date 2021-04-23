@@ -66,7 +66,7 @@
 
     $hashed_password = hashPassword($password, $result);
 
-    if ($result["last_try"] - time() > 1) // X seconds entre chaques tentives
+    if ($result["last_try"] - time() > 2) // X seconds entre chaques tentives
     {
         echo json_encode([
             "success" => false,
@@ -90,7 +90,7 @@
     $_SESSION["admin"]          = $result["admin"];
 
     $_SESSION["enable_public"]  = $result["enable_public"];
-    $_SESSION["public_name"]    = $result["public_image"];
+    $_SESSION["public_name"]    = $result["public_name"];
     $_SESSION["public_image"]   = $result["public_image"];
 
     $_SESSION["init_time"]      = time();

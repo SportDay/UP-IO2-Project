@@ -38,11 +38,12 @@
     setcookie("cookie_pass",    "", time() - 3600, $COOKIE_PATH);
     setcookie("cookie_expire",  "", time() - 3600, $COOKIE_PATH);
     
-    session_destroy();
-    mysqli_close($connexion);
-
     echo json_encode([
         "success" => true,
         "error"   => ""
     ]);
+
+    session_unset();
+    session_destroy();
+    mysqli_close($connexion);
 ?>

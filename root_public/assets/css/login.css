@@ -9,9 +9,9 @@ input[type=text], input[type=password] {
     box-sizing: border-box;
 }
 
-input:focus{
+input[type=text]:focus, input[type=password]:focus{
     outline: none;
-    border: solid rgb(202, 178, 132);
+    border: solid rgb(209, 176, 115);
 }
 
 

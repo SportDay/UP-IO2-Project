@@ -288,7 +288,7 @@ function menu_when_connected () {
 
                             if (feedback["success"]) {
                                 if (<?php echo $GLOBALS["global_params"]["redirect"] ? "true" : "false" ; ?>)
-                                    openPage('public/home_page.php?to_connect'); // SI PAGE PRIVE
+                                    openPage('public/home_page.php?to_connect&q=' + encodeURIComponent(window.location.href)); // SI PAGE PRIVE
                                 else
                                     window.open(window.location.href.split('?')[0], "_self"); // SI PAGE PUBLIC
                             }

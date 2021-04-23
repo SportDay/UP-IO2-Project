@@ -42,13 +42,11 @@
   <h2>Propriétés imposées de votre page publique.</h2>
   <p>Avatar, Nom, Espèce, Classe, Titre</p>
   
-  <!--
   <div class="centered_ul"> <ul>
     <li>Espèce : Sorcier, Moldu, Ogre, Esprit</li>
-    <li>Classe : ???? ..</li>
+    <li>Classe : Elève, Professeur, Les Forces du Mal, L'ordre du Phénix, ...</li>
     <li>Titre  : Griffon d'or, Serpentar, ..</li>
   </ul> </div>
-  -->
 
 
   

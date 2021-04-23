@@ -152,10 +152,13 @@ body{
     border: 5px solid rgb(10, 10, 10);
 }
 
-.centered_ul { /* on verra plus tard comment faire fonctionne ça */
+.centered_ul {
     align-content: center;
     text-align: left;
-    width: 400px;
 
-    background-color:red;
+    width: 40%;
+    min-width: 300px;
+    margin: auto;
+
+    /* background-color:red; */
 }
