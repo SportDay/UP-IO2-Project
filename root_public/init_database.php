@@ -16,20 +16,28 @@ if (true) {
 $nBots = 20;
 users = [
     [
-        "username"  =>  "Carl",
+        "username"  =>  "root",
         "password"  =>  "Vanille1", 
         "admin"     =>  TRUE 
     ],[
-        "username"  =>  "Wilfrid",
+        "username"  =>  "Carl",
         "password"  =>  "Vanille2", 
+        "admin"     =>  TRUE 
+    ],[
+        "username"  =>  "SportDay",
+        "password"  =>  "Vanille3", 
+        "admin"     =>  TRUE 
+    ],[
+        "username"  =>  "Wilfrid",
+        "password"  =>  "Vanille4", 
         "admin"     =>  FALSE 
     ],[
         "username"  =>  "Leila",
-        "password"  =>  "Vanille3", 
+        "password"  =>  "Vanille5", 
         "admin"     =>  FALSE
     ],[
         "username"  =>  "Fred",
-        "password"  =>  "Vanille4", 
+        "password"  =>  "Vanille6", 
         "admin"     =>  FALSE 
     ]
 ]
