@@ -2,15 +2,7 @@
 
 // MENU
 function menu_when_not_connected () {
-    // POUR LE BOUTTON SE CONNECTER
-    // redirige vers cette page avec le POST : try_connect
-    // ensuite => connection réussite = rien ou header( vers q )
-    //         => connection échoué   = rien de particulier
-
-    // POUR LE BUTTON LOGIN
-    // redirige vers cette page avec le POST : try_register
-    // ensuite => creation réussite  = rien ou header( vers q )
-    //         => creation échoué    = rien de particulier
+    // bouton de connection et d'enregistrement
 
     ?>
         <!-- DECLANCHEURS DE POP UP -->
@@ -62,10 +54,10 @@ function menu_when_not_connected () {
             <div class="reg_log_form_container">
                 <span onclick="document.getElementById('register').style.display='none'" class="close" title="Fermer">&times;</span>
                 <label class="popup_form_title" for="pseudo"><b>Pseudo</b></label>
-                <input id="register_name" type="text" placeholder="Pseudo" name="pseudo" >
+                <input id="register_name" type="text" placeholder="Pseudo | 2-16 charactères : A-z et 0-9 et tiret et tiret bas" name="pseudo" >
 
                 <label class="popup_form_title" for="password"><b>Mot de passe</b></label>
-                <input id="register_password" type="password" placeholder="Mot de passe" name="password">
+                <input id="register_password" type="password" placeholder="Mot de passe | 6-26 charactères : A-z et 0-9 et _*+-()[]" name="password">
                 
                 <p id="register_error" class="popup_text" style="display:none"> ERROR </p>
 
@@ -103,17 +95,16 @@ function menu_when_not_connected () {
                     if (xmlhttp.readyState === DONE)
                         if (xmlhttp.status === OK)
                         {
-                            alert(xmlhttp.responseText);
+                            const feedback = JSON.parse(xmlhttp.responseText);
 
-                            return;
-                            if (xmlhttp.responseText) {
+                            if (feedback["success"]) {
                                 debug.innerHTML = "Connection réussie.";
                                 debug.style.display = "block";
                                 redirection();
                             }
                             else {
                                 password.value = "";
-                                debug.innerHTML = "La connection a échoué.";
+                                debug.innerHTML = feedback["error"];
                                 debug.style.display = "block";
                             }
                         }
@@ -126,7 +117,7 @@ function menu_when_not_connected () {
             }
 
             function register() {
-                nickname = document.getELementById("register_name");
+                nickname = document.getElementById("register_name");
                 password = document.getElementById("register_password");
                 debug    = document.getElementById("register_error");
 
@@ -137,27 +128,26 @@ function menu_when_not_connected () {
 
                 var xmlhttp = new XMLHttpRequest();
                 
-                xmlhttp.open('POST', '../../assets/script/php/register.php');
+                xmlhttp.open('POST', '../../assets/script/php/signup.php');
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
                     var DONE = 4; // readyState 4 means the request is done.
                     var OK = 200; // status 200 is a successful return.
-                    
+
                     if (xmlhttp.readyState === DONE)
                         if (xmlhttp.status === OK)
                         {
-                            alert(xmlhttp.responseText);
+                            const feedback = JSON.parse(xmlhttp.responseText);
 
-                            return;
-                            if (xmlhttp.responseText) {
+                            if (feedback["success"]) {
                                 debug.innerHTML = "Création de compte réussie.";
                                 debug.style.display = "block";
                                 redirection();
                             }
                             else {
                                 password.value = "";
-                                debug   .innerHTML = "La création de compte à échoué.";
+                                debug   .innerHTML = feedback["error"];
                                 debug.style.display = "block";
                             }
                         }
@@ -173,8 +163,10 @@ function menu_when_not_connected () {
 
             function redirection() { // en reference au GET : q=
                 url = GET("q");
-                if (url == null) return;
-                url = decodeURIComponent(url.replace(/\+/g, ' '));
+                if (url == null) 
+                    url = window.location.href.split('?')[0];
+                else
+                    url = decodeURIComponent(url.replace(/\+/g, ' '));
                 window.open(url,"_self");
             }
 
@@ -204,6 +196,7 @@ function menu_when_not_connected () {
 
 function menu_when_connected () {
     // SOMMAIRE des choses à faire
+    // 
     // main_page | my_profile | params | likes | match | disconnect
 
     ?>

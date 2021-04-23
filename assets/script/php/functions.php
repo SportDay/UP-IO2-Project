@@ -41,25 +41,45 @@
         }
     }
 
-    ////////
+    function debug($content) {
+        if (isset($GLOBALS["debugging"]) && $GLOBALS["debugging"])
+            file_put_contents('debug.txt', ($content).PHP_EOL , FILE_APPEND | LOCK_EX);
+    }
 
-    function isValideName($str)) {
+    //////////////////
+    // FONCTIONS DE SECURITE (sans effets de bords)
+
+    function isValideName($str) {
         // longueur et charactère
-        return false;
+        if (strlen($str) > 16 || strlen($str) < 2) 
+            return false;
+        
+        return !(preg_match("/^[\w]*$/", $str) === 0);
     }
 
     function isValidePassword ($str) {
         // longueur et charactères
-        return false;
+        if (strlen($str) > 26 || strlen($str) < 6) return false;
+
+        return !(preg_match("/^[A-z!?\-\*\+\(\)\|\[\]@0-9]*$/" , $str) === 0);
+        return // version qui force l'utilisateur à compliquer le mdp
+            !(preg_match("/^[A-z!?\-\*\+\(\)\|\[\]@0-9]*$/" , $str) === 0) &&
+            !(preg_match("/[A-z]/"                          , $str) === 0) &&
+            !(preg_match("/[0-9]/"                          , $str) === 0) &&
+            !(preg_match("/!?\-\*\+\(\)\|\[\]@/"            , $str) === 0) ;
     }
 
     function hashPassword ($pass, $row) {
         // concatener le mot de passe avec des informations de la base de donnée
         // utiliser le hash de php
+        $pass .= $row["id"] . $row["creation_date"] . $pass . $row["username"]; // SALT
+        return md5($pass);
+        //return password_hash($pass, PASSWORD_DEFAULT);
+    }
 
-        $pass .= $row["creation_date"] . $row["username"];
-    
-        return password_hash($pass, PASSWORD_DEFAULT);
+    function randomString($length=20) {
+        return bin2hex(random_bytes($length)); // faudrait peut être passer en base64??
+        // return base64_encode(random_bytes($length));
     }
 
 ?>

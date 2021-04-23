@@ -1,13 +1,13 @@
 <?php
+    // FONCTIONS DE SECURITE (avec effets de bords)
 
     function simple_disconnect () {
-        session_unset();
-
         $_SESSION["connected"] = false;
         $_SESSION["admin"]     = false;
+
     }
 
-    function tryConnect () {
+    function tryConnect () { debug("\ntry connect:");
         $connexion = mysqli_connect (
             $GLOBALS["DB_URL"],
             $GLOBALS["DB_ACCOUNT"],
@@ -25,13 +25,14 @@
         // TRY TO CONNECT USING SESSION
         if (isset($_SESSION["connected"]) && $_SESSION["connected"]) {
             if (isset($_SESSION["inactive_time"]) && $_SESSION["inactive_time"] > time() )
-            { // CONNECT
+            { 
+                // CONNECT
                 $_SESSION["inactive_time"] = min(
                     $_SESSION["max_time"], 
-                    time() + $TIME_SESS_INACTIVE
+                    (time() + $GLOBALS["TIME_SESS_INACTIVE"])
                 );
 
-                $_SESSION["last_time"] = time();
+                $_SESSION["last_time"] = time();                
                 mysqli_query($connexion, 
                     "UPDATE users SET last_join=" . $_SESSION["last_time"] 
                     . " WHERE `id`=" . $_SESSION["id"]
@@ -54,7 +55,7 @@
         }
         
         $result = $connexion->query(
-            "SELECT * FROM users WHERE cookie_id=". $connexion->real_escape_string($_COOKIE["cookie_id"]) . ";"
+            "SELECT * FROM users WHERE cookie_id=\"". $connexion->real_escape_string($_COOKIE["cookie_id"]) . "\" ;"
         );
 
         if (
@@ -64,19 +65,28 @@
             $_COOKIE["cookie_expire"] < time()            
             ) { mysqli_close($connexion); return; }
 
-        //////////////////////////////////////////////
+            //////////////////////////////////////////////
         // NOW CONNECT
 
         $_SESSION["id"]             = $result["id"];
         $_SESSION["username"]       = $result["username"];
         $_SESSION["admin"]          = $result["admin"];
 
+        $_SESSION["enable_public"]  = $result["enable_public"];
+        $_SESSION["public_name"]    = $result["public_image"];
+        $_SESSION["public_image"]   = $result["public_image"];
+
         $_SESSION["init_time"]      = time();
         $_SESSION["last_time"]      = time();
-        $_SESSION["inactive_time"]  = time() + $TIME_SESS_INACTIVE;
-        $_SESSION["max_time"]       = time() + $TIME_SESS_END;
+        $_SESSION["inactive_time"]  = time() + $GLOBALS["TIME_SESS_INACTIVE"];
+        $_SESSION["max_time"]       = time() + $GLOBALS["TIME_SESS_END"];
 
         $_SESSION["connected"]      = true;
+
+        mysqli_query($connexion, 
+                    "UPDATE users SET last_join=" . $_SESSION["last_time"] 
+                    . " WHERE `id`=" . $_SESSION["id"] . " ;"
+                );
         
         mysqli_close($connexion);
     }
