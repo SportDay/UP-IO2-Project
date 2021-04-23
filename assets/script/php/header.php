@@ -103,7 +103,7 @@
     </script>
 
     <div class="containers_three_left_00">
-      <div style="padding-left:10px">
+      <div id="page_logo">
       <input 
         class="image_001" type="image"
         src=<?php echo $global_params["root_public"] . "assets/image/logo.jpg" ?> 

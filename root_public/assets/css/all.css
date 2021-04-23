@@ -40,9 +40,10 @@ body{
     right: 0px;
     margin-bottom: 0;
     position: fixed;
+    min-width: 800px;
     
     text-align: center;
-    height: 80px;
+    height: 90px;
     
     background-color: #ffc38a;
     box-shadow: 0px 5px 26px rgba(19, 19, 19, 0.712);
@@ -71,6 +72,7 @@ body{
 
 
     width: 80%;
+    min-width: 700px;
 
     padding-top: 1em;
     padding-bottom: 1em;
@@ -92,15 +94,18 @@ body{
     flex-direction: column;
     height: 100vh;
 }
+
 #mid_container{
     flex: 1 0 auto;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 #down_panel {
     background-color: #ffc38a;
 
-    padding-top: 1em;
-    padding-bottom: 1em;
-    height: 60px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: auto;
     bottom: 0px;
     left: 0px;
     right: 0px;
@@ -147,6 +152,11 @@ body{
 
 
 /*----------- SPECIFIQUE ---------------*/
+
+#page_logo {
+    padding-left:10px;
+    padding-top:5px;   
+}
 
 .image_001 img{
     border: 5px solid rgb(10, 10, 10);

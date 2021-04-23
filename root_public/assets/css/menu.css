@@ -41,10 +41,14 @@ input[type=text], input[type=password] {
     box-sizing: border-box;
 }
 
+#menu_contain_button {
+    padding:10px;
+}
+
 #open_menu {
-    background-image:url("../../assets/image/logo.jpg");
     border: rgb(59, 61, 63);
     border-radius: 3;
+    padding: 10px;
 }
 
 .menu_button {
