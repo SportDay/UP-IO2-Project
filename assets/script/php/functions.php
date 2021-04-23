@@ -78,8 +78,21 @@
     }
 
     function randomString($length=20) {
-        return bin2hex(random_bytes($length)); // faudrait peut être passer en base64??
-        // return base64_encode(random_bytes($length));
+        //return bin2hex(random_bytes($length)); // faudrait peut être passer en base64??
+        return base64_encode(random_bytes($length)) ;/* str_replace( 
+            ["=" , "/"], ["-", "_"],
+            base64_encode(random_bytes($length))
+        );*/
+    }
+
+    function getImagePath($image) {
+        $folder = $GLOBALS["global_params"]["root_public"] . "/assets/profile/";
+        $path   = $folder . "test" . $image . ".jpg";
+
+        if (file_exists($path))
+            return $path;
+
+        return $folder . "/assets/profile/default.png";
     }
 
 ?>

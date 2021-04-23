@@ -1,6 +1,7 @@
 <?php 
-       // SORTIE : echo true|false; | true si connection réussis, false sinon
-      // plus tard on sortira un json avec plus d'information en cas de problème
+    
+    // SORTIE : echo true|false; | true si connection réussis, false sinon
+    // plus tard on sortira un json avec plus d'information en cas de problème
 
     $global_params = [
         "root"        => "../../../../",
@@ -162,6 +163,7 @@
         "success" => true,
         "error"   => ""
     ]);
+
     mysqli_close($connexion);
 
 ?>

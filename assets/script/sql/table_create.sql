@@ -1,3 +1,6 @@
+-- #########################################################
+-- POUR INITIALISER LA BASE DE DONNER (ALLEZ DANS : /public_root/init_database.php)
+
 create database if not exists reseau;
 use reseau;
 
@@ -21,7 +24,7 @@ drop table if exists users;
 
 CREATE TABLE `users` (
     `id`            bigint UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `cookie_id`     varchar(40)     DEFAULT NULL,
+    `cookie_id`     varchar(32)     DEFAULT NULL,
 
     `username`      varchar(32)     DEFAULT NULL,
     `password`      varchar(32)     DEFAULT NULL, -- 32 POUR MD5
@@ -31,7 +34,7 @@ CREATE TABLE `users` (
     `last_try`      INT UNSIGNED    DEFAULT (unix_timestamp(CURRENT_TIMESTAMP) - 20),
     
     `cookie_enabled`BOOLEAN         DEFAULT FALSE,     
-    `cookie_pass`   varchar(40)     DEFAULT NULL,
+    `cookie_pass`   varchar(32)     DEFAULT NULL,
     `cookie_expire` INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
 
     `enable_public` BOOLEAN         DEFAULT FALSE,
