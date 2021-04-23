@@ -59,11 +59,11 @@ button:hover {
 }
 
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: white;
+    color: black;
 }
 
 ::-ms-input-placeholder { /* Microsoft Edge */
-    color: white;
+    color: black;
 }
 
 .reg_log_form_container {

@@ -1,5 +1,5 @@
 
-#search_input{
+#search_input, #search_input:-webkit-autofill{
     height: 40px;
     border-radius: 20px;
     background: #3B3D3F;
@@ -27,6 +27,7 @@
     color: white;
 }
 
+
 #search_input::-webkit-search-cancel-button {
     -webkit-appearance: none;
     height: 22px;
@@ -50,7 +51,7 @@
 }
 
 #post_add{
-    border-radius: 20px;
+    border-radius: 15px;
     background: #3B3D3F;
     box-shadow: inset 5px 5px 10px #333436,
     inset -5px -5px 10px #434648;
@@ -63,9 +64,15 @@
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     box-sizing:border-box;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;
 }
 
-#submit_add{
+#post_add::-webkit-scrollbar {
+    display: none;
+}
+
+#submit_add, #inpirate{
     margin-top: 5px;
     margin-right: auto;
     margin-left: auto;
@@ -88,7 +95,7 @@
     border-radius: 5px;
 }
 
-#submit_add:hover{
+#submit_add:hover, #inpirate:hover{
     opacity: 0.9;
 }
 
@@ -105,15 +112,6 @@
     "btn_like espace btn_report";
 }
 
-.btn_menu_post{
-    margin-left: auto;
-    margin-right: auto;
-    background-color: transparent;
-    color: #FFC38A;
-    border: none;
-    grid-area: btn_supp_post;
-}
-
 .info_containt{
     display: grid;
     grid-template-columns: auto auto 32px;
@@ -124,18 +122,26 @@
     grid-area: info_containt;
 }
 
-.post_menu{
-    grid-area: post_menu;
-    position: relative;
-    display: inline-block;
-}
-
 .profile_img_posts{
     border-radius: 15px;
     border: solid rgb(209, 176, 115);
     width: 58px;
     height: 58px;
     grid-area: profile_img_posts;
+}
+
+.btn_menu_post{
+    margin-left: auto;
+    margin-right: auto;
+    background-color: transparent;
+    color: #FFC38A;
+    border: none;
+}
+
+.post_menu{
+    grid-area: post_menu;
+    position: relative;
+    display: inline-block;
 }
 
 .supp_post{
@@ -150,6 +156,7 @@
 .post_menu:hover .supp_post {
     display: block;
 }
+
 .post_auteur, .post_date{
     margin-top: 0px;
     margin-bottom: 0px;
