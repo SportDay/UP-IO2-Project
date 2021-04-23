@@ -1,5 +1,5 @@
-.settings_title{
-    color: white;
+.settings_title {
+    color: rgb(240, 237, 231);
     text-align: center;
 }
 
@@ -8,6 +8,8 @@
     margin-top: 0;
     margin-bottom: .5em;
 }
+
+/* -------------- */
 
 input[type=password] {
     width: 80%;
@@ -19,14 +21,26 @@ input[type=password] {
     margin: 5px auto;
 }
 
-input:focus{
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+input[type=text]:focus, input[type=password]:focus{
     outline: none;
     border: solid rgb(209, 176, 115);
 }
 
+/* ----------------- */
+
 .form_title{
     font-size: 20px;
-    color: white;
+    color: rgb(236, 232, 225);
 }
 
 button:hover {
@@ -44,16 +58,6 @@ button:hover {
 
 ::-ms-input-placeholder { /* Microsoft Edge */
     color: black;
-}
-
-input[type=text] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    box-sizing: border-box;
 }
 
 input[type=text]:focus{
