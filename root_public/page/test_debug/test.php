@@ -17,10 +17,14 @@
     write($str);
     */
 
-    $connexion = mysqli_connect("127.0.0.1", "root", "", "reseau");
+    //$connexion = mysqli_connect("127.0.0.1", "root", "", "reseau");
 
     //$query = "INSERT INTO `users` (`username`,    `password`) VALUES " .
-                    "(\"" . $connexion->real_escape_string("toast") . "\", \"none\");";
+    //  "(\"" . $connexion->real_escape_string("toast") . "\", \"none\");";
 
     //print_r($connexion->query($query));
+
+    //write($h);
+
+    //gettype(hashPassword("test", ["id"=>"3", "creation_date"=>"19291", "username"=>"jean"]));
 ?>

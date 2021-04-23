@@ -27,7 +27,7 @@ CREATE TABLE `users` (
     `cookie_id`     varchar(32)     DEFAULT NULL,
 
     `username`      varchar(32)     DEFAULT NULL,
-    `password`      varchar(32)     DEFAULT NULL, -- 32 POUR MD5
+    `password`      varchar(128)    DEFAULT NULL, -- 128 POUR base 16
     `creation_date` INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
 
     `last_join`     INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
@@ -45,7 +45,7 @@ CREATE TABLE `users` (
     `class`         varchar(32)     DEFAULT NULL,
     `title`         varchar(32)     DEFAULT NULL,
     `likes`         int UNSIGNED    DEFAULT 0,
-    `description`   varchar(128)    DEFAULT NULL,
+    `description`   varchar(50)     DEFAULT NULL,
     
     `banned`        BOOLEAN         DEFAULT FALSE,
     `bannedto`      INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
@@ -76,10 +76,15 @@ CREATE TABLE pages_liked (
 CREATE TABLE `posts` (
     `id`            bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id`       bigint UNSIGNED NOT NULL,
+
+    `public_image`  INT             DEFAULT 0,
+    `public_name`   varchar(32)     DEFAULT NULL,
+    
     `reported`      BOOLEAN         DEFAULT FALSE,
     `reportnum`     INT             DEFAULT 0,
     `last_report`   INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
     `creation_date` INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
+    
     `content`       varchar(735)    DEFAULT NULL,
     `like_num`      INT             DEFAULT 0,
     `response_id`   bigint UNSIGNED DEFAULT NULL,
