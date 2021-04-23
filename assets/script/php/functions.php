@@ -86,13 +86,13 @@
     }
 
     function getImagePath($image) {
-        $folder = $GLOBALS["global_params"]["root_public"] . "/assets/profile/";
+        $folder = $GLOBALS["global_params"]["root_public"] . "assets/profile/";
         $path   = $folder . "test" . $image . ".jpg";
 
         if (file_exists($path))
             return $path;
 
-        return $folder . "/assets/profile/default.png";
+        return $folder . "default.png";
     }
 
 ?>

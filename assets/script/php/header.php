@@ -79,6 +79,8 @@
     <?php 
       if (!$_SESSION["connected"])
         echo "<link rel=\"stylesheet\" type=\"text/css\" href=" . $global_params["root_public"] . "assets/css/login.css>";
+      else
+        echo "<link rel=\"stylesheet\" type=\"text/css\" href=" . $global_params["root_public"] . "assets/css/menu.css>";
 
       if (isset($global_params["css_add"]))
         foreach($global_params["css_add"] as $css)
@@ -93,18 +95,24 @@
     <!-- HEADER -->
     <!-- ------------------------------------------ -->
 
-
+    <script>
+      function openPage(relLink) {
+        relLink = "<?php echo $global_params["root_public"] ?>" + "page/" + relLink;
+        window.open(relLink, "_self");
+      }
+    </script>
 
     <div class="containers_three_left_00">
       <div style="padding-left:10px">
-      <img 
-        class="image_001"
+      <input 
+        class="image_001" type="image"
         src=<?php echo $global_params["root_public"] . "assets/image/logo.jpg" ?> 
         alt="Harry Play, Role Potter"
         width="80" height="80"
+        onclick="openPage('public/home_page.php');"
         ></div>
-    </div>
 
+    </div>
     <div class="containers_three_mid_00">
       <h1><?php echo $global_params["title"]; ?></h1>
     </div>
