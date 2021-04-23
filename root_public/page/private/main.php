@@ -27,6 +27,7 @@
             <form id="form_post_add" action="/add_post.php" method="post">
                 <textarea id="post_add" name="post_content" form="form_post_add" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
                 <button id="submit_add" type="submit">Poster</button>
+                <button id="inpirate" onclick="inspiration()">Inspiration</button>
             </form>
         </div>
     </div>
