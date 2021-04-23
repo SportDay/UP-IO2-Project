@@ -7,7 +7,7 @@
 
     }
 
-    function tryConnect () { debug("\ntry connect:");
+    function tryConnect () {
         $connexion = mysqli_connect (
             $GLOBALS["DB_URL"],
             $GLOBALS["DB_ACCOUNT"],

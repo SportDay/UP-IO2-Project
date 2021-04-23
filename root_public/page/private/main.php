@@ -22,6 +22,7 @@
             </form>
         </div>
     </div>
+
     <div id = "mid_content" style="margin-top: 0px; text-align: initial; padding-top: 0px">
         <div id="container_add">
             <form id="form_post_add" action="/add_post.php" method="post">
@@ -31,6 +32,8 @@
             </form>
         </div>
     </div>
+
+
     <div id = "mid_content" style="margin-top: 0px; text-align: initial;">
         <div class="posts">
             <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
@@ -70,6 +73,20 @@
             </dfn>
         </div>
     </div>
+
+    <?php
+
+        // APPELLER LE SERVEUR
+
+        // CHERCHER TOUT LES PROFILES ABBONNEE (+ MON PROFILE)
+
+        // CHERCHER TOUT LES MESSAGES DE PROFILE CIS DESSUS
+
+        // TRIER CES MESSAGES PAR DATE
+        
+        // FOR EACH MESSAGE => call ($message_id)
+
+    ?>
 
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
