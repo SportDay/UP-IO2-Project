@@ -9,21 +9,51 @@ if (true) {
 
 // CREATION DES TABLES
 
+
+
 // REMPLISSAGE DES TABLES
 
+$nBots = 20;
 users = [
-    // PSEUDO / PASSWORD / ADMIN
-    [ "Carl", "Vanille1", TRUE ]
-    [ "Charle", "Poulpe", FALSE ]
+    [
+        "username"  =>  "Carl",
+        "password"  =>  "Vanille1", 
+        "admin"     =>  TRUE 
+    ],[
+        "username"  =>  "Wilfrid",
+        "password"  =>  "Vanille2", 
+        "admin"     =>  FALSE 
+    ],[
+        "username"  =>  "Leila",
+        "password"  =>  "Vanille3", 
+        "admin"     =>  FALSE
+    ],[
+        "username"  =>  "Fred",
+        "password"  =>  "Vanille4", 
+        "admin"     =>  FALSE 
+    ]
 ]
 
+
+// CREATION DE COMPTES CLASSIQUES (sans page publique par défaut)
+foreach($users as $user) {
+    addUser();
+}
+
 // CREATION DE PAGES PUBLICS
+for ($i = 0; $i < $nBots; $i++) {
+    addBot();
+}
 
 ?>
 
 <?php
 
 function addUser() {
+
+}
+
+function addBot() {
 
 }
 

@@ -16,4 +16,6 @@
   //$debuging = true;
   //debug("=> " . dirname(__FILE__));
 
+  $TIME_REROLL = 1 * (24*3600) * 1;
+
 ?>

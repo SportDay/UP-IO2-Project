@@ -82,7 +82,7 @@ body{
     border: solid rgb(209, 176, 115);
 }
 
-#mid_content p, #mid_content pre, #mid_content h1, #mid_content h2{
+#mid_content p, #mid_content ul, #mid_content li, #mid_content pre, #mid_content h1, #mid_content h2{
     color:rgb(241, 210, 163);
     white-space: normal;
 }
@@ -150,4 +150,12 @@ body{
 
 .image_001 img{
     border: 5px solid rgb(10, 10, 10);
+}
+
+.centered_ul { /* on verra plus tard comment faire fonctionne ça */
+    align-content: center;
+    text-align: left;
+    width: 400px;
+
+    background-color:red;
 }

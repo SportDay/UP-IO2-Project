@@ -29,9 +29,10 @@ CREATE TABLE `users` (
     `username`      varchar(32)     DEFAULT NULL,
     `password`      varchar(32)     DEFAULT NULL, -- 32 POUR MD5
     `creation_date` INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
-    `last_join`     INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
 
+    `last_join`     INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
     `last_try`      INT UNSIGNED    DEFAULT (unix_timestamp(CURRENT_TIMESTAMP) - 20),
+    `last_reroll`   INT UNSIGNED    DEFAULT (0), 
     
     `cookie_enabled`BOOLEAN         DEFAULT FALSE,     
     `cookie_pass`   varchar(32)     DEFAULT NULL,
