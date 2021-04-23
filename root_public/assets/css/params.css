@@ -1,5 +1,27 @@
+.settings_title {
+    color: rgb(240, 237, 231);
+    text-align: center;
+}
 
-input[type=text], input[type=password] {
+.settings_title p{
+    font-size: 28px;
+    margin-top: 0;
+    margin-bottom: .5em;
+}
+
+/* -------------- */
+
+input[type=password] {
+    width: 80%;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin: 5px auto;
+}
+
+input[type=text] {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -14,43 +36,15 @@ input[type=text]:focus, input[type=password]:focus{
     border: solid rgb(209, 176, 115);
 }
 
+/* ----------------- */
 
-button {
-    background-color: #505357;
-    color: rgb(230, 203, 152);
-    padding: 5px 5px;
-    margin: 5px 0;
-    cursor: pointer;
-    width: 100%;
-    border: solid transparent;
-    border-radius: 5px;
-}
-
-.popup_form_title {
+.form_title{
     font-size: 20px;
-    color: rgb(238, 236, 228);
-}
-
-.popup_text {
-    color: rgb(250, 225, 173) !important;
+    color: rgb(236, 232, 225);
 }
 
 button:hover {
     opacity: 0.9;
-}
-
-/* Extra styles for menu button */
-.login_right_button {
-    float: right;
-    margin-right: 4px;
-}
-
-/* Extra styles for the cancel button */
-.cancelbtn {
-    width: auto;
-    margin-top: 18px;
-    padding: 10px 18px;
-    background-color: #f44336;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -66,7 +60,29 @@ button:hover {
     color: black;
 }
 
-.reg_log_form_container {
+input[type=text]:focus{
+    outline: none;
+    border: solid rgb(209, 176, 115);
+}
+
+.btn_dell_acc, .btn_chg_pass{
+    padding: 10px 10px;
+}
+
+.btn_chg_pass{
+    margin-top: 5px;
+}
+
+
+/* Extra styles for the cancel button */
+.cancelbtn, .btn_dell {
+    width: auto;
+    padding: 7px 13px;
+    margin-top: 5px;
+    background-color: #f44336;
+}
+
+.del_account_form_container {
     position: relative;
     padding: 16px;
     background-color: #3B3D3F;
@@ -74,14 +90,9 @@ button:hover {
     border-radius: 5px;
 }
 
-span.psw {
-    float: right;
-    padding-top: 16px;
-}
-
 /* The Modal (background) */
 
-.reg_log_model {
+.del_account_model {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -91,13 +102,13 @@ span.psw {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     /*background-color: rgba(255,255,255,0.2); /* Black w/ opacity */
-    padding-top: 60px;
+    text-align: center;
 }
 
 /* Modal Content/Box */
 .modal-content {
     margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-    width: 40%; /* Could be more or less, depending on screen size */
+    width: 350px; /* Could be more or less, depending on screen size */
 }
 
 
@@ -115,26 +126,22 @@ span.psw {
     cursor: pointer;
 }
 
-/* Add Zoom Animation */
-.animate {
-    -webkit-animation: animatezoom 0.6s;
-    animation: animatezoom 0.6s
+.btn_grid{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+    gap: 0px 20px;
+    grid-template-areas:
+    "btn_public btn_public_reroll";
+    text-align: center;
+    margin-right: 20px;
+    margin-left: 20px;
 }
 
-@-webkit-keyframes animatezoom {
-    from {-webkit-transform: scale(0)}
-    to {-webkit-transform: scale(1)}
+.btn_public{
+    grid-area: btn_public;
 }
 
-@keyframes animatezoom {
-    from {transform: scale(0)}
-    to {transform: scale(1)}
-}
-
-/* Change styles for span and cancel button on extra small screens */
-@media screen and (max-width: 300px) {
-
-    .cancelbtn {
-        width: 100%;
-    }
+.btn_public_reroll{
+    grid-area: btn_public_reroll;
 }
