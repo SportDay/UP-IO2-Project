@@ -1,5 +1,14 @@
+/* ------ REDEFINE -------- */
+
+#mid-content {
+    width: 10%; min-width: 100px;
+}
+
+
+/* -------------- */
+
 .settings_title {
-    color: rgb(240, 237, 231);
+    color: rgb(240, 237, 231) !important;
     text-align: center;
 }
 
@@ -7,6 +16,8 @@
     font-size: 28px;
     margin-top: 0;
     margin-bottom: .5em;
+    color: white !important; 
+    font-size: 24px;
 }
 
 /* -------------- */
@@ -34,6 +45,16 @@ input[type=text] {
 input[type=text]:focus, input[type=password]:focus{
     outline: none;
     border: solid rgb(209, 176, 115);
+}
+
+/* ----------------- */
+
+.btn_valide {
+    padding: 10px 10px; width: auto; background-color: limegreen;
+}
+
+.btn_remove{
+    padding: 10px 10px; width: auto; background-color: #E14236;
 }
 
 /* ----------------- */
