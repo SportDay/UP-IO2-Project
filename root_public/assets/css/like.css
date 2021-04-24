@@ -37,3 +37,25 @@
     height: 30px;
     background-color: #fa001d;
 }
+
+.info_profile {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: auto;
+    gap: 20px 20px;
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+    border-radius: 15px;
+    text-align: initial;
+    font-size: 16px;
+    color: white;
+    grid-template-areas:
+    "profile_nickname profile_espece profile_classe profile_titre";
+}
+
+.profile_nickname { grid-area: profile_nickname; }
+.profile_titre { grid-area: profile_titre; }
+.profile_espece { grid-area: profile_espece; }
+.profile_classe { grid-area: profile_classe; }
+.profile_nlikes { grid-area: profile_nlikes; }

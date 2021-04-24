@@ -100,6 +100,29 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
                 relLink = "<?php echo $global_params["root_public"] ?>" + "page/" + relLink;
                 window.open(relLink, "_self");
             }
+
+            function redirection() { // en reference au GET : q=
+                url = GET("q");
+                if (url == null)
+                    url = window.location.href.split('?')[0];
+                else
+                    url = decodeURIComponent(url.replace(/\+/g, ' '));
+                window.open(url,"_self");
+            }
+
+            function GET (param) {
+                let otp = {};
+
+                window.location.href.replace( location.hash, '' ).replace(
+                    /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+                    function( m, key, value ) { // callback
+                        otp[key] = value !== undefined ? value : '';
+                    }
+                );
+
+                if (param) return otp[param] ? otp[param] : null;
+                return otp;
+            }
         </script>
 
         <div class="containers_three_left_00">
