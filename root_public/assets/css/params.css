@@ -21,8 +21,8 @@
 }
 
 /* -------------- */
-
-input[type=password] {
+.input_title input[type=text], 
+.input_title input[type=password] {
     width: 80%;
     padding: 12px 20px;
     display: inline-block;
@@ -32,17 +32,9 @@ input[type=password] {
     margin: 5px auto;
 }
 
-input[type=text] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    box-sizing: border-box;
-}
 
-input[type=text]:focus, input[type=password]:focus{
+.input_title input[type=text]:focus, 
+.input_title input[type=password]:focus {
     outline: none;
     border: solid rgb(209, 176, 115);
 }
@@ -50,11 +42,19 @@ input[type=text]:focus, input[type=password]:focus{
 /* ----------------- */
 
 .btn_valide {
-    padding: 10px 10px; width: auto; background-color: limegreen;
+    padding: 10px 10px; 
+    width: auto; 
+    background-color: rgb(86, 187, 65);
+    border-radius: 7px;
+    border-style: none;
 }
 
 .btn_remove{
-    padding: 10px 10px; width: auto; background-color: #E14236;
+    padding: 10px 10px; 
+    width: auto; 
+    background-color: #ca4940;
+    border-radius: 7px;
+    border-style: none;
 }
 
 /* ----------------- */
@@ -88,81 +88,6 @@ input[type=text]:focus{
 
 .btn_dell_acc, .btn_chg_pass{
     padding: 10px 10px;
-}
-
-.btn_chg_pass{
     margin-top: 5px;
 }
-
-
-/* Extra styles for the cancel button */
-.cancelbtn, .btn_dell {
-    width: auto;
-    padding: 7px 13px;
-    margin-top: 5px;
-    background-color: #f44336;
-}
-
-.del_account_form_container {
-    position: relative;
-    padding: 16px;
-    background-color: #3B3D3F;
-    border: solid rgb(209, 176, 115);
-    border-radius: 5px;
-}
-
-/* The Modal (background) */
-
-.del_account_model {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 100px;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    /*background-color: rgba(255,255,255,0.2); /* Black w/ opacity */
-    text-align: center;
-}
-
-/* Modal Content/Box */
-.modal-content {
-    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-    width: 350px; /* Could be more or less, depending on screen size */
-}
-
-
-.close {
-    position: absolute;
-    right: 25px;
-    top: 0;
-    font-size: 35px;
-    font-weight: bold;
-    color: #cccccc;
-}
-
-.close:hover {
-    color: red;
-    cursor: pointer;
-}
-
-.btn_grid{
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: auto;
-    gap: 0px 20px;
-    grid-template-areas:
-    "btn_public btn_public_reroll";
-    text-align: center;
-    margin-right: 20px;
-    margin-left: 20px;
-}
-
-.btn_public{
-    grid-area: btn_public;
-}
-
-.btn_public_reroll{
-    grid-area: btn_public_reroll;
-}
+ 
