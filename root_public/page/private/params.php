@@ -104,7 +104,7 @@
             if (xmlhttp.readyState === DONE)
                 if (xmlhttp.status === OK)
                 {
-                    alert(xmlhttp.responseText);
+                    //alert(xmlhttp.responseText);
                     const feedback = JSON.parse(xmlhttp.responseText);
 
                     if (feedback["success"])

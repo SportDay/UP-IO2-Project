@@ -160,6 +160,7 @@
 
         $connexion->query( 
             "UPDATE users SET " . 
+            
             " cookie_id=\""       . $cookie_id . "\"," .
             " cookie_enabled="   . "TRUE, " .
             " cookie_pass=\"" . $cookie_password . "\"," .

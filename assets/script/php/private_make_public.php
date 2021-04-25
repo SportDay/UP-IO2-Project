@@ -50,19 +50,45 @@
 
     ////////////////////////////////////////////////////////////////////
 
+    if ( $connexion->query( "SELECT `last_reroll` FROM users WHERE username=\"". $_SESSION["id"] . "\";" )
+        ->fetch_assoc()["last_reroll"] + $TIME_REROLL < time()
+    ) {
+        echo json_encode([
+            "success" => false,
+            "error"   => "Vous ne pouvez reroll qu'une seul fois toute les 24 heures."
+        ]); exit();
+    }
+
     // Suppression de l'ancienne page
     if ($_SESSION["enable_public"])
         removePublicPage();
 
     // Creation d'une nouvelle
+    $public_page = generateRandomPublicData();
 
+    $_SESSION["enable_public"] = true;
+    $_SESSION["public_name"  ] = $public_page["public_name" ];
+    $_SESSION["public_image" ] = $public_page["public_image"];
 
+    $connexion->query(
+        "UPDATE `users` SET " . 
+        "`enable_public`=TRUE, " .
+        "`public_name`=\""  . $connexion->real_escape_string($public_page["public_name"]) . "\", " .
+        "`public_image`=" . $public_page["public_image"] . ", " .
+        "`last_reroll`="  . time() . ", " .
+
+        "`specie`=\"" . $connexion->real_escape_string($public_page["specie"]) . "\", " .
+        "`class`=\""  . $connexion->real_escape_string($public_page["class"])  . "\", " .
+        "`title`=\""  . $connexion->real_escape_string($public_page["title"])  . "\" " .
+
+        " WHERE `id`=" . $_SESSION["id"] . " ;"
+    );
 
     ////////////////////////////////////////////////////////////////////
 
     echo json_encode([
         "success"     => true,
-        "public_name" => htmlentities("") 
+        "public_name" => htmlentities($_SESSION["public_name"]) 
     ]); exit(); 
 
     mysqli_close($connexion);

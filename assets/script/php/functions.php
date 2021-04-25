@@ -97,10 +97,12 @@
     function getImagePath($image) {
         $folder = $GLOBALS["global_params"]["root_public"] . "assets/profile/";
 
+        $path = "";
+
         if ($image < 36)
-            $path   = $folder . "profile_" . str_pad($image, 4, "0") . ".webp";
+            $path = $folder . "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".webp";
         else
-            $path   = $folder . "profile_" . str_pad($image, 4, "0") . ".jpg";        
+            $path = $folder . "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".jpg";        
 
         if (file_exists($path))
             return $path;
@@ -112,7 +114,61 @@
     // FONCTIONS RELATIVES AU LORE
 
     function generateRandomPublicData() {
+        $roles = json_decode( file_get_contents(
+            $GLOBALS["global_params"]["root_public"] . "assets/rp_data/procedural_role.json"
+        , true) );
+
+        //write("");
+        //return $roles->{"public_name"}->{"FirstName"};
+
+        // GENERATE NAME
+        $firstname   = $roles->{"public_name"}->{"FirstName"}
+        [rand(0, count($roles->{"public_name"}->{"FirstName"})-1 )];
         
+        $lastname    = $roles->{"public_name"}->{"LastName" }
+        [rand(0, count($roles->{"public_name"}->{"LastName" })-1 )];
+
+        $public_name  = $firstname . " " . $lastname;
+
+        // GENERATE SPECIE
+        $specie =      $roles->{"specie"}
+        [rand(0, count($roles->{"specie"})-1 )];
+
+        // GENERATE TITLE
+        $title = $roles->{"title"}
+        [rand(0, count($roles->{"title"})-1 )];
+
+        // GENERATE IMAGE
+        $public_image = rand(
+            $specie->{"images"}[0][0], 
+            $specie->{"images"}[0][1]
+        );
+
+        for ($i = 0; $i < 100; $i++) { // euristic
+            // GENERATE CLASS
+            $class = $roles->{"class"}[ 
+                rand(   0, 
+                        count( $roles->{"class"}) - 1
+                    )
+            ];
+
+            if (
+                    ($class->{"images"}[0][0] <= $public_image && $public_image <= $class->{"images"}[0][1]) 
+                    || $i == 99 
+                ) 
+            {
+                return [
+                    "public_name"   => $public_name,
+                    "public_image"  => $public_image,
+        
+                    "specie"        => $specie->{"name"},
+                    "class"         => $class->{"name"},
+                    "title"         => $title,
+
+                    "success"       => true
+                ];
+            }
+        }
     }
 
 ?>
