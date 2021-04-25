@@ -1,5 +1,11 @@
 <?php
 
+/*
+    INIT_DATABASE:
+    Activez ce fichier ou ouvrez sa page si vous souhaitez reinitialiser la base donnée.
+*/
+
+
 // INTIALISATION DE LA BASE DE DONNEE
 
 if (true) { 

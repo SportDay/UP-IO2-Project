@@ -1,10 +1,22 @@
 <?php
-    // FONCTIONS DE SECURITE (avec effets de bords)
+    /*
 
-    function simple_disconnect () {
+    SECURITY:
+    Ce fichier repertorie des fonction de verification relative à la gestion des compte et la connexion.
+    Ces fonctions ont donc naturellement des effets de bords sur la base de donnée réseau et les cookies/session.
+
+    */
+
+    // ACTUALISATION DE LA SESSION (s'execute avant l'execution de chaque page)
+
+    function simple_disconnect () { // reset de session
+        /*
+        session_unset();
+        session_destroy();
+        session_start();
+        */
         $_SESSION["connected"] = false;
         $_SESSION["admin"]     = false;
-
     }
 
     function tryConnect () {
@@ -65,7 +77,7 @@
             $_COOKIE["cookie_expire"] < time()            
             ) { mysqli_close($connexion); return; }
 
-            //////////////////////////////////////////////
+        //////////////////////////////////////////////
         // NOW CONNECT
 
         $_SESSION["id"]             = $result["id"];
@@ -90,6 +102,18 @@
         
         mysqli_close($connexion);
     }
+
+    // SUPPRESSION DES DONNEES
+
+    function removeAccount() {
+
+    }
+
+    function removePublicPage() {
+
+    }
+
+    // UTILITIES
 
     function redirectHomeConnect () {
         if ( !$_SESSION["connected"] ) {
@@ -131,4 +155,6 @@
             exit();
         }
     }
+
+//////////////////////////////////////////////////////////////////////
 ?>

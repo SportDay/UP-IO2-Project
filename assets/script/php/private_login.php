@@ -3,6 +3,8 @@
     // SORTIE : echo true|false; | true si connection réussis, false sinon
     // plus tard on sortira un json avec plus d'information en cas de problème
 
+    // ATTENTION
+    // LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
     $global_params = [
         "root"        => "../../../../",
         "root_public" => "../../../../root_public/",
@@ -12,6 +14,17 @@
     require($global_params["root"] . "assets/script/php/functions.php");
     session_start();
     
+    if (
+        !isset($_POST["username"]) || 
+        !isset($_POST["password"]) || 
+        !isset($_POST["remember"])
+        )
+    {
+        echo json_encode([
+            "success" => false,
+            "error"   => "Requête incorrecte."
+        ]); exit();
+    }
 
     // GET LES INFOS DE CONNECTION
     $username = $_POST["username"];
@@ -24,8 +37,7 @@
         echo json_encode([
             "success" => false,
             "error"   => "Problème de formattage."
-        ]);
-        exit();
+        ]); exit();
     }
 
     // CONNECTION A LA BASE DE DONNEE
@@ -41,13 +53,14 @@
         echo json_encode([
             "success" => false,
             "error"   => "Base de donnée indisponible."
-        ]);
-        exit();
+        ]); exit();
     }
 
     $result = $connexion->query(
         "SELECT * FROM users WHERE username=\"". $connexion->real_escape_string($username) . "\";"
     );
+
+
 
     if ($result->num_rows == 0)
     {
@@ -56,8 +69,7 @@
         echo json_encode([
             "success" => false,
             "error"   => "Couple pseudo/mot de passe innexistant."
-        ]);
-        exit();
+        ]); exit();
     }
 
     $result = $result->fetch_assoc();
@@ -71,8 +83,7 @@
         echo json_encode([
             "success" => false,
             "error"   => "Veuillez réessayer (moins rapidement)."
-        ]);
-        exit();
+        ]); exit();
     }
 
     if ($hashed_password != $result["password"]) {
@@ -80,8 +91,7 @@
         echo json_encode([
             "success" => false,
             "error"   => "Couple pseudo/mot de passe innexistant."
-        ]);
-        exit();
+        ]); exit();
     }
 
     // SIGN IN

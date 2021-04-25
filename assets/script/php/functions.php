@@ -76,7 +76,7 @@
         $pass .= $row["id"] . $row["creation_date"] . $pass . $row["username"]; // SALT
         return hash('sha512', hash('md5', $pass, false) . $pass, false); 
 
-        // NOTE SAFE : hash1(hash2(hash3(...hashn(pass+salt)+salt)+salt)...)+salt)
+        // NOT SAFE : hash1(hash2(hash3(...hashn(pass+salt)+salt)+salt)...)+salt)
         // SAFE     : hash1(hash2(hash3(...hashn(pass + salt) + pass + salt) + pass + salt)...) + pass + salt)
         // je me base sur les conseils de cette page :
         // https://softwareengineering.stackexchange.com/questions/115406/is-it-more-secure-to-hash-a-password-multiple-times
@@ -96,12 +96,21 @@
 
     function getImagePath($image) {
         $folder = $GLOBALS["global_params"]["root_public"] . "assets/profile/";
-        $path   = $folder . "profile_" . $image . ".jpg";
+
+        if ($image < 36)
+            $path   = $folder . "profile_" . str_pad($image, 4, "0") . ".webp";
+        else
+            $path   = $folder . "profile_" . str_pad($image, 4, "0") . ".jpg";        
 
         if (file_exists($path))
             return $path;
 
         return $folder . "default.png";
     }
+
+    //////////////////////////////////
+    // FONCTIONS RELATIVES AU LORE
+
+    function generateRandomPublicData()
 
 ?>

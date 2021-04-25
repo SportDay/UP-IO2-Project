@@ -1,4 +1,7 @@
 <?php
+
+    // ATTENTION
+    // LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
     $global_params = [
         "root"        => "../../../../",
         "root_public" => "../../../../root_public/",

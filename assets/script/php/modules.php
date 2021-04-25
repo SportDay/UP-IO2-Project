@@ -1,4 +1,14 @@
-<?php
+<?php 
+
+/*
+
+    MODULES:
+    Les modules correspondent à un ensemble de fonctions qui générent des élements html procéduraux.
+    Ces fonctions produisent donc effets de bords sur les pages ou elles sont appelés.
+
+
+*/
+
 
 // MENU
 function menu_when_not_connected () {
@@ -86,21 +96,21 @@ function menu_when_not_connected () {
                 remember = document.getElementById("login_remember");
                 debug    = document.getElementById("login_error");
 
-                var data = new FormData();
+                let data = new FormData();
                 data.append("username", nickname.value);
                 data.append("password", password.value);
                 data.append("remember", remember.checked);
                 //////////
 
-                var xmlhttp = new XMLHttpRequest();
+                let xmlhttp = new XMLHttpRequest();
                 
                 xmlhttp.open('POST', 
                 "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/login.php");
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
-                    var DONE = 4; // readyState 4 means the request is done.
-                    var OK = 200; // status 200 is a successful return.
+                    let DONE = 4; // readyState 4 means the request is done.
+                    let OK = 200; // status 200 is a successful return.
                     
                     if (xmlhttp.readyState === DONE)
                         if (xmlhttp.status === OK)
@@ -131,20 +141,20 @@ function menu_when_not_connected () {
                 password = document.getElementById("register_password");
                 debug    = document.getElementById("register_error");
 
-                var data = new FormData();
+                let data = new FormData();
                 data.append("username", nickname.value);
                 data.append("password", password.value);
                 //////////
 
-                var xmlhttp = new XMLHttpRequest();
+                let xmlhttp = new XMLHttpRequest();
                 
                 xmlhttp.open('POST', 
                 "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/signup.php");
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
-                    var DONE = 4; // readyState 4 means the request is done.
-                    var OK = 200; // status 200 is a successful return.
+                    let DONE = 4; // readyState 4 means the request is done.
+                    let OK = 200; // status 200 is a successful return.
 
                     if (xmlhttp.readyState === DONE)
                         if (xmlhttp.status === OK)
@@ -171,30 +181,6 @@ function menu_when_not_connected () {
             }
 
             ////////////////////////
-
-            function redirection() { // en reference au GET : q=
-                url = GET("q");
-                if (url == null) 
-                    url = window.location.href.split('?')[0];
-                else
-                    url = decodeURIComponent(url.replace(/\+/g, ' '));
-                window.open(url,"_self");
-            }
-
-            function GET (param) {
-                var otp = {};
-
-                window.location.href.replace( location.hash, '' ).replace( 
-                    /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
-                    function( m, key, value ) { // callback
-                        otp[key] = value !== undefined ? value : '';
-                    }
-                );
-
-                if (param) return otp[param] ? otp[param] : null;
-                return otp;
-            }
-
 
             // ouvrir la petite fenetre de connection
             <?php if (isset($_GET["to_connect"])){
@@ -274,21 +260,21 @@ function menu_when_connected () {
                 }
             }
 
-            function openProfile() {
-                openPage('public/public_page.php?user=<?php $_SESSION["public_name"] ?>');
+            function openProfile(profile_name="<?= htmlentities( $_SESSION["public_name"] ) ?>") {
+                openPage('public/public_page.php?user=' + profile_name);
             }
 
             function disconnect() {
-                var data = new FormData();
-                var xmlhttp = new XMLHttpRequest();
+                let data = new FormData();
+                let xmlhttp = new XMLHttpRequest();
                 
                 xmlhttp.open('POST', 
-                "<?php echo $GLOBALS["global_params"]["root_public"]?>/assets/script/php/disconnect.php");
+                "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/disconnect.php");
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
-                    var DONE = 4; // readyState 4 means the request is done.
-                    var OK = 200; // status 200 is a successful return.
+                    let DONE = 4; // readyState 4 means the request is done.
+                    let OK = 200; // status 200 is a successful return.
 
                     if (xmlhttp.readyState === DONE)
                         if (xmlhttp.status === OK)

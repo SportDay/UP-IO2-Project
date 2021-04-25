@@ -1,4 +1,13 @@
 <?php
+
+/*
+
+    HEADER :
+    Ce fichier s'execute sur l'ensemble des pages.
+    Avant celui ci s'execute aussi le fichier functions.php (fonctions générals)
+
+*/
+
 require($global_params["root"] . "assets/script/php/security.php");
 require($global_params["root"] . "assets/script/php/modules.php");
 
@@ -99,6 +108,29 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
             function openPage(relLink) {
                 relLink = "<?php echo $global_params["root_public"] ?>" + "page/" + relLink;
                 window.open(relLink, "_self");
+            }
+
+            function redirection() { // en reference au GET : q=
+                url = GET("q");
+                if (url == null) 
+                    url = window.location.href.split('?')[0];
+                else
+                    url = decodeURIComponent(url.replace(/\+/g, ' '));
+                window.open(url,"_self");
+            }
+
+            function GET (param) {
+                let otp = {};
+
+                window.location.href.replace( location.hash, '' ).replace( 
+                    /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+                    function( m, key, value ) { // callback
+                        otp[key] = value !== undefined ? value : '';
+                    }
+                );
+
+                if (param) return otp[param] ? otp[param] : null;
+                return otp;
             }
         </script>
 

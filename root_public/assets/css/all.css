@@ -47,6 +47,8 @@ body{
     
     background-color: #ffc38a;
     box-shadow: 0px 5px 26px rgba(19, 19, 19, 0.712);
+
+    z-index: 4;
 }
 
 #up_panel p, #up_panel h1, #up_panel h2, #up_panel pre {

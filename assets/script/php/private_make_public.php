@@ -1,0 +1,69 @@
+<?php
+
+    // ATTENTION
+    // LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
+    $global_params = [
+        "root"        => "../../../../",
+        "root_public" => "../../../../root_public/",
+    ];
+
+    require($global_params["root"] . "assets/script/php/constants.php");
+    require($global_params["root"] . "assets/script/php/functions.php");
+    require($global_params["root"] . "assets/script/php/security.php");
+    
+    ////////////////////////////////////////////////////////////////////
+    // ETABLISSEMENT DE LA CONNECTION
+
+    session_start();
+
+    if (
+        !isset($_POST["make_public"]) || !isset($_SESSION["make_public"]) ||
+              ($_POST["make_public"]  !=        $_SESSION["make_public"])
+               
+               /*
+                    quelqu'un qui veut utiliser ce fichier doit obligatoirement
+                    recevoir un code attribué sur la page de paramètre
+               */
+        )
+    {
+        unset($_SESSION["make_public"]);
+        echo json_encode([
+            "success" => false,
+            "error"   => "Requête incorrecte."
+        ]); exit();
+    } unset($_SESSION["make_public"]);
+
+    $connexion = mysqli_connect (
+        $db_conf["DB_URL"],
+        $db_conf["DB_ACCOUNT"],
+        $db_conf["DB_PASSWORD"],
+        $db_conf["DB_NAME"]
+    );
+
+    if (!$connexion) { 
+        // data base error
+        echo json_encode([
+            "success" => false,
+            "error"   => "Base de donnée hors d'accès."
+        ]); exit(); 
+    }
+
+    ////////////////////////////////////////////////////////////////////
+
+    // Suppression de l'ancienne page
+    if ($_SESSION["enable_public"])
+        removePublicPage();
+
+    // Creation d'une nouvelle
+
+
+
+    ////////////////////////////////////////////////////////////////////
+
+    echo json_encode([
+        "success"     => true,
+        "public_name" => htmlentities("") 
+    ]); exit(); 
+
+    mysqli_close($connexion);
+?>
