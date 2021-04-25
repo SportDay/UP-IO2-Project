@@ -111,6 +111,8 @@
     //////////////////////////////////
     // FONCTIONS RELATIVES AU LORE
 
-    function generateRandomPublicData()
+    function generateRandomPublicData() {
+        
+    }
 
 ?>
