@@ -27,4 +27,12 @@
     //write($h);
 
     //gettype(hashPassword("test", ["id"=>"3", "creation_date"=>"19291", "username"=>"jean"]));
+
+    $global_params = [
+        "root"        => "../../../",
+        "root_public" => "../../",
+    ];
+
+    for ($i = 0; $i < 10; $i++)
+        write(json_encode(generateRandomPublicData()));
 ?>

@@ -1,3 +1,11 @@
+
+<?php /*
+
+    FOOTER :
+    Ce fichier s'execute en dernier sur l'ensemble des pages.
+
+*/ ?>
+
 </div>
 <footer id= "down_panel">
   <div >

@@ -1,4 +1,14 @@
-<?php
+<?php 
+
+/*
+
+    MODULES:
+    Les modules correspondent à un ensemble de fonctions qui générent des élements html procéduraux.
+    Ces fonctions produisent donc effets de bords sur les pages ou elles sont appelés.
+
+
+*/
+
 
 // MENU
 function menu_when_not_connected () {
@@ -86,21 +96,21 @@ function menu_when_not_connected () {
                 remember = document.getElementById("login_remember");
                 debug    = document.getElementById("login_error");
 
-                var data = new FormData();
+                let data = new FormData();
                 data.append("username", nickname.value);
                 data.append("password", password.value);
                 data.append("remember", remember.checked);
                 //////////
 
-                var xmlhttp = new XMLHttpRequest();
+                let xmlhttp = new XMLHttpRequest();
                 
                 xmlhttp.open('POST', 
                 "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/login.php");
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
-                    var DONE = 4; // readyState 4 means the request is done.
-                    var OK = 200; // status 200 is a successful return.
+                    let DONE = 4; // readyState 4 means the request is done.
+                    let OK = 200; // status 200 is a successful return.
                     
                     if (xmlhttp.readyState === DONE)
                         if (xmlhttp.status === OK)
@@ -131,20 +141,20 @@ function menu_when_not_connected () {
                 password = document.getElementById("register_password");
                 debug    = document.getElementById("register_error");
 
-                var data = new FormData();
+                let data = new FormData();
                 data.append("username", nickname.value);
                 data.append("password", password.value);
                 //////////
 
-                var xmlhttp = new XMLHttpRequest();
+                let xmlhttp = new XMLHttpRequest();
                 
                 xmlhttp.open('POST', 
                 "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/signup.php");
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
-                    var DONE = 4; // readyState 4 means the request is done.
-                    var OK = 200; // status 200 is a successful return.
+                    let DONE = 4; // readyState 4 means the request is done.
+                    let OK = 200; // status 200 is a successful return.
 
                     if (xmlhttp.readyState === DONE)
                         if (xmlhttp.status === OK)
@@ -172,30 +182,6 @@ function menu_when_not_connected () {
 
             ////////////////////////
 
-            function redirection() { // en reference au GET : q=
-                url = GET("q");
-                if (url == null) 
-                    url = window.location.href.split('?')[0];
-                else
-                    url = decodeURIComponent(url.replace(/\+/g, ' '));
-                window.open(url,"_self");
-            }
-
-            function GET (param) {
-                var otp = {};
-
-                window.location.href.replace( location.hash, '' ).replace( 
-                    /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
-                    function( m, key, value ) { // callback
-                        otp[key] = value !== undefined ? value : '';
-                    }
-                );
-
-                if (param) return otp[param] ? otp[param] : null;
-                return otp;
-            }
-
-
             // ouvrir la petite fenetre de connection
             <?php if (isset($_GET["to_connect"])){
                 ?>document.getElementById('login').style.display='block';<?php
@@ -215,9 +201,9 @@ function menu_when_connected () {
             <div class="menu_contain_button">
                 <input
                     id="open_menu" type="image" 
-                    src=<?php echo getImagePath($_SESSION["public_name"]) ?> width="60"
+                    src="<?= getImagePath( $_SESSION["enable_public"] ? $_SESSION["public_image"] : "none")  ?>" width="60"
                     name ="menu" alt  ="menu" onclick="toggleMenu();"
-                >  
+                >
             </div>
             <br>
             <div class="menu_contain" id="menu_contain" style="display:none;">
@@ -274,21 +260,21 @@ function menu_when_connected () {
                 }
             }
 
-            function openProfile() {
-                openPage('public/public_page.php?user=<?php $_SESSION["public_name"] ?>');
+            function openProfile(profile_name="<?= htmlentities( $_SESSION["public_name"] ) ?>") {
+                openPage('public/public_page.php?user=' + profile_name);
             }
 
             function disconnect() {
-                var data = new FormData();
-                var xmlhttp = new XMLHttpRequest();
+                let data = new FormData();
+                let xmlhttp = new XMLHttpRequest();
                 
                 xmlhttp.open('POST', 
-                "<?php echo $GLOBALS["global_params"]["root_public"]?>/assets/script/php/disconnect.php");
+                "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/disconnect.php");
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
-                    var DONE = 4; // readyState 4 means the request is done.
-                    var OK = 200; // status 200 is a successful return.
+                    let DONE = 4; // readyState 4 means the request is done.
+                    let OK = 200; // status 200 is a successful return.
 
                     if (xmlhttp.readyState === DONE)
                         if (xmlhttp.status === OK)
@@ -299,7 +285,7 @@ function menu_when_connected () {
                                 if (<?php echo $GLOBALS["global_params"]["redirect"] ? "true" : "false" ; ?>)
                                     openPage('public/home_page.php?to_connect&q=' + encodeURIComponent(window.location.href)); // SI PAGE PRIVE
                                 else
-                                    window.open(window.location.href.split('?')[0], "_self"); // SI PAGE PUBLIC
+                                    window.open(window.location.href, "_self"); // SI PAGE PUBLIC
                             }
                         }
                 }
@@ -363,7 +349,89 @@ function public_message($message) { // WIP
 
 // MESSAGE PRIVEE
 function private_message($message) { // WIP
+}
 
+// FRIENDS
+function friend_bloc($friend) { // necessite un friend_js_bloc sur la même page
+    ?>
+        <div class = "mid_sub_content" id="friend_bloc_<?=htmlentities($friend["username"])?>" class="posts_and_user">
+            <div id = "profile">
+                <?php if($friend["enable_public"]) { ?>
+                <a href="<?=$GLOBALS["global_params"]["root_public"]?>page/public/public_page.php?user=<?=htmlentities($friend["public_name"])?>">
+                  <img 
+                        class="profile_img_profile" 
+                        src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none")  ?>"
+                    >
+                </a>
+                <?php } else { ?>
+                    <img 
+                        class="profile_img_profile" 
+                        src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none")  ?>"
+                    >
+                <?php } ?>
+
+                <div class="info_profile">
+                    <span class="profile_private_name">Pseudo: <?=htmlentities($friend["username"])?></span>
+                    <?php if($friend["enable_public"]) { ?>
+                    <span class="profile_public_name" >Nom: <?=   htmlentities($friend["public_name"])?></span>
+                    <span class="profile_title"       >Titre: <?= htmlentities($friend["title"])?></span>
+                    <span class="profile_specie"      >Espece: <?=htmlentities($friend["specie"])?></span>
+                    <span class="profile_class"       >Classe: <?=htmlentities($friend["class"])?></span>
+                    <?php } else { ?>
+                    <span></span> <span></span> <span></span> <span></span>
+                    <?php } ?>
+                    
+
+                    <div class="user_menu">
+                        <button class="btn_menu_user">&#8226;&#8226;&#8226;</button>
+                        <div class="user_menu_content border">
+                            <button class="btn_ignr_user" onclick='removeFriend("<?=htmlentities($friend["username"])?>");'
+                            >Supprimer</button>
+                        </div>
+                    </div>
+                    
+                    <span></span>
+                    <a href="dm.php?private=true&user=<?=htmlentities($friend["username"])?>">
+                        <img class="msg_img" width="32" height="32" src="<?=$GLOBALS["global_params"]["root_public"]?>assets/image/msg.png">
+                    </a>
+
+                </div> <br><br>
+            </div>
+
+            <br>
+        </div>
+    <?php
+
+}
+
+function friend_js_bloc() {
+    ?> <script>
+        function removeFriend(username) {
+            let friendBloc = document.getElementById("friend_bloc_"+username);
+
+            let data = new FormData();
+            data.append("username", username);
+            data.append("remove_friend", "<?= $_SESSION["remove_friend"] = randomString() ?>");
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST',
+            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/remove_friend.php");
+            xmlhttp.send( data );
+
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4) // request done
+                    if (xmlhttp.status === 200) // successful return
+                    {
+                        alert(xmlhttp.responseText);
+                        const feedback = JSON.parse(xmlhttp.responseText);
+                        
+                        if (feedback["success"])
+                            friendBloc.parentNode.removeChild(friendBloc);
+                            
+                    }
+            }
+        }
+    </script><?php
 }
 
 ?>

@@ -76,7 +76,7 @@
         $pass .= $row["id"] . $row["creation_date"] . $pass . $row["username"]; // SALT
         return hash('sha512', hash('md5', $pass, false) . $pass, false); 
 
-        // NOTE SAFE : hash1(hash2(hash3(...hashn(pass+salt)+salt)+salt)...)+salt)
+        // NOT SAFE : hash1(hash2(hash3(...hashn(pass+salt)+salt)+salt)...)+salt)
         // SAFE     : hash1(hash2(hash3(...hashn(pass + salt) + pass + salt) + pass + salt)...) + pass + salt)
         // je me base sur les conseils de cette page :
         // https://softwareengineering.stackexchange.com/questions/115406/is-it-more-secure-to-hash-a-password-multiple-times
@@ -96,12 +96,112 @@
 
     function getImagePath($image) {
         $folder = $GLOBALS["global_params"]["root_public"] . "assets/profile/";
-        $path   = $folder . "profile_" . $image . ".jpg";
+
+        $path = "";
+
+        if ($image < 36)
+            $path = $folder . "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".webp";
+        else
+            $path = $folder . "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".jpg";        
 
         if (file_exists($path))
             return $path;
 
         return $folder . "default.png";
+    }
+
+    //////////////////////////////////
+    // FONCTIONS RELATIVES AU LORE
+
+    function generateRandomPublicData() {
+        $roles = json_decode( file_get_contents(
+            $GLOBALS["global_params"]["root_public"] . "assets/rp_data/procedural_role.json"
+        , true) );
+
+        /////////////////////////////////////
+
+        $connexion = mysqli_connect (
+            $GLOBALS["DB_URL"],
+            $GLOBALS["DB_ACCOUNT"],
+            $GLOBALS["DB_PASSWORD"],
+            $GLOBALS["DB_NAME"]
+        );
+        if (!$connexion) { 
+            return "Can't connect to database."; 
+        }
+        mysqli_set_charset($connexion, "utf8");
+
+        /////////////////////////////////////
+
+        // GENERATE NAME
+        $firstname   = $roles->{"public_name"}->{"FirstName"}
+        [rand(0, count($roles->{"public_name"}->{"FirstName"})-1 )];
+        
+        $lastname    = $roles->{"public_name"}->{"LastName" }
+        [rand(0, count($roles->{"public_name"}->{"LastName" })-1 )];
+
+        $public_name  = $firstname . " " . $lastname;
+        
+        for ($i = 0; $i < 100; $i++) {
+            if ($i == 99)
+            {
+                mysqli_close($connexion);
+                return ["success" => false];
+            }
+
+            $idx = str_pad(rand(0, 999), 3, "0", STR_PAD_LEFT);
+
+            if ($connexion->query(
+                "SELECT `id` FROM `users` WHERE public_name=\"" . 
+                $connexion->real_escape_string($public_name . " " . $idx) . "\";"
+                )->num_rows == 0)
+            {
+                $public_name .= " " . $idx;
+                $i = 100;
+            }
+        }
+
+        mysqli_close($connexion);
+
+        // GENERATE SPECIE
+        $specie =      $roles->{"specie"}
+        [rand(0, count($roles->{"specie"})-1 )];
+
+        // GENERATE TITLE
+        $title = $roles->{"title"}
+        [rand(0, count($roles->{"title"})-1 )];
+
+        // GENERATE IMAGE
+        $public_image = rand(
+            $specie->{"images"}[0][0], 
+            $specie->{"images"}[0][1]
+        );
+
+        for ($i = 0; $i < 100; $i++) { // euristic
+            // GENERATE CLASS
+            $class = $roles->{"class"}[ 
+                rand(   0, 
+                        count( $roles->{"class"}) - 1
+                    )
+            ];
+
+            if (
+                    ($class->{"images"}[0][0] <= $public_image && $public_image <= $class->{"images"}[0][1]) 
+                    || $i == 99 
+                ) 
+            {
+                return [
+                    "public_name"   => $public_name,
+                    "public_image"  => $public_image,
+        
+                    "specie"        => $specie->{"name"},
+                    "class"         => $class->{"name"},
+                    "title"         => $title,
+
+                    "success"       => true
+                ];
+            }
+        }
     }
 
 ?>

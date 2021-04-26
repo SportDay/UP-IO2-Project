@@ -46,9 +46,9 @@
     <p>Avatar, Nom, Espèce, Classe, Titre</p>
     
     <div class="centered_ul"> <ul>
-      <li>Espèce : Sorcier, Moldu, Ogre, Esprit</li>
+      <li>Espèce : Sorcier, Moldu, Elf, Esprit</li>
       <li>Classe : Elève, Professeur, Les Forces du Mal, L'ordre du Phénix, ...</li>
-      <li>Titre  : Griffon d'or, Serpentar, ..</li>
+      <li>Titre  : « Gryffondor », « Poufsouffle », « Serdaigle », « Serpentard », ..</li>
     </ul> </div>
   </section>
 

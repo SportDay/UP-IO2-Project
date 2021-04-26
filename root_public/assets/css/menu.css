@@ -26,7 +26,6 @@
     background-color: #ffc38a;
     border: solid rgb(59, 61, 63);
     border-radius: 5px;
-
 }
 
 /* ----- MENU ELEMENTS ----- */
@@ -48,7 +47,7 @@ input[type=text], input[type=password] {
 #open_menu {
     border: rgb(59, 61, 63);
     border-radius: 3;
-    padding: 10px;
+    padding: 0px;
 }
 
 .menu_button {
