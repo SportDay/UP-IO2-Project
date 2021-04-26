@@ -201,7 +201,7 @@ function menu_when_connected () {
             <div class="menu_contain_button">
                 <input
                     id="open_menu" type="image" 
-                    src="<?php echo getImagePath($_SESSION["public_image"])  ?>" width="60"
+                    src="<?= getImagePath( $_SESSION["enable_public"] ? $_SESSION["public_image"] : "none")  ?>" width="60"
                     name ="menu" alt  ="menu" onclick="toggleMenu();"
                 >  
             </div>

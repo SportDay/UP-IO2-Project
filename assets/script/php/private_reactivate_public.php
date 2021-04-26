@@ -17,8 +17,8 @@
     session_start();
 
     if (
-        !isset($_POST["make_public"]) || !isset($_SESSION["make_public"]) ||
-              ($_POST["make_public"]  !=        $_SESSION["make_public"])
+        !isset($_POST["reactivate_public"]) || !isset($_SESSION["reactivate_public"]) ||
+              ($_POST["reactivate_public"]  !=        $_SESSION["reactivate_public"])
                
                /*
                     quelqu'un qui veut utiliser ce fichier doit obligatoirement
@@ -26,12 +26,12 @@
                */
         )
     {
-        unset($_SESSION["make_public"]);
+        unset($_SESSION["reactivate_public"]);
         echo json_encode([
             "success" => false,
             "error"   => "Requête incorrecte."
         ]); exit();
-    } unset($_SESSION["make_public"]);
+    } unset($_SESSION["reactivate_public"]);
 
     $connexion = mysqli_connect (
         $db_conf["DB_URL"],
@@ -57,37 +57,28 @@
         ]); exit();
     }
 
-    if ( $connexion->query( "SELECT * FROM users WHERE id=\"". $_SESSION["id"] . "\";")
-        ->fetch_assoc() ["last_reroll"] + $TIME_REROLL > time()
-    ) {
+    if ( !$_SESSION["memory_public"] && !$_SESSION["enable_public"] ) {
         echo json_encode([
             "success" => false,
-            "error"   => "Vous ne pouvez reroll qu'une seul fois toute les 24 heures."
+            "error"   => "Vous n'avez pas de page à reactiver."
         ]); exit();
     }
 
-    // Suppression de l'ancienne page
-    if ($_SESSION["enable_public"])
-        removePublicPage();
+    ///////////////////////////////////////////////////////////////////
 
-    // Creation d'une nouvelle
-    $public_page = generateRandomPublicData();
+    $public_page = $connexion->query(
+        "SELECT * FROM users WHERE id=\"". $_SESSION["id"] . "\";"
+        )->fetch_assoc();
 
     $_SESSION["enable_public"] = true;
+
     $_SESSION["public_name"  ] = $public_page["public_name" ];
     $_SESSION["public_image" ] = $public_page["public_image"];
 
     $connexion->query(
         "UPDATE `users` SET " . 
         "`enable_public`=TRUE, " .
-        "`public_name`=\""  . $connexion->real_escape_string($public_page["public_name"]) . "\", " .
-        "`public_image`=" . $public_page["public_image"] . ", " .
-        "`last_reroll`="  . time() . ", " .
-
-        "`specie`=\"" . $connexion->real_escape_string($public_page["specie"]) . "\", " .
-        "`class`=\""  . $connexion->real_escape_string($public_page["class"])  . "\", " .
-        "`title`=\""  . $connexion->real_escape_string($public_page["title"])  . "\" " .
-
+        "`memory_public`=FALSE "  . 
         " WHERE `id`=" . $_SESSION["id"] . " ;"
     );
 

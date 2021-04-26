@@ -37,19 +37,29 @@
         // TRY TO CONNECT USING SESSION
         if (isset($_SESSION["connected"]) && $_SESSION["connected"]) {
             if (isset($_SESSION["inactive_time"]) && $_SESSION["inactive_time"] > time() )
-            { 
+            {
+                $result = $connexion->query(
+                    "SELECT * FROM users WHERE id=". $_SESSION["id"] . " ;"
+                )->fetch_assoc();
+
                 // CONNECT
                 $_SESSION["inactive_time"] = min(
                     $_SESSION["max_time"], 
                     (time() + $GLOBALS["TIME_SESS_INACTIVE"])
                 );
 
-                $_SESSION["last_time"] = time();                
+                $_SESSION["last_time"]     = time();
+                $_SESSION["banned"]        = $result["banned_to"] > time();
+
                 mysqli_query($connexion, 
-                    "UPDATE users SET last_join=" . $_SESSION["last_time"] 
-                    . " WHERE `id`=" . $_SESSION["id"]
+                    "UPDATE users SET " .
+                    "last_join=" . $_SESSION["last_time"] . ", " .
+                    "banned=" . $_SESSION["banned"]       . " "  .
+                    "WHERE `id`=" . $_SESSION["id"]       . " ;"
                 );
 
+                $_SESSION["memory_public"] = $result["memory_public"];
+                
                 mysqli_close($connexion);
                 return;
             }
@@ -85,8 +95,10 @@
         $_SESSION["admin"]          = $result["admin"];
 
         $_SESSION["enable_public"]  = $result["enable_public"];
-        $_SESSION["public_name"]    = $result["public_image"];
+        $_SESSION["memory_public"]  = $result["memory_public"];
+        $_SESSION["public_name"]    = $result["public_name"];
         $_SESSION["public_image"]   = $result["public_image"];
+        $_SESSION["banned"]         = $result["banned_to"] > time();
 
         $_SESSION["init_time"]      = time();
         $_SESSION["last_time"]      = time();
@@ -96,21 +108,128 @@
         $_SESSION["connected"]      = true;
 
         mysqli_query($connexion, 
-                    "UPDATE users SET last_join=" . $_SESSION["last_time"] 
-                    . " WHERE `id`=" . $_SESSION["id"] . " ;"
-                );
+            "UPDATE users SET " .
+            "last_join=" . $_SESSION["last_time"] . ", " .
+            "banned=" . $_SESSION["banned"]       . " "  .
+            "WHERE `id`=" . $_SESSION["id"]       . " ;"
+        );
         
         mysqli_close($connexion);
     }
 
     // SUPPRESSION DES DONNEES
 
-    function removeAccount() {
+    function removeAccount($currentAccount=TRUE, $id=0) {
+        if ($currentAccount) $id = $_SESSION["id"];
 
+        if (!( ($error = removePublicPage()) === FALSE)) 
+            return $error;
+
+        //////////////
+        $connexion = mysqli_connect (
+            $GLOBALS["DB_URL"],
+            $GLOBALS["DB_ACCOUNT"],
+            $GLOBALS["DB_PASSWORD"],
+            $GLOBALS["DB_NAME"]
+        );
+        if (!$connexion) { 
+            return "Can't connect to database."; 
+        }
+        mysqli_set_charset($connexion, "utf8");
+
+
+        // supprimer: friends direct_messages
+        $connexion->query( // pas besoin de verifier que c'est privé
+            "DELETE FROM `friends` WHERE `from_id`=" . $id . " OR `to_id`=" . $id . " ;" 
+        );
+        $connexion->query(
+            "DELETE FROM `direct_messages` WHERE `user_id_0`=" . $id . " OR `user_id_1`=" . $id . " ;"
+        );
+
+        // supprimer le compte: (users)
+        $connexion->query(
+            "DELETE FROM `users` WHERE `id`=" . $id . " ;"
+        );
+
+        // mettre fin aux cookies/session
+        setcookie("cookie_id",      "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
+        setcookie("cookie_pass",    "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
+        setcookie("cookie_expire",  "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
+        
+        session_unset();
+        session_destroy();
+        session_start();
+
+        return false;
     }
 
-    function removePublicPage() {
+    function removePublicPage($currentAccount=TRUE, $id=0) {
+        if ($currentAccount) $id = $_SESSION["id"];
 
+        //////////////
+        $connexion = mysqli_connect (
+            $GLOBALS["DB_URL"],
+            $GLOBALS["DB_ACCOUNT"],
+            $GLOBALS["DB_PASSWORD"],
+            $GLOBALS["DB_NAME"]
+        );
+        if (!$connexion) { 
+            return "Can't connect to database."; 
+        }
+        mysqli_set_charset($connexion, "utf8");
+
+        $userData = $connexion->query("SELECT * FROM `users` WHERE id=" . $id . " ;")->fetch_assoc();
+
+        if (!$userData["enable_public"]) return false;
+
+        /////////////
+        // supprimer: reports, posts, pages_liked likes direct_messages
+        // attention, il y a un ordre de suppression
+            
+            // pages_liked | parents : | enfants : reports et likes
+            $connexion->query(
+                "DELETE FROM `pages_liked` WHERE `user_id`=" . $id . " ;"
+            );
+
+            // posts | parents : | enfants : reports et likes
+                $connexion->query(
+                    "DELETE FROM `reports` WHERE `user_id`=" . $id . " ;"
+                );
+                $connexion->query(
+                    "DELETE FROM `likes` WHERE `user_id`=" . $id . " ;"
+                );    
+            $connexion->query(
+                "DELETE FROM `posts` WHERE `user_id`=" . $id . " ;"
+            );
+
+            // direct_messages
+            $connexion->query(
+                "DELETE FROM `direct_messages` WHERE `(from_id`=" . $id . " OR `to_id`=" . $id . ") ;"
+            );
+
+        /////////////
+        // desactiver la page publique (dans users)
+        $connexion->query(
+            "UPDATE `users` SET " . 
+            "`enable_public`=FALSE, " .
+            "`memory_public`=TRUE  " . 
+            // etant donné qu'on ne peut pas reroll n'importe quand, 
+            // un utilisateur de réactiver sa page supprimé
+            // du coup je ne supprime pas 
+            // les données rudimentaires d'une page publique
+
+            " WHERE `id`=" . $_SESSION["id"] . " ;"
+        );
+
+        /////////////
+        // update la session
+        if ($currentAccount) {
+            $_SESSION["enable_public"] = FALSE;
+            $_SESSION["public_name" ] = "";
+            $_SESSION["public_image"] = -1;
+        }
+
+        return false;
     }
 
     // UTILITIES

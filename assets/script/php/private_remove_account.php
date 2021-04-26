@@ -81,5 +81,8 @@
         "error"   => ""
     ]); exit(); 
 
+    session_unset();
+    session_destroy();
     mysqli_close($connexion);
+    exit();
 ?>

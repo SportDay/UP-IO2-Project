@@ -25,15 +25,27 @@
             ($_SESSION["enable_public"]) ? (" | " . $_SESSION["public_name"]) : ""
         ?></p></div>
         
-        <?php if ($_SESSION["enable_public"]) { ?>
-                <button class="btn_valide" onclick="makePublic();"
-                >Reroll</button>
-                <button class="btn_remove" onclick="removePublic();"
-                >Supprimer</button>
-        <?php } else { ?>
-                <button class="btn_valide" onclick="makePublic();"
-                >Créer</button>
-        <?php } ?>
+        <?php 
+            
+            if ($_SESSION["banned"]) { ?>
+                <p>Vous êtes temporairement bannie de la partie publique du site.</p>
+            <?php } else {
+
+                if ($_SESSION["enable_public"]) { ?>
+                    <button class="btn_valide"      onclick="makePublic();"
+                    >Reroll</button>
+                    <button class="btn_remove"      onclick="removePublic();"
+                    >Supprimer</button>
+                <?php } else { ?>
+                    <button class="btn_valide"      onclick="makePublic();"
+                    >Créer</button>
+                    <button class="btn_valide"      onclick="reactivatePublic();" 
+                    style="display:<?= $_SESSION["memory_public"] ? "inline" : "none"?>"
+                    >Réactiver</button>
+                <?php }
+
+            }
+        ?>
 
         <p id="error_public_page" style="display:none">Error</p>
     
@@ -82,6 +94,8 @@
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
 
 <script>
+
+    // PUBLIC
     
     function makePublic() {
         let error = document.getElementById("error_public_page");
@@ -145,11 +159,11 @@
             if (xmlhttp.readyState === DONE)
                 if (xmlhttp.status === OK)
                 {
-                    alert(xmlhttp.responseText);
+                    //alert(xmlhttp.responseText);
                     const feedback = JSON.parse(xmlhttp.responseText);
 
                     if (feedback["success"])
-                        window.open( windd , "_self" );
+                        window.open(window.location.href.split('?')[0], "_self");
                     else {
                         error.innerHTML = feedback["error"];
                         error.style.display = "block";
@@ -162,6 +176,46 @@
                 }
         }
     }
+
+    function reactivatePublic() {
+        let error = document.getElementById("error_public_page");
+
+        let data = new FormData();
+        data.append("reactivate_public", "<?= $_SESSION["reactivate_public"] = randomString() ?>");
+        //////////
+
+        let xmlhttp = new XMLHttpRequest();
+        
+        xmlhttp.open('POST',
+        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/reactivate_public.php");
+        xmlhttp.send( data );
+
+        xmlhttp.onreadystatechange = function () {
+            let DONE = 4; // readyState 4 means the request is done.
+            let OK = 200; // status 200 is a successful return.
+
+            if (xmlhttp.readyState === DONE)
+                if (xmlhttp.status === OK)
+                {
+                    //alert(xmlhttp.responseText);
+                    const feedback = JSON.parse(xmlhttp.responseText);
+
+                    if (feedback["success"])
+                        openProfile(feedback["public_name"]);
+                    else {
+                        error.innerHTML = feedback["error"];
+                        error.style.display = "block";
+                    }
+                }
+                else
+                {
+                    error.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                    error.style.display = "block";
+                }
+        }
+    }
+
+    // PRIVATE
 
     function changePassword() {
         let error         = document.getElementById("error_change_password");
@@ -243,7 +297,7 @@
                     password .value = "";
                     password2.value = "";
 
-                    alert(xmlhttp.responseText);
+                    //alert(xmlhttp.responseText);
                     const feedback = JSON.parse(xmlhttp.responseText);
 
                     if (feedback["success"])

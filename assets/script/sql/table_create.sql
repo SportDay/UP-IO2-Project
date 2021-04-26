@@ -1,21 +1,21 @@
 -- #########################################################
 -- POUR INITIALISER LA BASE DE DONNER (ALLEZ DANS : /public_root/init_database.php)
 
-create database if not exists reseau;
+drop database if exists reseau;
+create database reseau;
 use reseau;
 
 -- ##########################################################
 -- CLEAN (attention à bien supprimer les parents après les enfants !!)
 
-drop table if exists direct_messages;   -- REF TO USER
-drop table if exists friends;           -- REF TO USER
+drop table if exists direct_messages;   -- REF TO USERS
+drop table if exists friends;           -- REF TO USERS
 
-drop table if exists reports;           -- REF TO USER/POSTS
+drop table if exists reports;           -- REF TO USERS/POSTS
 drop table if exists likes;             -- REF TO USERS/POSTS
 drop table if exists posts;             -- REF TO USERS
 
 drop table if exists pages_liked;       -- REF TO USERS
-drop table if exists follows;           -- REF TO USERS
 
 drop table if exists users;
 
@@ -39,6 +39,8 @@ CREATE TABLE `users` (
     `cookie_expire` INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
 
     `enable_public` BOOLEAN         DEFAULT FALSE,
+    `memory_public` BOOLEAN         DEFAULT FALSE,          
+
     `public_image`  INT             DEFAULT 0,
     `public_name`   varchar(32)     DEFAULT NULL,
     `specie`        varchar(32)     DEFAULT NULL,
@@ -48,18 +50,10 @@ CREATE TABLE `users` (
     `description`   varchar(50)     DEFAULT NULL,
     
     `banned`        BOOLEAN         DEFAULT FALSE,
-    `bannedto`      INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
+    `banned_to`     INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
     
     `admin`         BOOLEAN         DEFAULT FALSE
 
-) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE follows (
-    `user_id`       bigint UNSIGNED NOT NULL,
-    `follow_id`     bigint UNSIGNED NOT NULL,
-
-    PRIMARY KEY (`user_id`),
-    FOREIGN KEY (`follow_id`) REFERENCES users(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE pages_liked (
@@ -99,7 +93,8 @@ CREATE TABLE likes (
     `user_id`        bigint UNSIGNED NOT NULL,
 
     PRIMARY KEY (`message_id`),
-    FOREIGN KEY (`user_id`) REFERENCES users(`id`)
+    FOREIGN KEY (`message_id`) REFERENCES posts(`id`),
+    FOREIGN KEY (`user_id`)    REFERENCES users(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE reports (
@@ -107,19 +102,20 @@ CREATE TABLE reports (
     `user_id`        bigint UNSIGNED NOT NULL,
 
     PRIMARY KEY (`message_id`),
-    FOREIGN KEY (`user_id`) REFERENCES users(`id`)
+    FOREIGN KEY (`message_id`) REFERENCES posts(`id`),
+    FOREIGN KEY (`user_id`)    REFERENCES users(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- ##########################################################
 -- FRIENDS
 
 CREATE TABLE friends (
-    `user_id`        bigint UNSIGNED NOT NULL,
-    `friend_id`      bigint UNSIGNED NOT NULL,
+    `user_id_0`        bigint UNSIGNED NOT NULL,
+    `user_id_1`        bigint UNSIGNED NOT NULL,
 
-    PRIMARY KEY (`user_id`),
-    FOREIGN KEY (`user_id`)   REFERENCES users(`id`),
-    FOREIGN KEY (`friend_id`) REFERENCES users(`id`)
+    PRIMARY KEY (`user_id_0`),
+    FOREIGN KEY (`user_id_1`)   REFERENCES users(`id`),
+    FOREIGN KEY (`user_id_0`)   REFERENCES users(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- ##########################################################
@@ -131,6 +127,7 @@ CREATE TABLE direct_messages (
     `to_id`         bigint UNSIGNED NOT NULL,
     `creation_date` INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
     `content`       varchar(256)    DEFAULT NULL,
+    `private`       BOOLEAN         DEFAULT TRUE, -- Pour differencier les messages de match et d'amis
 
     PRIMARY KEY(id),
     FOREIGN KEY(from_id) REFERENCES users(id),

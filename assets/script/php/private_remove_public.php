@@ -57,8 +57,8 @@
     echo json_encode([
         "success" => true,
         "error"   => ""
-    ]); exit(); 
+    ]);
 
     mysqli_close($connexion);
-
+    exit();
 ?>
