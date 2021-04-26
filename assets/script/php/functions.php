@@ -118,8 +118,20 @@
             $GLOBALS["global_params"]["root_public"] . "assets/rp_data/procedural_role.json"
         , true) );
 
-        //write("");
-        //return $roles->{"public_name"}->{"FirstName"};
+        /////////////////////////////////////
+
+        $connexion = mysqli_connect (
+            $GLOBALS["DB_URL"],
+            $GLOBALS["DB_ACCOUNT"],
+            $GLOBALS["DB_PASSWORD"],
+            $GLOBALS["DB_NAME"]
+        );
+        if (!$connexion) { 
+            return "Can't connect to database."; 
+        }
+        mysqli_set_charset($connexion, "utf8");
+
+        /////////////////////////////////////
 
         // GENERATE NAME
         $firstname   = $roles->{"public_name"}->{"FirstName"}
@@ -129,6 +141,27 @@
         [rand(0, count($roles->{"public_name"}->{"LastName" })-1 )];
 
         $public_name  = $firstname . " " . $lastname;
+        
+        for ($i = 0; $i < 100; $i++) {
+            if ($i == 99)
+            {
+                mysqli_close($connexion);
+                return ["success" => false];
+            }
+
+            $idx = str_pad(rand(0, 999), 3, "0", STR_PAD_LEFT);
+
+            if ($connexion->query(
+                "SELECT `id` FROM `users` WHERE public_name=\"" . 
+                $connexion->real_escape_string($public_name . " " . $idx) . "\";"
+                )->num_rows == 0)
+            {
+                $public_name .= " " . $idx;
+                $i = 100;
+            }
+        }
+
+        mysqli_close($connexion);
 
         // GENERATE SPECIE
         $specie =      $roles->{"specie"}

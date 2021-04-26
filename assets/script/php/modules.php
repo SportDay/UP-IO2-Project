@@ -349,7 +349,6 @@ function public_message($message) { // WIP
 
 // MESSAGE PRIVEE
 function private_message($message) { // WIP
-
 }
 
 ?>

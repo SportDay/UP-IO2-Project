@@ -66,12 +66,21 @@
         ]); exit();
     }
 
+    // generation d'un nouvelle
+    $public_page = generateRandomPublicData();
+    if ($public_page["success"] === FALSE)
+    {
+        echo json_encode([
+            "success" => false,
+            "error"   => "Une est survenue dans la génération des données, veuillez réessayer."
+        ]); exit();
+    }
+
     // Suppression de l'ancienne page
     if ($_SESSION["enable_public"])
         removePublicPage();
 
-    // Creation d'une nouvelle
-    $public_page = generateRandomPublicData();
+    // application de la nouvelle
 
     $_SESSION["enable_public"] = true;
     $_SESSION["public_name"  ] = $public_page["public_name" ];

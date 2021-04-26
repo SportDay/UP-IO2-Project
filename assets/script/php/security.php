@@ -160,6 +160,7 @@
         session_destroy();
         session_start();
 
+        mysqli_close($connexion);
         return false;
     }
 
@@ -180,7 +181,10 @@
 
         $userData = $connexion->query("SELECT * FROM `users` WHERE id=" . $id . " ;")->fetch_assoc();
 
-        if (!$userData["enable_public"]) return false;
+        if (!$userData["enable_public"]) {
+            mysqli_close($connexion);
+            return false;
+        }
 
         /////////////
         // supprimer: reports, posts, pages_liked likes direct_messages
@@ -229,6 +233,7 @@
             $_SESSION["public_image"] = -1;
         }
 
+        mysqli_close($connexion);
         return false;
     }
 
