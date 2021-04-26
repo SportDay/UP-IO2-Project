@@ -1,4 +1,13 @@
 <?php
+
+/*
+
+    HEADER :
+    Ce fichier s'execute sur l'ensemble des pages.
+    Avant celui ci s'execute aussi le fichier functions.php (fonctions générals)
+
+*/
+
 require($global_params["root"] . "assets/script/php/security.php");
 require($global_params["root"] . "assets/script/php/modules.php");
 
@@ -13,8 +22,8 @@ if (!isset($global_params["root_public"]) || !isset($global_params["root"]))
 /*///////////////////////////////////////////
 
 Listes des paramètres de _SESSION:
-  id, username | admin
-  enable_public | public_name | public_image
+  id | username | admin
+  enable_public | memory_public | banned | public_name | public_image
   init_time | last_time | inactive_time | max_time
   connected
 
@@ -113,7 +122,7 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
             function GET (param) {
                 let otp = {};
 
-                window.location.href.replace( location.hash, '' ).replace(
+                window.location.href.replace( location.hash, '' ).replace( 
                     /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
                     function( m, key, value ) { // callback
                         otp[key] = value !== undefined ? value : '';

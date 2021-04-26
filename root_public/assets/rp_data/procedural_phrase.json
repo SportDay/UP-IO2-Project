@@ -1,0 +1,24 @@
+{
+    "Default": [
+        "Poudlard est une vieille école"
+    ], "Eleve": [
+        "Leviosa!", "As tu fait le dm ?",
+        "Participeras-tu au match de Quidditch ?"
+    ], "Professeur": [
+        "Ouvrez vos cahiers",
+        "Préparez un élyxir de vieillesse pour la prochaine fois!"
+    ], "Les Forces du Mal" : [
+        "Meurt!", "Souffre!", "Sang impure!",
+        "Il faut éradiquer Harry Potter"
+    ], "L'ordre du Phénix" : [
+        "Vite il faut se cacher!",
+        "Notre monde court un grave danger"
+    ], "Autre" : [
+        "J'ai entendu du bruit la nuit dernière.",
+        "Il se passe des choses étranges",
+        "On ne nous dit pas tout"
+    ], "Servant" : [
+        "Oui maître.", "Avez vous besoin d'aide?",
+        "Vos désires sont des ordres"
+    ]
+}
