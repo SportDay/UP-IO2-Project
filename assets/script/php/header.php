@@ -112,7 +112,7 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
 
             function redirection() { // en reference au GET : q=
                 url = GET("q");
-                if (url == null) 
+                if (url == null)
                     url = window.location.href.split('?')[0];
                 else
                     url = decodeURIComponent(url.replace(/\+/g, ' '));

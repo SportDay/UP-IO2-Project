@@ -181,7 +181,6 @@ function menu_when_not_connected () {
             }
 
             ////////////////////////
-
             // ouvrir la petite fenetre de connection
             <?php if (isset($_GET["to_connect"])){
                 ?>document.getElementById('login').style.display='block';<?php
