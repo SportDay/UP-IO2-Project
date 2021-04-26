@@ -19,7 +19,7 @@
 
 <div id = "mid_content">
     <h1 class="settings_title">Publique</h1>
-    <div id = "mid_sub_content" class="posts_and_user">
+    <div class = "mid_sub_content" class="posts_and_user">
         
         <div class="settings_title"><p>Page publique<?= 
             ($_SESSION["enable_public"]) ? (" | " . $_SESSION["public_name"]) : ""
@@ -56,7 +56,7 @@
 <div id = "mid_content"> <!-- Passwords -->
     <h1 class="settings_title">Privé | <?= $_SESSION["username"] ?> </h1>
     
-    <div id = "mid_sub_content">
+    <div class = "mid_sub_content">
         <div class="settings_title"><p>Changement du mot de passe</p></div>
         
         <div class="input_title">
@@ -70,7 +70,7 @@
             >Changer le mot de passe</button>
     </div>
 
-    <div id = "mid_sub_content"> <!-- Remove Account -->
+    <div class = "mid_sub_content"> <!-- Remove Account -->
         
         <div class="settings_title"><p>Supprimer le compte</p></div>
         
@@ -152,11 +152,8 @@
         xmlhttp.send( data );
 
         xmlhttp.onreadystatechange = function () {
-            let DONE = 4; // readyState 4 means the request is done.
-            let OK = 200; // status 200 is a successful return.
-
-            if (xmlhttp.readyState === DONE)
-                if (xmlhttp.status === OK)
+            if (xmlhttp.readyState === 4)
+                if (xmlhttp.status === 200)
                 {
                     //alert(xmlhttp.responseText);
                     const feedback = JSON.parse(xmlhttp.responseText);

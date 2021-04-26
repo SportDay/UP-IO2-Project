@@ -90,6 +90,27 @@ body{
     white-space: normal;
 }
 
+.mid_sub_content {
+    text-align: center;
+
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+
+    width: 80%;
+    min-width: 500px;
+
+    padding-top: 1em;
+    padding-bottom: 1em;
+    
+    /*-------------------------------*/
+
+    border-radius: 5px;
+    background-color:rgb(59, 61, 63);
+    border: solid rgb(209, 176, 115);
+}
+
 #mid_panel{
     display: flex;
     flex-direction: column;

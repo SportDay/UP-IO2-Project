@@ -203,7 +203,7 @@ function menu_when_connected () {
                     id="open_menu" type="image" 
                     src="<?= getImagePath( $_SESSION["enable_public"] ? $_SESSION["public_image"] : "none")  ?>" width="60"
                     name ="menu" alt  ="menu" onclick="toggleMenu();"
-                >  
+                >
             </div>
             <br>
             <div class="menu_contain" id="menu_contain" style="display:none;">
@@ -352,37 +352,86 @@ function private_message($message) { // WIP
 }
 
 // FRIENDS
-function friend_bloc($friend) {
+function friend_bloc($friend) { // necessite un friend_js_bloc sur la même page
     ?>
-              <div id = "mid_content" class="posts_and_user" style="text-align: initial;">
-          <div id = "profile">
-              <a href="/root_public/page/public/public_page.php?user=">
-                  <img class="profile_img_profile" src="<?= $global_params["root"] . "assets/profile/default.png" ?>">
-              </a>
-              <div class="info_profile">
-                  <span class="profile_nickname" >Nom: </span>
-                  <span class="profile_titre"    >Titre: </span>
-                  <span class="profile_espece"   >Espece: </span>
-                  <span class="profile_classe"   >Classe: </span>
-                  <span class="profile_nlikes"   >Likes: </span>
-                  <div class="user_menu">
-                      <button class="btn_menu_user">&#8226;&#8226;&#8226;</button>
-                      <div class="user_menu_content border">
-                          <form action="/supp_friend.php" method="post">
-                              <input type="hidden" name="supp_friend" value="user_id">
-                              <button class="btn_ignr_user" type="submit">Supprimer</button>
-                          </form>
-                      </div>
-                  </div>
-                  <div class="espace2"></div>
-                  <a href="dm.php?id=">
-                    <img class="msg_img" width="32" height="32" src="../../assets/image/msg.png">
-                  </a>
-              </div>
-          </div>
-      </div>
+        <div class = "mid_sub_content" id="friend_bloc_<?=htmlentities($friend["username"])?>" class="posts_and_user">
+            <div id = "profile">
+                <?php if($friend["enable_public"]) { ?>
+                <a href="<?=$GLOBALS["global_params"]["root_public"]?>page/public/public_page.php?user=<?=htmlentities($friend["public_name"])?>">
+                  <img 
+                        class="profile_img_profile" 
+                        src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none")  ?>"
+                    >
+                </a>
+                <?php } else { ?>
+                    <img 
+                        class="profile_img_profile" 
+                        src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none")  ?>"
+                    >
+                <?php } ?>
+
+                <div class="info_profile">
+                    <span class="profile_private_name">Pseudo: <?=htmlentities($friend["username"])?></span>
+                    <?php if($friend["enable_public"]) { ?>
+                    <span class="profile_public_name" >Nom: <?=   htmlentities($friend["public_name"])?></span>
+                    <span class="profile_title"       >Titre: <?= htmlentities($friend["title"])?></span>
+                    <span class="profile_specie"      >Espece: <?=htmlentities($friend["specie"])?></span>
+                    <span class="profile_class"       >Classe: <?=htmlentities($friend["class"])?></span>
+                    <?php } else { ?>
+                    <span></span> <span></span> <span></span> <span></span>
+                    <?php } ?>
+                    
+
+                    <div class="user_menu">
+                        <button class="btn_menu_user">&#8226;&#8226;&#8226;</button>
+                        <div class="user_menu_content border">
+                            <button class="btn_ignr_user" onclick='removeFriend("<?=htmlentities($friend["username"])?>");'
+                            >Supprimer</button>
+                        </div>
+                    </div>
+                    
+                    <span></span>
+                    <a href="dm.php?private=true&user=<?=htmlentities($friend["username"])?>">
+                        <img class="msg_img" width="32" height="32" src="<?=$GLOBALS["global_params"]["root_public"]?>assets/image/msg.png">
+                    </a>
+
+                </div> <br><br>
+            </div>
+
+            <br>
+        </div>
     <?php
 
+}
+
+function friend_js_bloc() {
+    ?> <script>
+        function removeFriend(username) {
+            let friendBloc = document.getElementById("friend_bloc_"+username);
+
+            let data = new FormData();
+            data.append("username", username);
+            data.append("remove_friend", "<?= $_SESSION["remove_friend"] = randomString() ?>");
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST',
+            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/remove_friend.php");
+            xmlhttp.send( data );
+
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4) // request done
+                    if (xmlhttp.status === 200) // successful return
+                    {
+                        alert(xmlhttp.responseText);
+                        const feedback = JSON.parse(xmlhttp.responseText);
+                        
+                        if (feedback["success"])
+                            friendBloc.parentNode.removeChild(friendBloc);
+                            
+                    }
+            }
+        }
+    </script><?php
 }
 
 ?>
