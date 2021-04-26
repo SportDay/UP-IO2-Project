@@ -19,14 +19,13 @@
 
 <div id = "mid_content">
     <h1 class="settings_title">Publique</h1>
-    <div id = "mid_content" class="posts_and_user">
+    <div id = "mid_sub_content" class="posts_and_user">
         
         <div class="settings_title"><p>Page publique<?= 
             ($_SESSION["enable_public"]) ? (" | " . $_SESSION["public_name"]) : ""
         ?></p></div>
         
         <?php 
-            
             if ($_SESSION["banned"]) { ?>
                 <p>Vous êtes temporairement bannie de la partie publique du site.</p>
             <?php } else {
@@ -57,7 +56,7 @@
 <div id = "mid_content"> <!-- Passwords -->
     <h1 class="settings_title">Privé | <?= $_SESSION["username"] ?> </h1>
     
-    <div id = "mid_content">
+    <div id = "mid_sub_content">
         <div class="settings_title"><p>Changement du mot de passe</p></div>
         
         <div class="input_title">
@@ -71,7 +70,7 @@
             >Changer le mot de passe</button>
     </div>
 
-    <div id = "mid_content"> <!-- Remove Account -->
+    <div id = "mid_sub_content"> <!-- Remove Account -->
         
         <div class="settings_title"><p>Supprimer le compte</p></div>
         

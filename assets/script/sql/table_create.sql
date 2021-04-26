@@ -57,10 +57,12 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE pages_liked (
+    `id`           bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id`      bigint UNSIGNED NOT NULL,
     `like_id`      bigint UNSIGNED NOT NULL,
 
-    PRIMARY KEY (`user_id`),
+    PRIMARY KEY(id),
+    FOREIGN KEY (`user_id`) REFERENCES users(`id`),
     FOREIGN KEY (`like_id`) REFERENCES users(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
@@ -89,19 +91,21 @@ CREATE TABLE `posts` (
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE likes (
+    `id`               bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `message_id`     bigint UNSIGNED NOT NULL,
     `user_id`        bigint UNSIGNED NOT NULL,
 
-    PRIMARY KEY (`message_id`),
+    PRIMARY KEY(id),
     FOREIGN KEY (`message_id`) REFERENCES posts(`id`),
     FOREIGN KEY (`user_id`)    REFERENCES users(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE reports (
+    `id`               bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `message_id`     bigint UNSIGNED NOT NULL,
     `user_id`        bigint UNSIGNED NOT NULL,
 
-    PRIMARY KEY (`message_id`),
+    PRIMARY KEY(id),
     FOREIGN KEY (`message_id`) REFERENCES posts(`id`),
     FOREIGN KEY (`user_id`)    REFERENCES users(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
@@ -110,10 +114,12 @@ CREATE TABLE reports (
 -- FRIENDS
 
 CREATE TABLE friends (
+    `id`               bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id_0`        bigint UNSIGNED NOT NULL,
     `user_id_1`        bigint UNSIGNED NOT NULL,
+    `accepted`         BOOLEAN         DEFAULT FALSE,
 
-    PRIMARY KEY (`user_id_0`),
+    PRIMARY KEY(id),
     FOREIGN KEY (`user_id_1`)   REFERENCES users(`id`),
     FOREIGN KEY (`user_id_0`)   REFERENCES users(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
