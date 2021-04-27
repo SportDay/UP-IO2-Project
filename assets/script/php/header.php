@@ -54,7 +54,7 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
 {
     redirectNotAdmin();
 }
-
+date_default_timezone_set("Etc/GMT-2");
 ?>
 
 
