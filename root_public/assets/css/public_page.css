@@ -25,11 +25,11 @@
     border: solid rgb(209, 176, 115);
 }
 
-.profile_nickname { grid-area: profile_nickname; }
-.profile_titre { grid-area: profile_titre; }
-.profile_espece { grid-area: profile_espece; }
-.profile_classe { grid-area: profile_classe; }
-.profile_nlikes { grid-area: profile_nlikes; }
+.profile_nickname   { grid-area: profile_nickname;  }
+.profile_titre      { grid-area: profile_titre;     }
+.profile_espece     { grid-area: profile_espece;    }
+.profile_classe     { grid-area: profile_classe;    }
+.profile_nlikes     { grid-area: profile_nlikes;    }
 
 .profile_img_profile{
     grid-area: profile_img_profile;

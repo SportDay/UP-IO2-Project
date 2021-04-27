@@ -94,18 +94,22 @@
         );*/
     }
 
-    function getImagePath($image) {
-        $folder = $GLOBALS["global_params"]["root_public"] . "assets/profile/";
+    function getImagePath($image, $specific_root=FALSE, $root_public="") {
+        if (!$specific_root)
+            $root_public = $GLOBALS["global_params"]["root_public"];
 
-        $path = "";
+        $folder     = $root_public                             . "assets/profile/";
+        $folderThis = $GLOBALS["global_params"]["root_public"] . "assets/profile/"; 
+
+        $where = "";
 
         if ($image < 36)
-            $path = $folder . "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".webp";
+            $where = $folder . "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".webp";
         else
-            $path = $folder . "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".jpg";        
+            $where = $folder . "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".jpg";        
 
-        if (file_exists($path))
-            return $path;
+        if (file_exists($folderThis . $where))
+            return $folder . $where;
 
         return $folder . "default.png";
     }
@@ -203,5 +207,5 @@
             }
         }
     }
-
+    
 ?>

@@ -352,21 +352,97 @@ function private_message($message) { // WIP
 }
 
 // FRIENDS
-function friend_bloc($friend) { // necessite un friend_js_bloc sur la même page
+function add_friend_bloc($friend) {
+
+    ?><div class=" grid" id="friend_bloc_<?=htmlentities($friend["username"])?>">
+        <span><?=$friend["username"]?> vous a ajouté!</span>
+        <button class="btn_button_btn acceptbtn_low_size" onclick='acceptFriend("<?=htmlentities($friend["username"])?>")'
+        >Accepter</button>
+        <button class="btn_button_btn cancelbtn_low_size" onclick='removeFriend("<?=htmlentities($friend["username"])?>")'
+        >Refuser</button>
+    </div><?php
+}
+
+function add_friend_js_bloc() {
+    ?> <script>
+        function acceptFriend(friend) {
+            let friendBlocs = document.getElementById("friend_blocs_area");
+            let requestBloc = document.getElementById("friend_bloc_" + friend);
+
+            let data = new FormData();
+            data.append("username", friend);
+            data.append("from_root", "<?=$GLOBALS["global_params"]["root_public"]?>");
+            data.append("accept_friend", "<?= $_SESSION["accept_friend"] = randomString() ?>");
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST',
+            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/accept_friend.php");
+            xmlhttp.send( data );
+
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4) // request done
+                    if (xmlhttp.status === 200) // successful return
+                    {
+                        //alert(xmlhttp.responseText);
+                        const feedback = JSON.parse(xmlhttp.responseText);
+                        
+                        if (feedback["success"])
+                        {
+                            requestBloc.parentNode.removeChild(requestBloc);
+                            friendBlocs.innerHTML = feedback["html"] + friendBlocs.innerHTML;
+                        }
+                    }
+            }
+        }
+
+        function refuseFriend(friend) {
+            let requestBloc = document.getElementById("friend_bloc_" + friend);
+
+            let data = new FormData();
+            data.append("username", $friend);
+            data.append("refuse_friend", "<?= $_SESSION["refuse_friend"] = randomString() ?>");
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST',
+            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/refuse_friend.php");
+            xmlhttp.send( data );
+
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4) // request done
+                    if (xmlhttp.status === 200) // successful return
+                    {
+                        //alert(xmlhttp.responseText);
+                        const feedback = JSON.parse(xmlhttp.responseText);
+                        
+                        if (feedback["success"])
+                        {
+                            requestBloc.parentNode.removeChild(requestBloc);
+                        }
+                    }
+            }
+        }
+    </script><?php
+}
+
+function friend_bloc($friend, $specific_root=FALSE, $root_public="") { // necessite un friend_js_bloc sur la même page
+    
+    if (!$specific_root)
+        $root_public = $GLOBALS["global_params"]["root_public"];
+
     ?>
         <div class = "mid_sub_content" id="friend_bloc_<?=htmlentities($friend["username"])?>" class="posts_and_user">
             <div id = "profile">
                 <?php if($friend["enable_public"]) { ?>
-                <a href="<?=$GLOBALS["global_params"]["root_public"]?>page/public/public_page.php?user=<?=htmlentities($friend["public_name"])?>">
+                <a href="<?=$root_public?>page/public/public_page.php?user=<?=htmlentities($friend["public_name"])?>">
                   <img 
                         class="profile_img_profile" 
-                        src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none")  ?>"
+                        src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>"
                     >
                 </a>
                 <?php } else { ?>
                     <img 
                         class="profile_img_profile" 
-                        src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none")  ?>"
+                        src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>"
                     >
                 <?php } ?>
 
@@ -381,7 +457,6 @@ function friend_bloc($friend) { // necessite un friend_js_bloc sur la même page
                     <span></span> <span></span> <span></span> <span></span>
                     <?php } ?>
                     
-
                     <div class="user_menu">
                         <button class="btn_menu_user">&#8226;&#8226;&#8226;</button>
                         <div class="user_menu_content border">
@@ -392,8 +467,9 @@ function friend_bloc($friend) { // necessite un friend_js_bloc sur la même page
                     
                     <span></span>
                     <a href="dm.php?private=true&user=<?=htmlentities($friend["username"])?>">
-                        <img class="msg_img" width="32" height="32" src="<?=$GLOBALS["global_params"]["root_public"]?>assets/image/msg.png">
+                        <img class="msg_img" width="32" height="32" src="<?=$root_public?>assets/image/msg.png">
                     </a>
+
 
                 </div> <br><br>
             </div>
@@ -422,7 +498,7 @@ function friend_js_bloc() {
                 if (xmlhttp.readyState === 4) // request done
                     if (xmlhttp.status === 200) // successful return
                     {
-                        alert(xmlhttp.responseText);
+                        //alert(xmlhttp.responseText);
                         const feedback = JSON.parse(xmlhttp.responseText);
                         
                         if (feedback["success"])
@@ -433,5 +509,4 @@ function friend_js_bloc() {
         }
     </script><?php
 }
-
 ?>
