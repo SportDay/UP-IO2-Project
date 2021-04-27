@@ -31,7 +31,7 @@
             "success" => false,
             "error"   => "Requête incorrecte."
         ]); exit();
-    } unset($_SESSION["reactivate_public"]);
+    }
 
     $connexion = mysqli_connect (
         $db_conf["DB_URL"],
@@ -90,5 +90,6 @@
     ]);
 
     mysqli_close($connexion);
+    unset($_SESSION["reactivate_public"]);
     exit();
 ?>

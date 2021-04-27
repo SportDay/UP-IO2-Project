@@ -1,5 +1,12 @@
 <?php // DEBUG DES DIVERS FONCTIONS
-    require( "../../../" . "assets/script/php/" . "functions.php");
+
+    $global_params = [
+        "root"        => "../../../",
+        "root_public" => "../../",
+    ];
+
+    require("../../../" . "assets/script/php/" . "functions.php");
+    require($global_params["root"] . "assets/script/php/constants.php");
 
     /*
     $rows = [
@@ -27,11 +34,6 @@
     //write($h);
 
     //gettype(hashPassword("test", ["id"=>"3", "creation_date"=>"19291", "username"=>"jean"]));
-
-    $global_params = [
-        "root"        => "../../../",
-        "root_public" => "../../",
-    ];
 
     for ($i = 0; $i < 10; $i++)
         write(json_encode(generateRandomPublicData()));

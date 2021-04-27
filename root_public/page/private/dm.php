@@ -10,10 +10,18 @@
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
-<?php // FUNCTIONS (specific à cette page)
+<?php // verification amitié
 
+    $friend = $_GET["user"];
+
+    if (true) 
+    {
+        require($global_params["root"] . "assets/script/php/footer.php");
+        exit();
+    }
 ?>
 <!-- ------------------------------------------ -->
+
     <div id="mid_container_mid">
     <div id = "mid_content" class="container_message" style="margin-top: 0; margin-bottom: 20px; text-align: initial; height: 100%;">
         <div class="pofile_container_dm">
