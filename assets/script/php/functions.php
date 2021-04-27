@@ -207,5 +207,32 @@
             }
         }
     }
-    
+
+    function inspirate()
+    {
+        $messages = json_decode(file_get_contents(
+            $GLOBALS["global_params"]["root_public"] . "assets/rp_data/procedural_phrase.json"
+            , true));
+
+        /////////////////////////////////////
+
+        $connexion = mysqli_connect (
+            $GLOBALS["DB_URL"],
+            $GLOBALS["DB_ACCOUNT"],
+            $GLOBALS["DB_PASSWORD"],
+            $GLOBALS["DB_NAME"]
+        );
+        if (!$connexion) {
+            return "Can't connect to database.";
+        }
+        $query = "SELECT * FROM users WHERE id=\"". $connexion->real_escape_string($_SESSION["id"]) . "\";";
+        $class = $connexion->query($query)->fetch_assoc();
+
+        $message = $messages->{$class["class"]}
+        [rand(0, count($messages->{$class["class"]}) - 1)];
+
+        return $message;
+    }
+
+
 ?>
