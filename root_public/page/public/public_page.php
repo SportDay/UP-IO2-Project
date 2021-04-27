@@ -42,7 +42,7 @@
     $me = $connexion->query($user_query)->fetch_assoc();
     profile_bloc($me);
 
-    $post_query = "SELECT * FROM posts WHERE user_id=\"". $connexion->real_escape_string($_SESSION["id"]) . "\" ORDER BY creation_date DESC;";
+    $post_query = "SELECT * FROM posts WHERE public_name=\"". $connexion->real_escape_string(trim(htmlentities($_GET["user"]))) . "\" ORDER BY creation_date DESC;";
     $my_posts = $connexion->query($post_query);
     while($my_post=$my_posts->fetch_assoc()) {
         $like = false;
