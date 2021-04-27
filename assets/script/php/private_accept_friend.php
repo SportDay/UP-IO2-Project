@@ -9,7 +9,7 @@
 
     require($global_params["root"] . "assets/script/php/constants.php");
     require($global_params["root"] . "assets/script/php/functions.php");
-    require($global_params["root"] . "assets/script/php/security.php");
+    require($global_params["root"] . "assets/script/php/modules.php");
     
     ////////////////////////////////////////////////////////////////////
     // ETABLISSEMENT DE LA CONNECTION
@@ -17,8 +17,8 @@
     session_start();
 
     if (
-        !isset($_POST["remove_public"]) || !isset($_SESSION["remove_public"]) ||
-              ($_POST["remove_public"]  !=        $_SESSION["remove_public"])
+        !isset($_POST["accept_friend"]) || !isset($_SESSION["accept_friend"]) ||
+              ($_POST["accept_friend"]  !=        $_SESSION["accept_friend"])
                
                /*
                     quelqu'un qui veut utiliser ce fichier doit obligatoirement
@@ -26,12 +26,21 @@
                */
         )
     {
-        unset($_SESSION["remove_public"]);
         echo json_encode([
             "success" => false,
             "error"   => "Requête incorrecte."
         ]); exit();
     }
+
+    if (!isset($_POST["username"]) || !isset($_POST["from_root"])) {
+        echo json_encode([
+            "success" => false,
+            "error"   => "Requête incorrecte."
+        ]); exit();
+    }
+
+    $username = $_POST["username"];
+    $from_root = $_POST["from_root"];
 
     $connexion = mysqli_connect (
         $db_conf["DB_URL"],
@@ -50,16 +59,45 @@
 
     ///////////////////////////////////////////////////////////////////////////
 
-    removePublicPage();
+    $friend = $connexion->query(
+        "SELECT * FROM users WHERE username=\"" . $connexion->real_escape_string($username) . "\""
+    );
+
+    if ($friend->num_rows == 0) { 
+        // data base error
+        echo json_encode([
+            "success" => false,
+            "error"   => "Cet utilisateur n'existe pas."
+        ]); exit(); 
+    }
+    
+    $id = ($friend=$friend->fetch_assoc())["id"];
+
+    $connexion->query(
+        "UPDATE friends SET " .
+        "accepted=1 " .
+        "WHERE (user_id_0=".$id.            " AND user_id_1=".$_SESSION["id"].") ".
+        "OR    (user_id_0=".$_SESSION["id"]." AND user_id_1=".$id.")"
+    );
 
     ///////////////////////////////////////////////////////////////////////////
+    // SEND HTML of friend
+
+    ob_start();
+    
+    friend_bloc($friend, true, $from_root);
+
+    $html = ob_get_clean();
+    //$html = htmlentities(stripslashes(utf8_encode($html)), ENT_QUOTES);
+
+    ////////////////////////////
 
     echo json_encode([
-        "success" => true,
-        "error"   => ""
+        "success"   => true,
+        "error"     => "",
+        "html"      => $html
     ]);
 
-    unset($_SESSION["remove_public"]);
     mysqli_close($connexion);
     exit();
 ?>

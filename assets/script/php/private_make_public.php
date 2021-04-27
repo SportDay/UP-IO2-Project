@@ -31,7 +31,7 @@
             "success" => false,
             "error"   => "Requête incorrecte."
         ]); exit();
-    } unset($_SESSION["make_public"]);
+    }
 
     $connexion = mysqli_connect (
         $db_conf["DB_URL"],
@@ -106,7 +106,8 @@
         "success"     => true,
         "public_name" => htmlentities($_SESSION["public_name"]) 
     ]);
-
+    
+    unset($_SESSION["make_public"]);
     mysqli_close($connexion);
     exit();
 ?>

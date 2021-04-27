@@ -11,6 +11,55 @@
 .msg_img{
     grid-area: msg_img;
 }
-.espace2{
-    grid-area: espace2;
+.grid{
+    grid-area: grid;
+}
+
+#add_friend_input, #add_friend_input:-webkit-autofill{
+    height: 15px;
+    border-radius: 20px;
+    background: #fdfbf7;
+    box-shadow: inset 1px 1px 1px #333436, inset 5px 5px 5px #4346485d;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border: solid rgb(209, 176, 115);
+    color: rgb(19, 19, 19);
+    width: 50%;
+
+    padding: 1em 5px 1em 20px;
+}
+
+.mid_sub_content_friend {
+    text-align: center;
+
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+
+    width: 40%;
+    min-width: 500px;
+
+    padding-top: 1em;
+    padding-bottom: 1em;
+    
+    /*-------------------------------*/
+
+    border-radius: 5px;
+    background-color:rgb(238, 232, 216);
+    border: solid rgb(209, 176, 115);
+}
+
+.cancelbtn_low_size {
+    width: auto;
+    margin-top: 5px;
+    padding: 5px 5px;
+    background-color: #f44336;
+}
+
+.acceptbtn_low_size {
+    width: auto;
+    margin-top: 5px;
+    padding: 5px 5px;
+    background-color: #77df5d;
 }
