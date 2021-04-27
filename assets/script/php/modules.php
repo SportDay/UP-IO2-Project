@@ -516,11 +516,11 @@ function profile_bloc($profile){
             <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
             </a>
             <div class="info_profile">
-                <span class="profile_nickname" style="color: white; font-size: 20px">Nom:     <?= htmlentities($profile["public_name"])?></span>
-                <span class="profile_titre"    style="color: white; font-size: 20px">Titre:   <?= htmlentities($profile["title"])?></span>
-                <span class="profile_espece"   style="color: white; font-size: 20px">Espece:  <?= htmlentities($profile["specie"])?></span>
-                <span class="profile_classe"   style="color: white; font-size: 20px">Classe:  <?= htmlentities($profile["class"])?></span>
-                <span class="profile_nlikes"   style="color: white; font-size: 20px">Likes:   <?= htmlentities($profile["likes"])?></span>
+                <span class="profile_nickname" >Nom:     <?= htmlentities($profile["public_name"])?></span>
+                <span class="profile_titre"    >Titre:   <?= htmlentities($profile["title"])?></span>
+                <span class="profile_espece"   >Espece:  <?= htmlentities($profile["specie"])?></span>
+                <span class="profile_classe"   >Classe:  <?= htmlentities($profile["class"])?></span>
+                <span class="profile_nlikes"   >Likes:   <?= htmlentities($profile["likes"])?></span>
             </div>
         </div>
         <?php if($_SESSION["id"] === $profile["id"]) { ?>
