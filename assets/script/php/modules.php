@@ -729,32 +729,8 @@ function post_bloc($post, $like = false, $reported = false){
                 <?php
                 }
                 ?>
-                <div class="espace" style="grid-area: espace;"></div>
-                <?php
+                <div class="post_btn_espace" style="grid-area: post_btn_espace;"></div>
 
-                    if (!$reported)
-                    {?>
-                <dfn title="Voulez-vous signaler?">
-                    <div class="btn_report">
-                        <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>" onclick="reportPost('<?= htmlentities(trim($post["id"]))?>');" class="report_ref btn_button_btn">
-                            <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
-                        </button>
-                    </div>
-                </dfn>
-                        <?php
-                    } else {
-                        ?>
-                        <dfn title="Vous avez deja signaler">
-                            <div class="btn_report">
-                                <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>"  onclick="unreportPost('<?= htmlentities(trim($post["id"]))?>');" class="report_ref btn_button_btn">
-                                    <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/reported.png"?>">
-                                </button>
-                            </div>
-                        </dfn>
-                        <?php
-                    }
-                    ?>
-                    <div class="post_btn_espace" style="grid-area: post_btn_espace;"></div>
                     <?php
 
                         if (!$reported)
