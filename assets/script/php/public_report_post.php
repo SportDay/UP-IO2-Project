@@ -60,12 +60,6 @@ $post = $connexion->query(
     "SELECT * FROM posts WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
 )->fetch_assoc();
 
-if($post["user_id"] !== $_SESSION["id"]){
-    echo json_encode([
-        "success" => false,
-        "error"   => "Base de donnée hors d'accès."
-    ]); exit();
-}
 $connexion->query(
     "UPDATE posts set reportnum =\"". $connexion->real_escape_string($post["reportnum"]+1) . "\",  last_report =\"". $connexion->real_escape_string(time()) . "\"WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
 );
