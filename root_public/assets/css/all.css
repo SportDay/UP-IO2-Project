@@ -85,6 +85,27 @@ body{
     border: solid rgb(209, 176, 115);
 }
 
+.mid_content{
+    text-align: center;
+
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+
+    width: 80%;
+    min-width: 700px;
+
+    padding-top: 1em;
+    padding-bottom: 1em;
+
+    /*-------------------------------*/
+
+    border-radius: 5px;
+    background-color:rgb(59, 61, 63);
+    border: solid rgb(209, 176, 115);
+}
+
 #mid_content p, #mid_content ul, #mid_content li, #mid_content pre, #mid_content h1, #mid_content h2{
     color:rgb(241, 210, 163);
     white-space: normal;
