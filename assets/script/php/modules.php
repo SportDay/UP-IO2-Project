@@ -505,41 +505,42 @@ function friend_js_bloc() {
                             
                     }
             }
-        </script><?php
+        }
+    </script><?php
 }
 
 function profile_bloc($profile){
-?>
-    <div id = "mid_content" style="margin-top: 0px; text-align: initial;">
-        <div id = "profile">
-            <a href="public_page.php?user=<?= htmlentities(trim($profile["public_name"])) ?>">
-            <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
-            </a>
-            <div class="info_profile">
-                <span class="profile_nickname" >Nom:     <?= htmlentities($profile["public_name"])?></span>
-                <span class="profile_titre"    >Titre:   <?= htmlentities($profile["title"])?></span>
-                <span class="profile_espece"   >Espece:  <?= htmlentities($profile["specie"])?></span>
-                <span class="profile_classe"   >Classe:  <?= htmlentities($profile["class"])?></span>
-                <span class="profile_nlikes"   >Likes:   <?= htmlentities($profile["likes"])?></span>
-            </div>
-        </div>
-        <?php if($_SESSION["id"] === $profile["id"]) { ?>
-            <div class="desc_container">
-                <textarea id="description" class="post_add" name="desc" style="font-size: 18px;" placeholder="<?= trim(htmlentities($profile["description"]))?>" rows="2" maxlength="50"></textarea><br>
-                <button class="submit_add" onclick="updateDesc('<?= trim(htmlentities($profile["description"]))?>');">Changer</button>
-            </div>
-            <div id="container_add">
-                <textarea id="post_content" class="post_add" name="post_content" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
-                <button class="submit_add" onclick="postAdd();">Poster</button>
-                <button id="inspirate" onclick="inspiration();">inspiration</button>
-            </div>
-        <?php }else{ ?>
-                <div class="container_desc border" style="border-radius: 15px">
-                    <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= trim(htmlentities($profile["description"]))?></p>
+    ?>
+        <div id = "mid_content" style="margin-top: 0px; text-align: initial;">
+            <div id = "profile">
+                <a href="public_page.php?user=<?= htmlentities(trim($profile["public_name"])) ?>">
+                <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
+                </a>
+                <div class="info_profile">
+                    <span class="profile_nickname" >Nom:     <?= htmlentities($profile["public_name"])?></span>
+                    <span class="profile_titre"    >Titre:   <?= htmlentities($profile["title"])?></span>
+                    <span class="profile_espece"   >Espece:  <?= htmlentities($profile["specie"])?></span>
+                    <span class="profile_classe"   >Classe:  <?= htmlentities($profile["class"])?></span>
+                    <span class="profile_nlikes"   >Likes:   <?= htmlentities($profile["likes"])?></span>
                 </div>
-        <?php } ?>
-    </div>
-<?php }
+            </div>
+            <?php if($_SESSION["id"] === $profile["id"]) { ?>
+                <div class="desc_container">
+                    <textarea id="description" class="post_add" name="desc" style="font-size: 18px;" placeholder="<?= trim(htmlentities($profile["description"]))?>" rows="2" maxlength="50"></textarea><br>
+                    <button class="submit_add" onclick="updateDesc('<?= trim(htmlentities($profile["description"]))?>');">Changer</button>
+                </div>
+                <div id="container_add">
+                    <textarea id="post_content" class="post_add" name="post_content" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
+                    <button class="submit_add" onclick="postAdd();">Poster</button>
+                    <button id="inspirate" onclick="inspiration();">inspiration</button>
+                </div>
+            <?php }else{ ?>
+                    <div class="container_desc border" style="border-radius: 15px">
+                        <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= trim(htmlentities($profile["description"]))?></p>
+                    </div>
+            <?php } ?>
+        </div>
+    <?php }
 
 function profile_js_bloc() {
     ?> <script>

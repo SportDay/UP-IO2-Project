@@ -110,8 +110,8 @@
                         const feedback = JSON.parse(xmlhttp.responseText);
                         
                         requestFriend.value = "";
-                        debug.style.display="block";
-                        debug.innerHtml = feedback["error"];
+                        debugHtml.style.display="block";
+                        debugHtml.innerHTML = feedback["error"];
                     }
             }
         }
