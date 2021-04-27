@@ -433,9 +433,9 @@ function friend_bloc($friend) { // necessite un friend_js_bloc sur la même page
         </script><?php
     }
 
-    function profile_bloc($profile){
+    function profile_bloc($profile, $friend = null){
     ?>
-        <div id = "mid_content" style="margin-top: 0px; text-align: initial;">
+        <div class = "mid_content" style="text-align: initial;">
         <div id = "profile">
             <a href="public_page.php?user=<?= htmlentities(trim($profile["public_name"])) ?>">
             <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
@@ -445,7 +445,17 @@ function friend_bloc($friend) { // necessite un friend_js_bloc sur la même page
                 <span class="profile_titre"    >Titre:   <?= htmlentities($profile["title"])?></span>
                 <span class="profile_espece"   >Espece:  <?= htmlentities($profile["specie"])?></span>
                 <span class="profile_classe"   >Classe:  <?= htmlentities($profile["class"])?></span>
-                <span class="profile_nlikes"   >Likes:   <?= htmlentities($profile["likes"])?></span>
+                <?php
+                    if(isset($friend) && !$friend){
+                ?>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #56bb41;" onclick="ajouterAmis('<?= htmlentities(trim($profile["id"])) ?>');">Ajouter en amis</button>
+                <?php
+                    }else if(isset($friend) && $friend){
+                ?>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #bb4141;" onclick="supprimerAmis('<?= htmlentities(trim($profile["username"])) ?>')";>Supprimer l'amis</button>
+                <?php
+                    }
+                ?>
             </div>
         </div>
             <?php
@@ -472,70 +482,130 @@ function friend_bloc($friend) { // necessite un friend_js_bloc sur la même page
 
     </div>
         <?php
+
             }
 
-    function profile_js_bloc() {
-        ?> <script>
-            function updateDesc(old_desc) {
-                let textZone = document.getElementById("description");
+    function profile_js_bloc($me) {
 
-                let data = new FormData();
-                data.append("user_id", <?= $_SESSION["id"] ?>);
-                data.append("old_desc", old_desc);
-                data.append("new_desc", textZone.value);
-                data.append("update_desc", "<?= $_SESSION["update_desc"] = randomString()?>");
+            ?> <script>
+            <?php
+            if($_SESSION["username"] === $me["username"]){
+            ?>
+                function updateDesc(old_desc) {
+                    let textZone = document.getElementById("description");
 
-                let xmlhttp = new XMLHttpRequest();
-                xmlhttp.open('POST',
-                    "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/change_desc.php");
-                xmlhttp.send( data );
+                    let data = new FormData();
+                    data.append("user_id", <?= $_SESSION["id"] ?>);
+                    data.append("old_desc", old_desc);
+                    data.append("new_desc", textZone.value);
+                    data.append("update_desc", "<?= $_SESSION["update_desc"] = randomString()?>");
 
-                xmlhttp.onreadystatechange = function () {
-                    if (xmlhttp.readyState === 4) // request done
-                        if (xmlhttp.status === 200) // successful return
-                        {
-                            //alert(xmlhttp.responseText);
-                            const feedback = JSON.parse(xmlhttp.responseText);
+                    let xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/change_desc.php");
+                    xmlhttp.send( data );
 
-                            if (feedback["success"])
-                                document.location.reload();
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState === 4) // request done
+                            if (xmlhttp.status === 200) // successful return
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
 
-                        }
+                                if (feedback["success"])
+                                    document.location.reload();
+
+                            }
+                    }
                 }
-            }
+                function postAdd(content) {
+                    let textZone = document.getElementById("post_content");
 
-            function postAdd(content) {
-                let textZone = document.getElementById("post_content");
+                    let data = new FormData();
+                    data.append("user_id", <?= $_SESSION["id"] ?>);
+                    data.append("post_content", textZone.value);
+                    data.append("post", "<?= $_SESSION["post"] = randomString()?>");
 
-                let data = new FormData();
-                data.append("user_id", <?= $_SESSION["id"] ?>);
-                data.append("post_content", textZone.value);
-                data.append("post", "<?= $_SESSION["post"] = randomString()?>");
+                    let xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/add_posts.php");
+                    xmlhttp.send( data );
 
-                let xmlhttp = new XMLHttpRequest();
-                xmlhttp.open('POST',
-                    "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/add_posts.php");
-                xmlhttp.send( data );
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState === 4) // request done
+                            if (xmlhttp.status === 200) // successful return
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
 
-                xmlhttp.onreadystatechange = function () {
-                    if (xmlhttp.readyState === 4) // request done
-                        if (xmlhttp.status === 200) // successful return
-                        {
-                            //alert(xmlhttp.responseText);
-                            const feedback = JSON.parse(xmlhttp.responseText);
+                                if (feedback["success"])
+                                    document.location.reload();
 
-                            if (feedback["success"])
-                                document.location.reload();
-
-                        }
+                            }
+                    }
                 }
-            }
+                function inspiration() {
+                    let textZone = document.getElementById("post_content");
+                    textZone.value = "<?= inspirate()?>";
 
-            function inspiration() {
-                let textZone = document.getElementById("post_content");
-                textZone.value = "<?= inspirate()?>";
+                }
+            <?php
+            }else{
+            ?>
+                function ajouterAmis(friend_id){
+                    let textZone = document.getElementById("friend_add_btn");
 
+                    let data = new FormData();
+                    data.append("friend_id", friend_id);
+                    data.append("friend", "<?= $_SESSION["friend"] = randomString()?>");
+
+                    let xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/request_friend.php");
+                    xmlhttp.send( data );
+
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState === 4) // request done
+                            if (xmlhttp.status === 200) // successful return
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
+
+                                if (feedback["success"])
+                                    document.location.reload();
+
+                            }
+                    }
+
+                }
+                function supprimerAmis(username){
+                    let textZone = document.getElementById("friend_add_btn");
+                    let data = new FormData();
+                    data.append("username", username);
+                    data.append("remove_friend", "<?= $_SESSION["remove_friend"] = randomString() ?>");
+
+                    let xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/remove_friend.php");
+                    xmlhttp.send( data );
+
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState === 4) // request done
+                            if (xmlhttp.status === 200) // successful return
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
+
+                                if (feedback["success"])
+                                    document.location.reload();
+
+                            }
+                    }
+
+                }
+            <?php
             }
+            ?>
         </script><?php
     }
 
@@ -583,7 +653,7 @@ function friend_bloc($friend) { // necessite un friend_js_bloc sur la même page
                     <?php
                     }
                     ?>
-                    <div class="espace" style="grid-area: espace;"></div>
+                    <div class="post_btn_espace" style="grid-area: post_btn_espace;"></div>
                     <?php
 
                         if (!$reported)
