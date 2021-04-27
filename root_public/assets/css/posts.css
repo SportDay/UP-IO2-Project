@@ -10,7 +10,7 @@
     border: solid rgb(209, 176, 115);
     color: white;
     width: 80%;
-
+    min-width: 730px;
     padding: 1em 5px 1em 20px;
 }
 
@@ -116,7 +116,7 @@
     grid-template-areas:
     "profile_img_posts info_containt info_containt"
     "post_content post_content post_content"
-    "btn_like espace btn_report";
+    "btn_like post_btn_espace btn_report";
 }
 
 .info_containt{

@@ -509,103 +509,181 @@ function friend_js_bloc() {
     </script><?php
 }
 
-function profile_bloc($profile){
+        function profile_bloc($profile, $friend = null){
     ?>
-        <div id = "mid_content" style="margin-top: 0px; text-align: initial;">
-            <div id = "profile">
-                <a href="public_page.php?user=<?= htmlentities(trim($profile["public_name"])) ?>">
-                <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
-                </a>
-                <div class="info_profile">
-                    <span class="profile_nickname" >Nom:     <?= htmlentities($profile["public_name"])?></span>
-                    <span class="profile_titre"    >Titre:   <?= htmlentities($profile["title"])?></span>
-                    <span class="profile_espece"   >Espece:  <?= htmlentities($profile["specie"])?></span>
-                    <span class="profile_classe"   >Classe:  <?= htmlentities($profile["class"])?></span>
-                    <span class="profile_nlikes"   >Likes:   <?= htmlentities($profile["likes"])?></span>
-                </div>
+        <div class = "mid_content" style="text-align: initial;">
+        <div id = "profile">
+            <a href="public_page.php?user=<?= htmlentities(trim($profile["public_name"])) ?>">
+            <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
+            </a>
+            <div class="info_profile">
+                <span class="profile_nickname" >Nom:     <?= htmlentities($profile["public_name"])?></span>
+                <span class="profile_titre"    >Titre:   <?= htmlentities($profile["title"])?></span>
+                <span class="profile_espece"   >Espece:  <?= htmlentities($profile["specie"])?></span>
+                <span class="profile_classe"   >Classe:  <?= htmlentities($profile["class"])?></span>
+                <?php
+                    if(isset($friend) && !$friend){
+                ?>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #56bb41;" onclick="ajouterAmis('<?= htmlentities(trim($profile["id"])) ?>');">Ajouter en amis</button>
+                <?php
+                    }else if(isset($friend) && $friend){
+                ?>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #bb4141;" onclick="supprimerAmis('<?= htmlentities(trim($profile["username"])) ?>')";>Supprimer l'amis</button>
+                <?php
+                    }
+                ?>
             </div>
-            <?php if($_SESSION["id"] === $profile["id"]) { ?>
-                <div class="desc_container">
-                    <textarea id="description" class="post_add" name="desc" style="font-size: 18px;" placeholder="<?= trim(htmlentities($profile["description"]))?>" rows="2" maxlength="50"></textarea><br>
-                    <button class="submit_add" onclick="updateDesc('<?= trim(htmlentities($profile["description"]))?>');">Changer</button>
-                </div>
-                <div id="container_add">
-                    <textarea id="post_content" class="post_add" name="post_content" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
-                    <button class="submit_add" onclick="postAdd();">Poster</button>
-                    <button id="inspirate" onclick="inspiration();">inspiration</button>
-                </div>
-            <?php }else{ ?>
-                    <div class="container_desc border" style="border-radius: 15px">
-                        <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= trim(htmlentities($profile["description"]))?></p>
-                    </div>
-            <?php } ?>
         </div>
-    <?php }
-
-function profile_js_bloc() {
-    ?> <script>
-        function updateDesc(old_desc) {
-            let textZone = document.getElementById("description");
-
-            let data = new FormData();
-            data.append("user_id", <?= $_SESSION["id"] ?>);
-            data.append("old_desc", old_desc);
-            data.append("new_desc", textZone.value);
-            data.append("update_desc", "<?= $_SESSION["update_desc"] = randomString()?>");
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/change_desc.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                            document.location.reload();
-
-                    }
+            <?php
+            if($_SESSION["id"] === $profile["id"]){
+                ?>
+                    <div class="desc_container">
+                        <textarea id="description" class="post_add" name="desc" style="font-size: 18px;" placeholder="<?= trim(htmlentities($profile["description"]))?>" rows="2" maxlength="50"></textarea><br>
+                        <button class="submit_add" onclick="updateDesc('<?= trim(htmlentities($profile["description"]))?>');">Changer</button>
+                    </div>
+                    <div id="container_add">
+                        <textarea id="post_content" class="post_add" name="post_content" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
+                        <button class="submit_add" onclick="postAdd();">Poster</button>
+                        <button id="inspirate" onclick="inspiration();">inspiration</button>
+                    </div>
+        <?php
+            }else{
+        ?>
+                <div class="container_desc border" style="border-radius: 15px">
+                    <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= trim(htmlentities($profile["description"]))?></p>
+                </div>
+        <?php
             }
-        }
+        ?>
 
-        function postAdd(content) {
-            let textZone = document.getElementById("post_content");
+    </div>
+        <?php
 
-            let data = new FormData();
-            data.append("user_id", <?= $_SESSION["id"] ?>);
-            data.append("post_content", textZone.value);
-            data.append("post", "<?= $_SESSION["post"] = randomString()?>");
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/add_posts.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                            document.location.reload();
-
-                    }
             }
-        }
 
-        function inspiration() {
-            let textZone = document.getElementById("post_content");
-            textZone.value = "<?= inspirate()?>";
+    function profile_js_bloc($me) {
 
-        }
-    </script> <?php
-}
+            ?> <script>
+            <?php
+            if($_SESSION["username"] === $me["username"]){
+            ?>
+                function updateDesc(old_desc) {
+                    let textZone = document.getElementById("description");
+
+                    let data = new FormData();
+                    data.append("user_id", <?= $_SESSION["id"] ?>);
+                    data.append("old_desc", old_desc);
+                    data.append("new_desc", textZone.value);
+                    data.append("update_desc", "<?= $_SESSION["update_desc"] = randomString()?>");
+
+                    let xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/change_desc.php");
+                    xmlhttp.send( data );
+
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState === 4) // request done
+                            if (xmlhttp.status === 200) // successful return
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
+
+                                if (feedback["success"])
+                                    document.location.reload();
+
+                            }
+                    }
+                }
+                function postAdd(content) {
+                    let textZone = document.getElementById("post_content");
+
+                    let data = new FormData();
+                    data.append("user_id", <?= $_SESSION["id"] ?>);
+                    data.append("post_content", textZone.value);
+                    data.append("post", "<?= $_SESSION["post"] = randomString()?>");
+
+                    let xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/add_posts.php");
+                    xmlhttp.send( data );
+
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState === 4) // request done
+                            if (xmlhttp.status === 200) // successful return
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
+
+                                if (feedback["success"])
+                                    document.location.reload();
+
+                            }
+                    }
+                }
+                function inspiration() {
+                    let textZone = document.getElementById("post_content");
+                    textZone.value = "<?= inspirate()?>";
+
+                }
+            <?php
+            }else{
+            ?>
+                function ajouterAmis(friend_id){
+                    let textZone = document.getElementById("friend_add_btn");
+
+                    let data = new FormData();
+                    data.append("friend_id", friend_id);
+                    data.append("friend", "<?= $_SESSION["friend"] = randomString()?>");
+
+                    let xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/request_friend.php");
+                    xmlhttp.send( data );
+
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState === 4) // request done
+                            if (xmlhttp.status === 200) // successful return
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
+
+                                if (feedback["success"])
+                                    document.location.reload();
+
+                            }
+                    }
+
+                }
+                function supprimerAmis(username){
+                    let textZone = document.getElementById("friend_add_btn");
+                    let data = new FormData();
+                    data.append("username", username);
+                    data.append("remove_friend", "<?= $_SESSION["remove_friend"] = randomString() ?>");
+
+                    let xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/remove_friend.php");
+                    xmlhttp.send( data );
+
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState === 4) // request done
+                            if (xmlhttp.status === 200) // successful return
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
+
+                                if (feedback["success"])
+                                    document.location.reload();
+
+                            }
+                    }
+
+                }
+            <?php
+            }
+            ?>
+        </script><?php
+    }
 
 function post_bloc($post, $like = false, $reported = false){
         ?>
@@ -675,7 +753,32 @@ function post_bloc($post, $like = false, $reported = false){
                         </dfn>
                         <?php
                     }
-                ?>
+                    ?>
+                    <div class="post_btn_espace" style="grid-area: post_btn_espace;"></div>
+                    <?php
+
+                        if (!$reported)
+                        {?>
+                    <dfn title="Voulez-vous signaler?">
+                        <div class="btn_report">
+                            <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>" onclick="reportPost('<?= htmlentities(trim($post["id"]))?>');" class="report_ref btn_button_btn">
+                                <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
+                            </button>
+                        </div>
+                    </dfn>
+                            <?php
+                        } else {
+                            ?>
+                            <dfn title="Vous avez deja signaler">
+                                <div class="btn_report">
+                                    <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>"  onclick="unreportPost('<?= htmlentities(trim($post["id"]))?>');" class="report_ref btn_button_btn">
+                                        <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/reported.png"?>">
+                                    </button>
+                                </div>
+                            </dfn>
+                            <?php
+                        }
+                    ?>
             </div>
         </div>
 

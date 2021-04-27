@@ -17,8 +17,8 @@ require($global_params["root"] . "assets/script/php/security.php");
 session_start();
 
 if (
-    !isset($_POST["unreport_post"]) || !isset($_SESSION["unreport_post"]) ||
-    ($_POST["unreport_post"]  !=        $_SESSION["unreport_post"])
+    !isset($_POST["friend"]) || !isset($_SESSION["friend"]) ||
+    ($_POST["friend"]  !=        $_SESSION["friend"])
 
     /*
          quelqu'un qui veut utiliser ce fichier doit obligatoirement
@@ -32,7 +32,7 @@ if (
     ]); exit();
 }
 
-if (!isset($_POST["post_id"])) {
+if (!isset($_POST["friend_id"])) {
     echo json_encode([
         "success" => false,
         "error"   => "Requête incorrecte."
@@ -56,27 +56,8 @@ if (!$connexion) {
 
 ////////////////////////////////////////////////////////////////////
 
-$post = $connexion->query(
-    "SELECT * FROM posts WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
-)->fetch_assoc();
-
 $connexion->query(
-    "UPDATE posts set reportnum =\"". $connexion->real_escape_string($post["reportnum"]-1) . "\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
-
-);
-
-$post = $connexion->query(
-    "SELECT * FROM posts WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
-)->fetch_assoc();
-
-if($post["reportnum"] <=0){
-    $connexion->query(
-        "UPDATE posts set reported =\"". $connexion->real_escape_string(0) . "\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
-    );
-}
-
-$connexion->query(
-    "DELETE FROM reports WHERE (message_id=\"".$post["id"]."\") AND (user_id=\"".$_SESSION["id"]."\");"
+    "INSERT INTO `friends` (`user_id_0`,`user_id_1`) VALUES (\"" . $connexion->real_escape_string($_POST["friend_id"]) . "\", \"" . $connexion->real_escape_string($_SESSION["id"]) . "\");"
 );
 
 

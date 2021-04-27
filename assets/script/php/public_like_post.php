@@ -60,12 +60,6 @@ $post = $connexion->query(
     "SELECT * FROM posts WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
 )->fetch_assoc();
 
-if($post["user_id"] !== $_SESSION["id"]){
-    echo json_encode([
-        "success" => false,
-        "error"   => "Base de donnée hors d'accès."
-    ]); exit();
-}
 $connexion->query(
     "UPDATE posts set like_num =\"". $connexion->real_escape_string($post["like_num"]+1) . "\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
 );
