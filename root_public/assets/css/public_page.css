@@ -29,14 +29,13 @@
 .profile_titre { grid-area: profile_titre; }
 .profile_espece { grid-area: profile_espece; }
 .profile_classe { grid-area: profile_classe; }
-.profile_nlikes { grid-area: profile_nlikes; }
 .btn_friend_porfile_add{
     grid-area: btn_friend_porfile_add;
     margin: auto auto;
     padding: 10px 10px;
 }
 
-.profile_nickname,.profile_titre,.profile_espece,.profile_classe,.profile_nlikes{
+.profile_nickname,.profile_titre,.profile_espece,.profile_classe{
     color: white; font-size: 20px
 }
 
