@@ -3,51 +3,34 @@
     grid-template-columns: auto auto auto 32px;
     grid-template-rows: auto auto;
     gap: 20px 20px;
+    grid-area: info_profile;
     grid-template-areas:
-    "profile_nickname profile_espece profile_classe user_menu"
-    "profile_titre profile_nlikes espace2 msg_img";
+    "profile_private_name profile_public_name profile_title user_menu"
+    "profile_specie profile_class friend_porfile_espace msg_img";
 }
 
-.msg_img{
-    grid-area: msg_img;
-}
-.grid{
-    grid-area: grid;
-}
+.profile_private_name{grid-area: profile_private_name;}
+.profile_public_name{grid-area: profile_public_name;}
+.profile_title{grid-area: profile_title;}
+.user_menu{grid-area: user_menu;}
+.profile_specie{grid-area: profile_specie;}
+.profile_class{grid-area: profile_class;}
+.friend_porfile_espace{grid-area: friend_porfile_espace;}
+.msg_img{grid-area: msg_img;}
 
-#add_friend_input, #add_friend_input:-webkit-autofill{
-    height: 15px;
-    border-radius: 20px;
-    background: #fdfbf7;
-    box-shadow: inset 1px 1px 1px #333436, inset 5px 5px 5px #4346485d;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    border: solid rgb(209, 176, 115);
-    color: rgb(19, 19, 19);
-    width: 50%;
-
-    padding: 1em 5px 1em 20px;
+.profile_private_name,.profile_public_name,.profile_title,.profile_specie,.profile_class{
+    color: white; font-size: 20px
 }
 
 .mid_sub_content_friend {
     text-align: center;
 
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
+    margin: 20px auto;
+    color: white;
+    width: 80%;
+    min-width: 730px;
 
-    width: 40%;
-    min-width: 500px;
-
-    padding-top: 1em;
-    padding-bottom: 1em;
-    
-    /*-------------------------------*/
-
-    border-radius: 5px;
-    background-color:rgb(238, 232, 216);
-    border: solid rgb(209, 176, 115);
+    padding: 20px 0 20px ;
 }
 
 .cancelbtn_low_size {
@@ -63,3 +46,99 @@
     padding: 5px 5px;
     background-color: #77df5d;
 }
+
+.add_friend_bar{
+    text-align: center;
+    margin: 20px auto;
+    width: 80%;
+    min-width: 730px;
+    padding: 20px 0;
+}
+
+.search_input{
+    width: 100%;
+    min-width: 500px;
+}
+
+#search_container{
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+#add_friend_debug{
+    color: white;
+    margin-top: 11px;
+    margin-bottom: 0;
+}
+
+.btn_menu_user{
+    margin: 0 auto;
+    background-color: transparent;
+    color: #FFC38A;
+    border: none;
+}
+
+.request_and_searchbtn_friend{
+    display: grid;
+    grid-template-columns: auto 125px;
+    grid-template-rows: auto;
+    gap: 0px 20px;
+    grid-template-areas:
+    "search_request_friend_bar send_request_friend_bar";
+}
+
+.search_request_friend_bar{grid-area: search_request_friend_bar;}
+.send_request_friend_bar{grid-area: send_request_friend_bar;}
+
+.request_friend_list{
+    display: grid;
+    grid-template-columns: 64px auto;
+    grid-template-rows: 64px;
+    gap: 0px 20px;
+    grid-template-areas:
+    "request_profile_img request_profile_content";
+    margin: 20px 20px 0;
+}
+
+.request_profile_img{
+    border-radius: 15px;
+    border: solid rgb(209, 176, 115);
+    width: 58px;
+    height: 58px;
+    grid-area: request_profile_img;
+}
+
+.request_profile_content{
+    grid-area: request_profile_content;
+    border-radius: 15px;
+    padding: 0;
+    text-align: initial;
+    display: grid;
+    grid-template-columns: auto auto 100px 100px;
+    grid-template-rows: auto;
+    gap: 0px 20px;
+    grid-template-areas:
+    "username_request espace_request_list btn_accept_friend_btn btn_reject_friend_btn";
+    padding: 10px 10px;
+}
+
+.btn_accept_friend_btn{
+    grid-area: btn_accept_friend_btn;
+    height: 32px;
+}
+
+.btn_reject_friend_btn{
+    grid-area: btn_reject_friend_btn;
+    height: 32px;
+}
+
+.request_username{
+    color: white;
+    font-size: 17px;
+    height: 32px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    grid-area: request_username;
+}
+
+.espace_request_list{grid-area: espace_request_list;}

@@ -72,6 +72,13 @@
 
     $id = $id->fetch_assoc()["id"];
 
+    if (isset($_SESSION["id"]) && $id == $_SESSION["id"]) {
+        echo json_encode([
+        "success" => false,
+        "error"   => "Vous pouvez pas vous demander en ami."
+        ]); exit();
+    }
+
     // verifier que l'id n'est pas en amis
     if ($connexion->query("SELECT id FROM friends " . 
             "WHERE (user_id_0=".$id.            " AND user_id_1=".$_SESSION["id"].") ".

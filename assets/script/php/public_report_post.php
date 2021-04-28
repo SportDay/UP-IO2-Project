@@ -56,6 +56,7 @@ if (!$connexion) {
 
 ////////////////////////////////////////////////////////////////////
 
+
 $post = $connexion->query(
     "SELECT * FROM posts WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
 )->fetch_assoc();

@@ -223,9 +223,9 @@
             $GLOBALS["DB_NAME"]
         );
         if (!$connexion) {
-            return "Can't connect to database.";
+            return "Description";
         }
-        $query = "SELECT * FROM users WHERE id=\"". $connexion->real_escape_string($_SESSION["id"]) . "\";";
+        $query = "SELECT * FROM users WHERE username=\"". $connexion->real_escape_string($_SESSION["username"]) . "\";";
         $class = $connexion->query($query)->fetch_assoc();
 
         $message = $messages->{$class["class"]}
