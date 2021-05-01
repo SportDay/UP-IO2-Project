@@ -85,13 +85,13 @@
     $_SESSION["enable_public"] = true;
     $_SESSION["public_name"  ] = $public_page["public_name" ];
     $_SESSION["public_image" ] = $public_page["public_image"];
-
     $connexion->query(
         "UPDATE `users` SET " . 
         "`enable_public`=TRUE, " .
         "`public_name`=\""  . $connexion->real_escape_string($public_page["public_name"]) . "\", " .
         "`public_image`=" . $public_page["public_image"] . ", " .
         "`last_reroll`="  . time() . ", " .
+        "`description`=\""  . $connexion->real_escape_string(inspirate()) . "\", " .
 
         "`specie`=\"" . $connexion->real_escape_string($public_page["specie"]) . "\", " .
         "`class`=\""  . $connexion->real_escape_string($public_page["class"])  . "\", " .

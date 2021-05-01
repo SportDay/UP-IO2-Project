@@ -13,7 +13,7 @@
 
 ?>
 <!-- ------------------------------------------ -->
-<div id = "mid_content">
+<div class = "mid_content">
 
   <section id="">
     <h1>Harry Potter | Role Play</h1>

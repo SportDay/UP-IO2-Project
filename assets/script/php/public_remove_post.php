@@ -66,6 +66,16 @@ if($post["user_id"] !== $_SESSION["id"]){
         "error"   => "Base de donnée hors d'accès."
     ]); exit();
 }
+
+
+$connexion->query(
+    "DELETE FROM `reports` WHERE `message_id`=" . $post["id"] . " ;"
+);
+
+$connexion->query(
+    "DELETE FROM `likes` WHERE `message_id`=" . $post["id"] . " ;"
+);
+
 $connexion->query(
     "DELETE FROM posts WHERE (id=\"".$post["id"]."\");"
 );

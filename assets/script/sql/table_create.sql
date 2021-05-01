@@ -47,7 +47,7 @@ CREATE TABLE `users` (
     `class`         varchar(32)     DEFAULT NULL,
     `title`         varchar(32)     DEFAULT NULL,
     `likes`         int UNSIGNED    DEFAULT 0,
-    `description`   varchar(50)     DEFAULT 'Description',
+    `description`   varchar(50)     DEFAULT NULL,
     
     `banned`        BOOLEAN         DEFAULT FALSE,
     `banned_to`     INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),

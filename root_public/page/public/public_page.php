@@ -13,13 +13,6 @@
 
 <!-- ------------------------------------------ -->
     <!-- Faire des focntions qui verifie si la page a partient a l'utilisateur -->
-    <div style="text-align: center; margin-bottom: 1em;">
-    <div id="search_container">
-        <form action="/search.php" method="get">
-            <input id="search_input" type="search" autocomplete="off" placeholder="Recherche">
-        </form>
-    </div>
-    </div>
     <?php // FUNCTIONS (specific à cette page)
     $connexion = mysqli_connect (
     $db_conf["DB_URL"],
@@ -32,16 +25,24 @@
         echo "connection_error"; exit();
     }
 
-    if(!isset($_GET["user"]) || $_SESSION["connected"] === false){
+    if(!isset($_GET["user"])){
         ?>
             <script>window.location.href = "<?="home_page.php"?>";</script>
         <?php
     }
 
     $user_query = "SELECT * FROM users WHERE public_name=\"". $connexion->real_escape_string(trim(htmlentities($_GET["user"]))) . "\";";
-    $me = $connexion->query($user_query)->fetch_assoc();
+    $me = $connexion->query($user_query);
 
-    if($me["id"] !== $_SESSION["id"]) {
+    if($me->num_rows == 0){
+        ?>
+        <script>window.location.href = "<?="home_page.php"?>";</script>
+        <?php
+    }
+
+    $me = $me->fetch_assoc();
+
+    if(isset($_SESSION["id"]) && $me["id"] !== $_SESSION["id"]) {
         $friend = false;
         $friend1_query = "SELECT * FROM friends WHERE user_id_0=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND user_id_1=\"" . $connexion->real_escape_string($me["id"]) . "\";";
         $friend2_query = "SELECT * FROM friends WHERE user_id_1=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND user_id_0=\"" . $connexion->real_escape_string($me["id"]) . "\";";
@@ -59,6 +60,7 @@
     while($my_post=$my_posts->fetch_assoc()) {
         $like = false;
         $reported = false;
+        if (isset($_SESSION["id"])){
         $like_query = "SELECT * FROM likes WHERE user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND message_id=\"" . $connexion->real_escape_string($my_post["id"]) . "\";";
         if ($connexion->query($like_query)->num_rows != 0) {
             $like = true;
@@ -68,14 +70,17 @@
         if ($connexion->query($report_query)->num_rows != 0) {
             $reported = true;
         }
-
-        post_bloc($my_post, $like, $reported);
+            post_bloc($my_post, $like, $reported, true);
+        }else{
+            post_bloc($my_post, $like, $reported, false);
+        }
     }
 
     mysqli_close($connexion);
-
-    profile_js_bloc($me);
-    post_js_bloc();
+    if(isset($_SESSION["id"])){
+        profile_js_bloc($me);
+        post_js_bloc();
+    }
 ?>
 
 
