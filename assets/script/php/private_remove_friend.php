@@ -26,12 +26,11 @@
                */
         )
     {
-        unset($_SESSION["remove_friend"]);
         echo json_encode([
             "success" => false,
             "error"   => "Requête incorrecte."
         ]); exit();
-    } unset($_SESSION["remove_friend"]);
+    }
 
     if (!isset($_POST["username"])) {
         echo json_encode([

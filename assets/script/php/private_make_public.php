@@ -91,7 +91,7 @@
         "`public_name`=\""  . $connexion->real_escape_string($public_page["public_name"]) . "\", " .
         "`public_image`=" . $public_page["public_image"] . ", " .
         "`last_reroll`="  . time() . ", " .
-        "`description`=\""  . $connexion->real_escape_string(inspirate()) . "\", " .
+        "`description`=\""  . $connexion->real_escape_string(inspirate($public_page["class"])) . "\", " .
 
         "`specie`=\"" . $connexion->real_escape_string($public_page["specie"]) . "\", " .
         "`class`=\""  . $connexion->real_escape_string($public_page["class"])  . "\", " .
