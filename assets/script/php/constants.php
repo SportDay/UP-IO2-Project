@@ -7,6 +7,8 @@
 
   */
 
+  date_default_timezone_set("Etc/GMT-2");
+
   $db_conf = json_decode( file_get_contents($global_params["root"] . "assets/script/sql/db_config.json") , true );
   $DB_URL       = $db_conf["DB_URL"];
   $DB_ACCOUNT   = $db_conf["DB_ACCOUNT"];
@@ -24,6 +26,5 @@
   //debug("=> " . dirname(__FILE__));
 
   $TIME_REROLL = 1 * (24*3600) * 1;
-
 
 ?>

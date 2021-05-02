@@ -375,9 +375,11 @@ function add_friend_bloc($friend) {
 
     ?>
         <div class="request_friend_list" id="friend_bloc_<?=htmlentities($friend["username"])?>">
+
             <a href="/root_public/page/public/public_page.php?user=<?= htmlentities(trim($friend["public_name"])) ?>">
                 <img class="request_profile_img" src="<?= getImagePath( $friend["public_image"])  ?>">
             </a>
+            
             <div class="request_profile_content border" >
                 <a href="/root_public/page/public/public_page.php?user=<?= htmlentities($friend["public_name"]) ?>">
                     <p class="request_username" >Utilisateur <?= htmlentities($friend["username"])." vous a ajouté!" ?></p><br>
@@ -388,6 +390,7 @@ function add_friend_bloc($friend) {
                 <button class="btn_button_btn cancelbtn_low_size btn_reject_friend_btn" onclick='removeFriend("<?=htmlentities($friend["username"])?>")'
                 >Refuser</button>
             </div>
+
         </div>
     <?php
 }

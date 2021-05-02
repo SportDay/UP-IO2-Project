@@ -54,7 +54,9 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
 {
     redirectNotAdmin();
 }
+
 date_default_timezone_set("Etc/GMT-2");
+
 ?>
 
 
@@ -145,6 +147,7 @@ date_default_timezone_set("Etc/GMT-2");
                 ></div>
 
         </div>
+
         <div class="containers_three_mid_00">
             <h1><?php echo $global_params["title"]; ?></h1>
         </div>
@@ -158,10 +161,9 @@ date_default_timezone_set("Etc/GMT-2");
             ?>
         </div>
 
+<!-- ------------------------------------------ -->
+</div> </header>
 
-
-        <!-- ------------------------------------------ -->
-    </div> </header>
 <div id = "mid_panel">
     <div id = "mid_container">
         <div style="text-align: center; margin: 7em auto 1em;"></div>
