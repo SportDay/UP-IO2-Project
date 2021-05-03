@@ -81,7 +81,6 @@
         removePublicPage();
 
     // application de la nouvelle
-
     $_SESSION["enable_public"] = true;
     $_SESSION["public_name"  ] = $public_page["public_name" ];
     $_SESSION["public_image" ] = $public_page["public_image"];

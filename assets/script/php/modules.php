@@ -6,10 +6,14 @@
     Les modules correspondent à un ensemble de fonctions qui générent des élements html procéduraux.
     Ces fonctions produisent donc effets de bords sur les pages ou elles sont appelés.
 
+    A noter que les scripts (javascript) prennent beaucoup de place.
+    Il est à envisager de créer des fichiers .js dans root_public/assets/script/js/*.js
+    Et d'y mettre tout ces scripts.
+    Pour les variables de pages, on pourrait utiliser des var qui serait set dans un <script></script> au préalable
 
 */
 
-
+////////////////////////////////////////////////
 // MENU
 function menu_when_not_connected () {
     // bouton de connection et d'enregistrement
@@ -303,64 +307,20 @@ function menu_when_connected () {
     <?php
 }
 
+////////////////////////////////////////////////
 // BARRE DE RECHERCHE
 function search($query) { // WIP
     return [ 1, 2, 3, 4 ]; // retourner une liste d'id de message
 }
 
-// MESSAGE
-function public_message($message) { // WIP
-
-    ?>
-        <div id = "mid_content" style="margin-top: 0px; text-align: initial;">
-        <div class="posts">
-            <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-                <img class="profile_img_posts" src="<?= $global_params["root"] . "assets/profile/default.png" ?>">
-            </a>
-            <div class="info_containt border" style="border-radius: 15px; padding: 10px 10px;">
-                <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-                    <span class="post_auteur" style="color: white; font-size: 20px">Test Test</span><br>
-                    <span class="post_date" style="color: lightgray; font-size: 14px">19/04/2021 19:24</span>
-                </a>
-                <div class="post_menu">
-                    <button class="btn_menu_post">&#8226;&#8226;&#8226;</button>
-                    <div class="supp_post border">
-                        <form action="/supp_post.php" method="post">
-                            <input type="hidden" name="sup_post" value="post_id">
-                            <button class="btn_sup_post" type="submit">Supprimer</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div class="post_content border">
-                <p style="color: white; font-size: 18px">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi aliquet fermentum odio. Nulla sed venenatis nulla. Pellentesque interdum ligula ac venenatis mattis. Nam nec lectus urna. Vestibulum finibus tellus a auctor feugiat. Morbi vel cursus orci, eu efficitur nisl. Vivamus congue mi sed metus condimentum aliquet. Aliquam tempus ante vel viverra vulputate. Phasellus eros lorem, imperdiet in ante vel, malesuada viverra orci. Curabitur laoreet porta quam nec rhoncus. Donec aliquet dui in rhoncus eleifend.
-
-                    Donec eleifend elementum bibendum. Quisque porta, lacus eget vehicula aliquam, augue ante dignissim lectus, eu porta neque magna sit amet odio. Morbi gravida quam a libero blandit, nec laoreet tortor finibus. In facilisis augue sed ante interdum, nec consequat arcu feugiat. Morbi sagittis justo non ligula luctus imperdiet. Integer ultrices diam vel venenatis sodales. Praesent nisl est, vulputate ut viverra quis, rhoncus et libero.</p>
-            </div>
-            <a href="#" class="btn_like">
-                <img class="like_img" width="32" height="32" src="<?= $global_params["root_public"] . "assets/image/like.png"?>"><span class="like_num"">0</span>
-            </a>
-            <div class="espace" style="grid-area: espace;"></div>
-            <dfn title="Voulez-vous signaler?">
-                <div class="btn_report">
-                    <a href="#" class="report_ref">
-                        <img class="report_img" width="32" height="32" src="<?= $global_params["root_public"] . "assets/image/report.png"?>">
-                    </a>
-                </div>
-            </dfn>
-        </div>
-    </div>
-
-    <?php
-}
-
+////////////////////////////////////////////////
 // MESSAGE PRIVEE
 function private_message($message) { // WIP
 }
 
+////////////////////////////////////////////////
 // FRIENDS
-function add_friend_blocOriginal($friend) {
+/* function add_friend_blocOriginal($friend) {
 
     ?><div class="grid" id="friend_bloc_<?=htmlentities($friend["username"])?>">
         <span><?=$friend["username"]?> vous a ajouté!</span>
@@ -369,7 +329,7 @@ function add_friend_blocOriginal($friend) {
         <button class="btn_button_btn cancelbtn_low_size" onclick='removeFriend("<?=htmlentities($friend["username"])?>")'
         >Refuser</button>
     </div><?php
-}
+} */
 
 function add_friend_bloc($friend) {
 
@@ -466,8 +426,7 @@ function add_friend_js_bloc() {
     </script><?php
 }
 
-/*
-function friend_blocOriginal($friend, $specific_root=FALSE, $root_public="") { // necessite un friend_js_bloc sur la même page
+/* function friend_blocOriginal($friend, $specific_root=FALSE, $root_public="") { // necessite un friend_js_bloc sur la même page
     
     if (!$specific_root)
         $root_public = $GLOBALS["global_params"]["root_public"];
@@ -519,8 +478,7 @@ function friend_blocOriginal($friend, $specific_root=FALSE, $root_public="") { /
         </div>
     <?php
 
-}
-*/
+} */
 
 function friend_bloc($friend, $specific_root=FALSE, $root_public="") { // necessite un friend_js_bloc sur la même page
 
@@ -603,6 +561,8 @@ function friend_js_bloc() {
     </script><?php
 }
 
+////////////////////////////////////////////////
+// PROFILES BLOC
 function profile_bloc($profile, $friend = null){
     ?>
         <div class = "mid_content" style="text-align: initial;">
@@ -793,6 +753,8 @@ function profile_js_bloc($me) {
         </script><?php
 }
 
+////////////////////////////////////////////////
+// POSTS
 function post_add(){
     ?>
     <div class = "mid_content" style="text-align: initial;">

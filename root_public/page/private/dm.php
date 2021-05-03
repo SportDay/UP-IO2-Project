@@ -31,11 +31,26 @@
         $GLOBALS["DB_NAME"]
     );
 
-    if (!$connexion) invalidPage("connection_error"); 
+    if (!$connexion) invalidPage("connection_error");
+    
+    // Token
+    // pour utiliser les fonctionnalités de la page il faut son token
+    // imaginons que l'utilisateur ouvre 2 fois la page (pour dm 2 personnes).
+    // alors le token va être ré-écrit
+    // le moyens de fixer ça que j'ai trouvé
+    // lors d'un erreur de token, envoyé un client une erreur de token
+    // le client va alors recharger sa page pour actualiser son token (javascript)
+    // ajouter en post le messages en cours de redaction 
+    $page_token   = $SESSION["dm_token"] = randomString(); // base64 string
+    
+    if (isset($_POST["last_message"])) { ?> <script>
+        //send le message maintenant
+    </script> <?php }
+
 
     //////////////////////////////
     // CONTENU MODULABLE DE PAGE
-    function pageContent($friend, $load_script, $post_script, $private) {
+    function pageContent($friend, $private) {
         
         $root_public = $GLOBALS["global_params"]["root_public"];
         $root        = $GLOBALS["global_params"]["root"];
@@ -62,29 +77,48 @@
                 
                 <!-- Messages -->
                 <div class="all_message_container border" id="all_message_container">
+                    
                     <div class="message_container">
                         <p class="date" style="color: white; font-size: 14px">Test Test<br>23:06<br>21/04/2021</p>
                         <p class="message" style="color: white; font-size: 16px">test</p>
                     </div>
+
                 </div>
 
                 <!-- Send Messages -->
                 <div class="send_container">
-                    <textarea id="msg_send_content" name="message" form="msg_form" placeholder="Votre Message" rows="3"></textarea>
+
+                    <textarea id="msg_send_content" placeholder="Votre Message" rows="3"></textarea>
                     <button class="btn_send btn_button_btn" onclick='sendMessage()'>
                         <img height="32" width="32" src="<?= $root_public ?>assets/image/send.png">
                     </button>
+
                 </div>
 
                 <!-- Scripts -->
                 <script>
+
                     // scroll en bas de la bar des messages par défaut
                     let messagesContainer = document.getElementById("all_message_container");
                     messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                </script>
 
-                <?= $load_script ?>
-                <?= $post_script ?>
+                    // auto refresh (5s)
+                    // j'ai verifié, js est single threaded, 
+                    // donc pas de problème d'effets de bords à refresh 2x en même temps
+                    window.setInterval( refreshMessages, 5000 );
+
+                    //////////////////
+                    // fonctions 
+                    
+                    function sendMessage() {
+
+                    }
+
+                    function refreshMessages() {
+                        
+                    }
+
+                </script>
 
             </div>
             </div>
@@ -126,12 +160,7 @@
         $friend = $friend->fetch_assoc();
 
         // afficher la page
-        pageContent(
-            $friend,
-            "",
-            "",
-            true
-        );
+        pageContent( $friend, true );
 
     } 
     else {        // check public  friend
@@ -159,12 +188,7 @@
         $friend = $friend->fetch_assoc();
 
         // afficher la page
-        pageContent(
-            $friend,
-            "",
-            "",
-            false
-        );
+        pageContent( $friend, false );
     }
 
 ?>
