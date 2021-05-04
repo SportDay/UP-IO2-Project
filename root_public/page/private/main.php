@@ -46,7 +46,7 @@ if(!isset($_SESSION["id"])){
 
 
 $my_posts = $connexion->query("select * from ( ".
-    " (SELECT like_id as poster FROM `pages_liked` WHERE (user_id=".$connexion->real_escape_string($_SESSION["id"])."))".
+    "          (SELECT like_id as poster FROM `pages_liked` WHERE (user_id=".$connexion->real_escape_string($_SESSION["id"])."))".
     " UNION (SELECT user_id_1 as poster FROM `friends` WHERE (user_id_0=".$connexion->real_escape_string($_SESSION["id"])." AND accepted))".
     " UNION (SELECT user_id_0 as poster FROM `friends` WHERE (user_id_1=".$connexion->real_escape_string($_SESSION["id"])." AND accepted))".
     " UNION (SELECT user_id as poster FROM `posts` WHERE (user_id=".$connexion->real_escape_string($_SESSION["id"]).")) )".
@@ -54,23 +54,22 @@ $my_posts = $connexion->query("select * from ( ".
     " ORDER BY creation_date DESC;");
 
 post_add();
-while($my_post=$my_posts->fetch_assoc()) {
-    $like = false;
-    $reported = false;
-    if (isset($_SESSION["id"])){
-        $like_query = "SELECT * FROM likes WHERE user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND message_id=\"" . $connexion->real_escape_string($my_post["id"]) . "\";";
-        if ($connexion->query($like_query)->num_rows != 0) {
-            $like = true;
-        }
 
-        $report_query = "SELECT * FROM reports WHERE user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND message_id=\"" . $connexion->real_escape_string($my_post["id"]) . "\";";
-        if ($connexion->query($report_query)->num_rows != 0) {
-            $reported = true;
-        }
-        post_bloc($my_post, $like, $reported, true);
-    }else{
-        post_bloc($my_post, $like, $reported, false);
-    }
+while($my_post=$my_posts->fetch_assoc()) {
+
+    $like_query = 
+        "SELECT id FROM likes WHERE ".
+        " user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) . 
+        "\" AND message_id=\"" . $connexion->real_escape_string($my_post["id"]) . "\";";
+    $like = $connexion->query($like_query)->num_rows != 0;
+
+    $report_query = 
+        "SELECT id FROM reports WHERE ".
+        " user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) . 
+        "\" AND message_id=\"" . $connexion->real_escape_string($my_post["id"]) . "\";";
+    $reported = $connexion->query($report_query)->num_rows != 0;
+
+    post_bloc($my_post, $like, $reported, true);
 }
 
 mysqli_close($connexion);

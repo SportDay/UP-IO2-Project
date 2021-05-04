@@ -57,10 +57,10 @@
 
         ?>
             <div id="mid_container_mid">
-            <div class="mid_content container_message" style="margin-top: 0; margin-bottom: 20px; text-align: initial; height: 100%;">
+            <div class="mid_content container_message">
                 
                 <!-- Description -->
-                <div class="pofile_container_dm">
+                <div class="pofile_container_dm dm_text_setting">
                     <?php if($friend["enable_public"]) { ?>
                     <a href="<?=$root_public?>page/public/public_page.php?user=<?=htmlentities($friend["public_name"])?>">
                         <img class="profile_img_posts" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
@@ -69,8 +69,8 @@
                         <img class="profile_img_posts" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
                     <?php } ?>
 
-                    <div class="info_containt border" style="border-radius: 15px; padding: 10px 10px;">
-                        <span class="post_auteur" style="color: white; font-size: 32px"><?= $private ? $friend["username"] : $friend["public_name"] ?></span><br>
+                    <div class="border">
+                        <span class="info_containt post_auteur"><?= $private ? $friend["username"] : $friend["public_name"] ?></span><br>
                     </div>
                 
                 </div>
@@ -158,7 +158,7 @@
                     //var cnt = 0;
                     function refreshMessages() {
                         //cnt++; if (cnt>5) return;
-
+                        
                         let data = new FormData();
                         data.append("dm_token",     page_token);
                         data.append("private",      private);

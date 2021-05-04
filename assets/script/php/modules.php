@@ -608,7 +608,7 @@ function profile_bloc($profile, $friend = null){
             }else{
         ?>
                 <div class="container_desc border" style="border-radius: 15px">
-                    <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= trim(htmlentities($profile["description"]))?></p>
+                    <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= htmlentities(trim($profile["description"]))?></p>
                 </div>
         <?php
             }
@@ -825,98 +825,108 @@ function post_js_add(){
 }
 
 function post_bloc($post, $like = false, $reported = false, $connected = false){
+
+        $connected = isset($_SESSION["connected"]) && $_SESSION["connected"]; 
+
     ?>
     
     <div id = "post_id_<?= htmlentities(trim($post["id"])) ?>" class="mid_content" style="text-align: initial;">
-        <div class="posts">
+    <div class="posts">
+
+        <!-- USER -->
+        <a href="<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($post["public_name"]) ?>">
+
+            <img class="profile_img_posts" src="<?= getImagePath( $post["public_image"])  ?>">
+        
+        </a>
+
+        <div class="info_containt border" style="border-radius: 15px; padding: 10px 10px;">
             <a href="<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($post["public_name"]) ?>">
-
-                <img class="profile_img_posts" src="<?= getImagePath( $post["public_image"])  ?>">
-            
+                <span class="post_auteur" style="color: white; font-size: 20px"><?= htmlentities($post["public_name"]) ?></span><br>
+                <span class="post_date" style="color: lightgray; font-size: 14px"><?= date('d/m/Y H:i', htmlentities(trim($post["creation_date"]))); ?></span>
             </a>
-            <div class="info_containt border" style="border-radius: 15px; padding: 10px 10px;">
-                <a href="<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($post["public_name"]) ?>">
-                    <span class="post_auteur" style="color: white; font-size: 20px"><?= htmlentities($post["public_name"]) ?></span><br>
-                    <span class="post_date" style="color: lightgray; font-size: 14px"><?= date('d/m/Y H:i', htmlentities(trim($post["creation_date"]))); ?></span>
-                </a>
-                <?php
-                    if(isset($_SESSION["id"]) && $_SESSION["id"] === $post["user_id"]){
-                ?>
-                <div class="post_menu">
-                    <button class="btn_menu_post">&#8226;&#8226;&#8226;</button>
-                    <div class="supp_post border">
-                        <button class="btn_sup_post" onclick="removePost('<?= htmlentities(trim($post["id"])) ?>');">Supprimer</button>
-                    </div>
-                </div>
-                        <?php } ?>
-            </div>
-
-            <div class="post_content border">
-                <p style="color: white; font-size: 18px"><?= htmlentities(trim($post["content"])) ?></p>
-            </div>
             <?php
-
-            if($connected){
-                if (!$like)
-                {?>
-                    <button id="btn_like_id_<?= htmlentities(trim($post["id"]))?>" class="btn_like btn_button_btn" onclick="likePost('<?= htmlentities(trim($post["id"]))?>');">
-                        <img id="img_like_<?= htmlentities(trim($post["id"]))?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/like.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= trim(htmlentities($post["like_num"])) ?></span>
-                    </button>
-                <?php
-                } else {
-                ?>
-                    <button id="btn_like_id_<?= htmlentities(trim($post["id"]))?>" class="btn_like btn_button_btn" onclick="unlikePost('<?= htmlentities(trim($post["id"]))?>');">
-                        <img id="img_like_<?= htmlentities(trim($post["id"]))?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/liked.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= trim(htmlentities($post["like_num"])) ?></span>
-                    </button>
-                <?php
-                }
-                }else{
-                ?>
-                    <button id="btn_like_id_<?= htmlentities(trim($post["id"]))?>" class="btn_like btn_button_btn"">
-                        <img id="img_like_<?= htmlentities(trim($post["id"]))?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/like.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= trim(htmlentities($post["like_num"])) ?></span>
-                    </button>
-                    <?php
-                }
+                if(isset($_SESSION["id"]) && $_SESSION["id"] === $post["user_id"]){
             ?>
-            <div class="post_btn_espace" style="grid-area: post_btn_espace;"></div>
+            <div class="post_menu">
+                <button class="btn_menu_post">&#8226;&#8226;&#8226;</button>
+                <div class="supp_post border">
+                    <button class="btn_sup_post" onclick="removePost('<?= htmlentities($post['id']) ?>');">Supprimer</button>
+                </div>
+            </div>
+                    <?php } ?>
+        </div>
 
-                <?php
-                    if($connected){
-                    if (!$reported)
-                    {?>
-                <dfn title="Voulez-vous signaler?">
-                    <div class="btn_report">
-                        <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>" onclick="reportPost('<?= htmlentities(trim($post["id"]))?>');" class="report_ref btn_button_btn">
-                            <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
-                        </button>
-                    </div>
-                </dfn>
-                        <?php
-                    } else {
-                        ?>
-                        <dfn title="Vous avez deja signaler">
-                            <div class="btn_report">
-                                <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>"  onclick="unreportPost('<?= htmlentities(trim($post["id"]))?>');" class="report_ref btn_button_btn">
-                                    <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/reported.png"?>">
-                                </button>
-                            </div>
-                        </dfn>
-                        <?php
-                    }
-                    }else{?>
-            <dfn title="Boutton de signalement">
+
+        <!-- CONTENT -->
+        <div class="post_content border">
+            <p style="color: white; font-size: 18px"><?= htmlentities($post["content"]) ?></p>
+        </div>
+
+        <!-- INTERACT -->
+        <?php
+        if($connected) {
+            
+            if (!$like)
+            {  ?>
+                <button id="btn_like_id_<?= htmlentities($post["id"])?>" class="btn_like btn_button_btn" onclick="likePost('<?= htmlentities($post['id'])?>');">
+                    <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/like.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= htmlentities($post["like_num"]) ?></span>
+                </button>
+            <?php
+            } else {
+            ?>
+                <button id="btn_like_id_<?= htmlentities($post["id"])?>" class="btn_like btn_button_btn" onclick="unlikePost('<?= htmlentities(trim($post['id']))?>');">
+                    <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/liked.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= htmlentities($post["like_num"]) ?></span>
+                </button>
+            <?php }
+            
+        } else { ?>
+                <button id="btn_like_id_<?= htmlentities(trim($post["id"]))?>" class="btn_like btn_button_btn">
+                    <img id="img_like_<?= htmlentities(trim($post["id"]))?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/like.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= trim(htmlentities($post["like_num"])) ?></span>
+                </button>
+        <?php } ?>
+
+
+        <div class="post_btn_espace" style="grid-area: post_btn_espace;"></div>
+
+            <?php
+                if($connected){
+                if (!$reported)
+                {?>
+            <dfn title="Voulez-vous signaler?">
                 <div class="btn_report">
-                    <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>"  onclick="" class="report_ref btn_button_btn">
+                    <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>" onclick="reportPost('<?= htmlentities(trim($post['id']))?>');" class="report_ref btn_button_btn">
                         <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
                     </button>
                 </div>
             </dfn>
-            <?php
+                    <?php
+                } else {
+                    ?>
+                    <dfn title="Vous avez deja signaler">
+                        <div class="btn_report">
+                            <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>"  onclick="unreportPost('<?= htmlentities(trim($post['id']))?>');" class="report_ref btn_button_btn">
+                                <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/reported.png"?>">
+                            </button>
+                        </div>
+                    </dfn>
+                    <?php
+                }
+                }else{?>
+        <dfn title="Boutton de signalement">
+            <div class="btn_report">
+                <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>"  onclick="" class="report_ref btn_button_btn">
+                    <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
+                </button>
+            </div>
+        </dfn>
+        <?php
+                }
+            ?>
 
-                    }
 
-                ?>
-        </div>
+
+    </div>
     </div>
 
     <?php
