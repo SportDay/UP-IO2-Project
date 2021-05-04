@@ -575,21 +575,16 @@ function profile_bloc($profile, $friend = null){
             <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
             </a>
             <div class="info_profile">
-                <span class="profile_nickname" >Nom:     <?= htmlentities($profile["public_name"])?></span>
-                <span class="profile_titre"    >Titre:   <?= htmlentities($profile["title"])?></span>
-                <span class="profile_espece"   >Espece:  <?= htmlentities($profile["specie"])?></span>
-                <span class="profile_classe"   >Classe:  <?= htmlentities($profile["class"])?></span>
-                <?php
-                    if(isset($friend) && !$friend){
-                ?>
-                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #56bb41;" onclick='ajouterAmis(<?= "à corriger" ?>);'>Ajouter en amis</button>
-                <?php
-                    }else if(isset($friend) && $friend){
-                ?>
-                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #bb4141;" onclick='supprimerAmis(<?= json_encode($profile["username"]) ?>);>Supprimer l'amis</button>
-                <?php
-                    }
-                ?>
+                <span class="profile_nickname" >Nom: <?= htmlentities($profile["public_name"])?></span>
+                <span class="profile_titre"    >Titre: <?= htmlentities($profile["title"])?></span>
+                <span class="profile_espece"   >Espece: <?= htmlentities($profile["specie"])?></span>
+                <span class="profile_classe"   >Classe: <?= htmlentities($profile["class"])?></span>
+                <span class="profile_nlikes"   >Likes: <?= htmlentities($profile["likes"])?></span>
+                <?php if(isset($friend) && !$friend){ ?>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #41bb41;" onclick='ajouterAmis(<?= "à corriger" ?>);'>Liker la page</button>
+                <?php }else if(isset($friend) && $friend){ ?>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #bb4141;" onclick='supprimerAmis(<?= json_encode($profile["username"]) ?>);'>Unlike la page</button>
+                <?php } ?>
             </div>
         </div>
             <?php
@@ -864,62 +859,43 @@ function post_bloc($post, $like = false, $reported = false, $connected = false){
         </div>
 
         <!-- INTERACT -->
-        <?php
-        if($connected) {
-            
-            if (!$like)
-            {  ?>
-                <button id="btn_like_id_<?= htmlentities($post["id"])?>" class="btn_like btn_button_btn" onclick="likePost('<?= htmlentities($post['id'])?>');">
+        <?php if($connected) {?>
+                <button id="btn_like_id_<?= htmlentities($post["id"])?>" class="btn_like btn_button_btn" onclick="likeSystemPost('<?= $post['id']?>');">
+                <?php
+                if (!$like)
+                {  ?>
                     <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/like.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= htmlentities($post["like_num"]) ?></span>
+                    <?php }else{?>
+                    <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/liked.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= htmlentities($post["like_num"]) ?></span>
+                <?php } ?>
                 </button>
             <?php
-            } else {
-            ?>
-                <button id="btn_like_id_<?= htmlentities($post["id"])?>" class="btn_like btn_button_btn" onclick="unlikePost('<?= htmlentities(trim($post['id']))?>');">
-                    <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/liked.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= htmlentities($post["like_num"]) ?></span>
-                </button>
-            <?php }
-            
-        } else { ?>
-                <button id="btn_like_id_<?= htmlentities(trim($post["id"]))?>" class="btn_like btn_button_btn">
-                    <img id="img_like_<?= htmlentities(trim($post["id"]))?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/like.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= trim(htmlentities($post["like_num"])) ?></span>
+            } else { ?>
+                <button id="btn_like_id_<?= htmlentities($post["id"])?>" class="btn_like btn_button_btn">
+                    <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/like.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= trim(htmlentities($post["like_num"])) ?></span>
                 </button>
         <?php } ?>
 
-
         <div class="post_btn_espace" style="grid-area: post_btn_espace;"></div>
 
-            <?php
-                if($connected){
-                if (!$reported)
-                {?>
-            <dfn title="Voulez-vous signaler?">
-                <div class="btn_report">
-                    <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>" onclick="reportPost('<?= htmlentities(trim($post['id']))?>');" class="report_ref btn_button_btn">
-                        <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
-                    </button>
-                </div>
-            </dfn>
-                    <?php
-                } else {
-                    ?>
-                    <dfn title="Vous avez deja signaler">
-                        <div class="btn_report">
-                            <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>"  onclick="unreportPost('<?= htmlentities(trim($post['id']))?>');" class="report_ref btn_button_btn">
+            <?php if($connected){?>
+                <dfn title="<?php if(!$reported){ echo "Voulez-vous signaler?";}else{ echo "Vous avez deja signaler";}?>">
+                    <div class="btn_report">
+                        <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>" onclick="reportSystemPost('<?= $post['id']?>');" class="report_ref btn_button_btn">
+                            <?php if (!$reported) {?>
+                                <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
+                            <?php } else {?>
                                 <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/reported.png"?>">
-                            </button>
-                        </div>
-                    </dfn>
-                    <?php
-                }
-                }else{?>
-        <dfn title="Boutton de signalement">
+                            <?php }?>
+                    </button>
+                    </div>
+                </dfn>
+                    <?php }else{?>
             <div class="btn_report">
-                <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>"  onclick="" class="report_ref btn_button_btn">
+                <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>" class="report_ref btn_button_btn">
                     <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
                 </button>
             </div>
-        </dfn>
         <?php
                 }
             ?>
@@ -959,14 +935,14 @@ function post_js_bloc() {
                     }
             }
         }
-        function likePost(post_id) {
+        function likeSystemPost(post_id) {
             let data = new FormData();
             data.append("post_id", post_id);
             data.append("like_post", "<?= $_SESSION["like_post"] = randomString()?>");
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/like_post.php");
+                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/likeSystemPost.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -977,49 +953,25 @@ function post_js_bloc() {
                         const feedback = JSON.parse(xmlhttp.responseText);
 
                         if (feedback["success"]) {
-                            document.getElementById("img_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"]."assets/image/liked.png"?>";
-                            document.getElementById("like_id_" + post_id).textContent  = parseInt(document.getElementById("like_id_" + post_id).textContent,10)+ 1;
-                            document.getElementById("btn_like_id_" + post_id).setAttribute( "onClick", "unlikePost("+post_id+");");
+                            if(feedback["liked"]) {
+                                document.getElementById("img_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"] . "assets/image/liked.png"?>";
+                            }else{
+                                document.getElementById("img_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"] . "assets/image/like.png"?>";
+                            }
+                            document.getElementById("like_id_" + post_id).textContent  = feedback["nbr_like"];
                         }
-
-                    }
-            }
-        }
-        function unlikePost(post_id) {
-            let data = new FormData();
-            data.append("post_id", post_id);
-            data.append("unlike_post", "<?= $_SESSION["unlike_post"] = randomString()?>");
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/unlike_post.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"]) {
-                            document.getElementById("img_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"]."assets/image/like.png"?>";
-                            document.getElementById("like_id_" + post_id).textContent  = parseInt(document.getElementById("like_id_" + post_id).textContent,10)- 1;
-                            document.getElementById("btn_like_id_" + post_id).setAttribute( "onClick", "likePost("+post_id+");");
-                        }
-
                     }
             }
         }
 
-        function reportPost(post_id) {
+        function reportSystemPost(post_id) {
             let data = new FormData();
             data.append("post_id", post_id);
             data.append("report_post", "<?= $_SESSION["report_post"] = randomString()?>");
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/report_post.php");
+                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/reportSystemPost.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -1030,33 +982,11 @@ function post_js_bloc() {
                         const feedback = JSON.parse(xmlhttp.responseText);
 
                         if (feedback["success"]) {
-                            document.getElementById("img_report_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"]."assets/image/reported.png"?>";
-                            document.getElementById("btn_report_id_" + post_id).setAttribute( "onClick", "unreportPost("+post_id+");");
-                        }
-
-                    }
-            }
-        }
-        function unreportPost(post_id) {
-            let data = new FormData();
-            data.append("post_id", post_id);
-            data.append("unreport_post", "<?= $_SESSION["unreport_post"] = randomString()?>");
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/unreport_post.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"]) {
-                            document.getElementById("img_report_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"]."assets/image/report.png"?>";
-                            document.getElementById("btn_report_id_" + post_id).setAttribute( "onClick", "reportPost("+post_id+");");
+                            if(feedback["report"]) {
+                                document.getElementById("img_report_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"]."assets/image/reported.png"?>";
+                            }else{
+                                document.getElementById("img_report_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"]."assets/image/report.png"?>";
+                            }
                         }
 
                     }

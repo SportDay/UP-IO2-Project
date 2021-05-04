@@ -15,7 +15,7 @@
     grid-template-rows: auto auto;
     gap: 20px 20px;
     grid-template-areas:
-    "profile_nickname profile_espece btn_friend_porfile_add"
+    "profile_nickname profile_espece profile_nlikes"
     "profile_titre profile_classe btn_friend_porfile_add";
     padding: 20px 20px;
     /*-------------------------------*/
@@ -29,14 +29,17 @@
 .profile_titre { grid-area: profile_titre; }
 .profile_espece { grid-area: profile_espece; }
 .profile_classe { grid-area: profile_classe; }
+.profile_nlikes { grid-area: profile_nlikes; }
 .btn_friend_porfile_add{
     grid-area: btn_friend_porfile_add;
-    margin: auto auto;
-    padding: 10px 10px;
+    margin-bottom: auto;
+    margin-right: auto;
+    padding: 3px 3px;
+    color: white;
 }
 
 
-.profile_nickname,.profile_titre,.profile_espece,.profile_classe{
+.profile_nickname,.profile_titre,.profile_espece,.profile_classe,.profile_nlikes{
     color: white; font-size: 20px
 }
 
