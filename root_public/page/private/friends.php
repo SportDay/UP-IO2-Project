@@ -63,7 +63,7 @@
 
 <!-- Liste d'amis -->
 
-
+    <div id="friend_blocs_area" >
     <?php
         $friends = $connexion->query( 
             "select *
@@ -85,6 +85,7 @@
 
         mysqli_close($connexion);
     ?>
+    </div>
 
 <?php friend_js_bloc(); add_friend_js_bloc(); ?>
 <script>
