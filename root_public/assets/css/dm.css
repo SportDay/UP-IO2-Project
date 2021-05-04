@@ -7,6 +7,29 @@
 .container_message{
     display: flex;
     flex-direction: column;
+    margin-top: 0; margin-bottom: 20px; text-align: initial; height: 100%;
+}
+
+.mid_content p, .mid_content ul, .mid_content li, .mid_content pre, .mid_content h1, .mid_content h2 {
+    color: rgb(233, 233, 233);
+    white-space: normal;
+}
+
+.border {
+    padding: 10px 20px;
+    border-radius: 15px;
+    background-color: rgb(59, 61, 63);
+    border: solid rgb(209, 176, 115);
+}
+
+.info_containt_border{
+    border-radius: 15px; 
+    padding: 10px 10px;
+}
+
+.post_auteur {
+    color: white; 
+    font-size: 32px
 }
 
 .pofile_container_dm{
@@ -16,8 +39,7 @@
     gap: 10px 20px;
     margin-left: 20px;
     margin-right: 20px;
-    grid-template-areas:
-    "profile_img_posts info_containt"
+    grid-template-areas:"profile_img_posts info_containt"
 }
 
 .all_message_container{
@@ -25,6 +47,9 @@
     border-radius: 15px;
     padding: 10px 20px 0;
     height: 100%;
+
+    color:whitesmoke !important;
+
     overflow-y: auto;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;

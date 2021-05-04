@@ -10,50 +10,258 @@
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
-<?php // verification amitié
+<?php 
+    
+    function invalidPage($debug) {
+        if (isset($debug)) {
+            write($debug);
+        }
 
-    $friend = $_GET["user"];
-
-    if (true) 
-    {
-        require($global_params["root"] . "assets/script/php/footer.php");
+        require($GLOBALS["global_params"]["root"] . "assets/script/php/footer.php");
         exit();
     }
+
+    $friend  = isset($_GET["user"])    ? $_GET["user"]    : invalidPage("Requête invalide.");
+    $private = isset($_GET["private"]) ? $_GET["private"] == "true" : invalidPage("Requête invalide.");
+
+    $connexion = mysqli_connect (
+        $GLOBALS["DB_URL"],
+        $GLOBALS["DB_ACCOUNT"],
+        $GLOBALS["DB_PASSWORD"],
+        $GLOBALS["DB_NAME"]
+    );
+
+    if (!$connexion) invalidPage("connection_error");
+    
+    // Token
+    // pour utiliser les fonctionnalités de la page il faut son token
+    // imaginons que l'utilisateur ouvre 2 fois la page (pour dm 2 personnes).
+    // alors le token va être ré-écrit
+    // le moyens de fixer ça que j'ai trouvé
+    // lors d'un erreur de token, envoyé un client une erreur de token
+    // le client va alors recharger sa page pour actualiser son token (javascript)
+    // ajouter en post le messages en cours de redaction 
+    $page_token   = $_SESSION["dm_token"] = randomString(); // base64 string
+    
+    if (isset($_POST["last_message"])) { ?> <script>
+        //send le message maintenant
+    </script> <?php }
+
+
+    //////////////////////////////
+    // CONTENU MODULABLE DE PAGE
+    function pageContent($friend, $private) {
+        
+        $root_public = $GLOBALS["global_params"]["root_public"];
+        $root        = $GLOBALS["global_params"]["root"];
+
+        ?>
+            <div id="mid_container_mid">
+            <div class="mid_content container_message">
+                
+                <!-- Description -->
+                <div class="pofile_container_dm dm_text_setting">
+                    <?php if($friend["enable_public"]) { ?>
+                    <a href="<?=$root_public?>page/public/public_page.php?user=<?=htmlentities($friend["public_name"])?>">
+                        <img class="profile_img_posts" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
+                    </a>
+                    <?php } else { ?>
+                        <img class="profile_img_posts" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
+                    <?php } ?>
+
+                    <div class="border">
+                        <span class="info_containt post_auteur"><?= $private ? $friend["username"] : $friend["public_name"] ?></span><br>
+                    </div>
+                
+                </div>
+                
+                <!-- Messages -->
+                <div class="all_message_container border" id="all_message_container">
+                    <span></span>
+                </div>
+
+                <!-- Send Messages -->
+                <div class="send_container">
+
+                    <textarea id="msg_send_content" placeholder="Votre Message" rows="3"></textarea>
+                    <button class="btn_send btn_button_btn" onclick='sendMessage()'>
+                        <img height="32" width="32" src="<?= $root_public ?>assets/image/send.png">
+                    </button>
+
+                </div>
+
+                <!-- Scripts -->
+                <script>
+
+                    // scroll en bas de la bar des messages par défaut
+                    var messagesArea = document.getElementById("all_message_container");
+
+                    //persistents data
+                    const page_token    = "<?=$GLOBALS["page_token"]?>";
+                    const friend        = <?= json_encode($private ? $friend["username"] : $friend["public_name"]) ?>;
+                    const private       = <?= $private ? "true" :  "false" ?>;
+                    var   lastUpdate    = 0;
+
+                    // auto refresh (5s)
+                    // j'ai verifié, js est single threaded, 
+                    // donc pas de problème d'effets de bords à refresh 2x en même temps
+                    window.setInterval( refreshMessages, 5000 );
+                    refreshMessages(); // first iter
+
+                    //////////////////
+                    // fonctions 
+                    
+                    function sendMessage() {
+                        let sender = document.getElementById("msg_send_content");
+
+                        let data = new FormData();
+                        data.append("dm_token",     page_token);
+                        data.append("private",      private);
+                        data.append("friend",       friend);
+                        data.append("message",      sender.value);
+
+                        let xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/direct_message_send.php");
+                        xmlhttp.send( data );
+
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState === 4) // request done
+                                if (xmlhttp.status === 200) // successful return
+                                {
+                                    //alert(xmlhttp.responseText);
+                                    const feedback = JSON.parse(xmlhttp.responseText);
+                                    
+                                    if (feedback["success"])
+                                    {
+                                        refreshMessages();
+                                        sender.value = "";
+                                        sender.focus();
+
+                                    }
+                                    else
+                                    {
+
+                                        if (feedback["error"] == "token_error")
+                                        {
+                                            // normalement on reload cette page avec le message en post
+                                            // en attendant de trouver coment faire un post en js
+                                            // je reload juste la page
+
+                                            window.open(window.location.href, "_self");
+                                        }
+                                    }
+                                }
+                        }
+                    }
+
+                    //var cnt = 0;
+                    function refreshMessages() {
+                        //cnt++; if (cnt>5) return;
+                        
+                        let data = new FormData();
+                        data.append("dm_token",     page_token);
+                        data.append("private",      private);
+                        data.append("friend",       friend);
+                        data.append("last",         lastUpdate);
+
+                        let xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/direct_message_refresh.php");
+                        xmlhttp.send( data );
+
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState === 4) // request done
+                                if (xmlhttp.status === 200) // successful return
+                                {
+                                    //alert(xmlhttp.responseText);
+                                    const feedback = JSON.parse(xmlhttp.responseText);
+                                    
+                                    if (feedback["success"])
+                                    {
+                                        lastUpdate = feedback["last"];
+                                        messagesArea.innerHTML = messagesArea.innerHTML + feedback["html"];
+                                    }
+                                }
+                            
+                            messagesArea.scrollTop = messagesArea.scrollHeight;
+                        }
+                    }
+
+                </script>
+
+            </div>
+            </div>
+
+        <?php
+    }
+
 ?>
 <!-- ------------------------------------------ -->
+<?php
 
-    <div id="mid_container_mid">
-    <div id = "mid_content" class="container_message" style="margin-top: 0; margin-bottom: 20px; text-align: initial; height: 100%;">
-        <div class="pofile_container_dm">
-            <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-                <img class="profile_img_posts" src="<?= $global_params["root"] . "assets/profile/default.png" ?>">
-            </a>
-            <div class="info_containt border" style="border-radius: 15px; padding: 10px 10px;">
-                <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-                    <span class="post_auteur" style="color: white; font-size: 32px">Test Test</span><br>
-                </a>
-            </div>
-        </div>
-        <div class="all_message_container border">
-            <div class="message_container">
-                <p class="date" style="color: white; font-size: 14px">Test Test<br>23:06<br>21/04/2021</p>
-                <p class="message" style="color: white; font-size: 16px">test</p>
-            </div>
-            <div class="message_container">
-                <p class="date" style="color: white; font-size: 14px">Me Me<br>23:06<br>21/04/2021</p>
-                <p class="message" style="color: white; font-size: 16px">test </p>
-            </div>
-        </div>
-        <form action="send_msg.php" method="get" id="msg_form">
-                <div class="send_container">
-                    <textarea id="msg_send_content" name="message" form="msg_form" placeholder="Votre Message" rows="3"></textarea>
-                    <button class="btn_send btn_button_btn" type="submit">
-                        <img height="32" width="32" src="../../assets/image/send.png">
-                    </button>
-                </div>
-        </form>
-    </div>
-    </div>
-    <div style="text-align: center; margin: 1em auto 4em;"></div>
-    <!-- ------------------------------------------ -->
+    if ($private) { // check private friend   
+
+        // transformer friend en id
+        $friend = $connexion->query(
+            "SELECT id FROM users WHERE username=\"" . $connexion->real_escape_string($friend) . "\";"
+        );
+
+        if ($friend->num_rows == 0) 
+            invalidPage("Ami invalide.");
+        $friend = $friend->fetch_assoc();
+
+        // verifier si l'id est amis
+        $friend = $connexion->query( 
+            "select *
+            from
+            (
+                (SELECT user_id_1 as friend FROM `friends` WHERE (user_id_0=".$_SESSION["id"]." AND user_id_1=".$friend["id"]." AND accepted))
+                    UNION 
+                (SELECT user_id_0 as friend FROM `friends` WHERE (user_id_1=".$_SESSION["id"]." AND user_id_0=".$friend["id"]." AND accepted))
+            ) as t1
+            inner join users
+            on t1.friend=users.id
+            "
+        );
+
+        if ($friend->num_rows == 0) 
+            invalidPage("Ami invalide.");
+        $friend = $friend->fetch_assoc();
+
+        // afficher la page
+        pageContent( $friend, true );
+
+    } 
+    else { // check public  friend
+        // transformer friend en id
+
+        $friend = $connexion->query(
+            "SELECT * FROM users WHERE public_name=\"" . $connexion->real_escape_string($friend) . "\";"
+        );
+
+        if ($friend->num_rows == 0) 
+            invalidPage("Compte invalide.");
+        $friend = $friend->fetch_assoc();
+
+        // verifier si l'id est amis
+        $link = $connexion->query(
+            "
+                (SELECT id FROM `pages_liked` WHERE (user_id=".$_SESSION["id"]." AND like_id=".$friend["id"]." ))
+                    UNION 
+                (SELECT id FROM `pages_liked` WHERE (like_id=".$_SESSION["id"]." AND user_id=".$friend["id"]." ))
+            "
+        );
+
+        if ($link->num_rows != 2) 
+            invalidPage("Compte invalide.");
+
+
+        // afficher la page
+        pageContent( $friend, false );
+    }
+
+?>
+
+<!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>

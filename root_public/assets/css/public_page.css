@@ -1,7 +1,7 @@
 #profile{
     display: grid;
     grid-template-columns: 128px auto;
-    grid-template-rows: 128px;
+    grid-template-rows: auto;
     gap: 0px 20px;
     margin-left: 20px;
     margin-right: 20px;

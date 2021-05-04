@@ -47,7 +47,7 @@ CREATE TABLE `users` (
     `class`         varchar(32)     DEFAULT NULL,
     `title`         varchar(32)     DEFAULT NULL,
     `likes`         int UNSIGNED    DEFAULT 0,
-    `description`   varchar(50)     DEFAULT 'Description',
+    `description`   varchar(50)     DEFAULT NULL,
     
     `banned`        BOOLEAN         DEFAULT FALSE,
     `banned_to`     INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
@@ -72,6 +72,8 @@ CREATE TABLE pages_liked (
 CREATE TABLE `posts` (
     `id`            bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id`       bigint UNSIGNED NOT NULL,
+
+    `post_id`       varchar(128)    NOT NULL, -- Pour ne pas exposer l'id de message
 
     `public_image`  INT             DEFAULT 0,
     `public_name`   varchar(32)     DEFAULT NULL,

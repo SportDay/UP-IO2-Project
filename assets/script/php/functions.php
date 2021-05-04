@@ -208,7 +208,7 @@
         }
     }
 
-    function inspirate()
+    function inspirate($class="-1")
     {
         $messages = json_decode(file_get_contents(
             $GLOBALS["global_params"]["root_public"] . "assets/rp_data/procedural_phrase.json"
@@ -223,10 +223,15 @@
             $GLOBALS["DB_NAME"]
         );
         if (!$connexion) {
-            return "Can't connect to database.";
+            return "Description";
         }
-        $query = "SELECT * FROM users WHERE id=\"". $connexion->real_escape_string($_SESSION["id"]) . "\";";
-        $class = $connexion->query($query)->fetch_assoc();
+
+        $query = "SELECT class FROM users WHERE username=\"". $connexion->real_escape_string($_SESSION["username"]) . "\";";
+        
+        if ($class==="-1")
+            $class = $connexion->query($query)->fetch_assoc();
+        else
+            $class = ["class" => $class];
 
         $message = $messages->{$class["class"]}
         [rand(0, count($messages->{$class["class"]}) - 1)];

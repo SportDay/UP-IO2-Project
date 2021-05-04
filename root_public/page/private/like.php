@@ -15,7 +15,7 @@
 ?>
 <!-- ------------------------------------------ -->
 
-    <div id = "mid_content">
+    <div class = "mid_content">
         <div class="img_btn_like">
             <button class="like btn_button_btn">Like</button>
             <img class="img_profile border" width="256" height="256" src="<?= $global_params["root_public"] . "assets/profile/default_2.png"?>"s>

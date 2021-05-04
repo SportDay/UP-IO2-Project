@@ -17,7 +17,7 @@
 
 <!-- Gestion de page publique -->
 
-<div id = "mid_content">
+<div class = "mid_content">
     <h1 class="settings_title">Publique</h1>
     <div class = "mid_sub_content" class="posts_and_user">
         
@@ -53,7 +53,7 @@
 
 <!-- Gestion Compte privé -->
 
-<div id = "mid_content"> <!-- Passwords -->
+<div class = "mid_content"> <!-- Passwords -->
     <h1 class="settings_title">Privé | <?= $_SESSION["username"] ?> </h1>
     
     <div class = "mid_sub_content">

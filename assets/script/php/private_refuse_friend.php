@@ -50,7 +50,7 @@
 
     $id = $connexion->query(
         "SELECT id FROM users WHERE username=\"" . $connexion->real_escape_string($username) . "\""
-    )
+    );
 
     if ($id->num_rows = 0) { 
         // data base error

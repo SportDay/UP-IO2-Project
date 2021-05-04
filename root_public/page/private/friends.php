@@ -5,7 +5,7 @@
   "css"         => "all.css",
   "css_add"     => [
       "posts.css", "public_page.css","admin.css",
-      "friends.css","user_bloc.css","login.css"
+      "friends.css","login.css"
     ],
   "redirect"    => TRUE
 ];?>
@@ -14,13 +14,15 @@
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
 
-<div id="mid_content">
-    
     <!-- Ajout d'amis -->
-    <div class="grid">
-        <input  id="add_friend_input" placeholder="Pseudo à ajouter">
-        <button class="btn_button_btn" onclick="addFriend();">Ajouter en amis</button>
-        <p id="add_friend_debug" style="display:none">Debug</p>
+    <div class="add_friend_bar border">
+        <div id="search_container">
+            <div class="request_and_searchbtn_friend">
+                <input  id="add_friend_input" type="search" class="search_request_friend_bar search_input" autocomplete="off" placeholder="Pseudo à ajouter">
+                <button class="send_request_friend_bar btn_button_btn" onclick="addFriend();">Ajouter en amis</button>
+            </div>
+            <p id="add_friend_debug" style="display:none">Debug</p>
+        </div>
     </div>
 
     <!-- Accepte demande d'amis -->
@@ -52,17 +54,16 @@
 
         if ($friends->num_rows!=0)
         { ?>
-            <div class="mid_sub_content_friend">
-                <h3>Demandes d'amis en attente : </h3>
+            <div id="friends_request_list" class="mid_sub_content_friend border">
+                <h3 style="margin: 0;">Demandes d'amis en attente</h3>
                 <?php while($friend=$friends->fetch_assoc()) add_friend_bloc($friend); ?>
             </div>
         <?php }
     ?>
-</div>
 
 <!-- Liste d'amis -->
-<div id="mid_content">
-<div id="friend_blocs_area">
+
+    <div id="friend_blocs_area" >
     <?php
         $friends = $connexion->query( 
             "select *
@@ -84,8 +85,7 @@
 
         mysqli_close($connexion);
     ?>
-</div>
-</div>
+    </div>
 
 <?php friend_js_bloc(); add_friend_js_bloc(); ?>
 <script>
