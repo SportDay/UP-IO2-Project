@@ -14,6 +14,7 @@
 <!-- ------------------------------------------ -->
     <!-- Faire des focntions qui verifie si la page a partient a l'utilisateur -->
     <?php // FUNCTIONS (specific à cette page)
+
     $connexion = mysqli_connect (
     $db_conf["DB_URL"],
     $db_conf["DB_ACCOUNT"],
@@ -31,7 +32,7 @@
         <?php
     }
 
-    $user_query = "SELECT * FROM users WHERE public_name=\"". $connexion->real_escape_string(trim(htmlentities($_GET["user"]))) . "\";";
+    $user_query = "SELECT * FROM users WHERE public_name=\"". $connexion->real_escape_string($_GET["user"]) . "\";";
     $me = $connexion->query($user_query);
 
     if($me->num_rows == 0){

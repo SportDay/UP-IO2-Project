@@ -44,6 +44,7 @@ if(!isset($_SESSION["id"])){
     <?php
 }
 
+
 $my_posts = $connexion->query("select * from ( ".
     " (SELECT like_id as poster FROM `pages_liked` WHERE (user_id=".$connexion->real_escape_string($_SESSION["id"])."))".
     " UNION (SELECT user_id_1 as poster FROM `friends` WHERE (user_id_0=".$connexion->real_escape_string($_SESSION["id"])." AND accepted))".
@@ -51,6 +52,7 @@ $my_posts = $connexion->query("select * from ( ".
     " UNION (SELECT user_id as poster FROM `posts` WHERE (user_id=".$connexion->real_escape_string($_SESSION["id"]).")) )".
     " as t1 inner join posts on (t1.poster=posts.user_id)".
     " ORDER BY creation_date DESC;");
+
 post_add();
 while($my_post=$my_posts->fetch_assoc()) {
     $like = false;

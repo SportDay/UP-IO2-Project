@@ -333,18 +333,22 @@ function private_message($message) { // WIP
 
 function add_friend_bloc($friend) {
 
+    $public_page = $friend["enable_public"] ? $friend["public_name"] : "";
+    $public_page = $GLOBALS["global_params"]["root_public"] . "page/public/public_page.php?user=" . urlencode ($public_page);
+
     ?>
         <div class="request_friend_list" id="friend_bloc_<?=htmlentities($friend["username"])?>">
 
-            <a href="/root_public/page/public/public_page.php?user=<?= htmlentities(trim($friend["public_name"])) ?>">
+            <?php if ( $friend["enable_public"] ) { ?>
+                <a href="<?= $public_page ?>">
                 <img class="request_profile_img" src="<?= getImagePath( $friend["public_image"])  ?>">
-            </a>
-            
-            <div class="request_profile_content border" >
-                <a href="/root_public/page/public/public_page.php?user=<?= htmlentities($friend["public_name"]) ?>">
-                    <p class="request_username" >Utilisateur <?= htmlentities($friend["username"])." vous a ajouté!" ?></p><br>
                 </a>
-                <div class="espace_request_list"></div>
+            <?php } else { ?>
+                <img class="request_profile_img" src="<?= getImagePath("") ?>">
+            <?php } ?>
+
+            <div class="request_profile_content border" >
+                <p><?= htmlentities($friend["username"])." vous a ajouté!" ?></p>
                 <button class="btn_button_btn acceptbtn_low_size btn_accept_friend_btn" onclick='acceptFriend("<?=htmlentities($friend["username"])?>")'
                 >Accepter</button>
                 <button class="btn_button_btn cancelbtn_low_size btn_reject_friend_btn" onclick='removeFriend("<?=htmlentities($friend["username"])?>")'
@@ -492,7 +496,7 @@ function friend_bloc($friend, $specific_root=FALSE, $root_public="") { // necess
 
 
                 <?php if($friend["enable_public"]) { ?>
-                <a href="<?=$root_public?>page/public/public_page.php?user=<?=htmlentities($friend["public_name"])?>">
+                <a href="<?=$root_public?>page/public/public_page.php?user=<?=urlencode($friend["public_name"])?>">
                     <img class="profile_img_profile" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
                 </a>
                 <?php } else { ?>
@@ -515,11 +519,11 @@ function friend_bloc($friend, $specific_root=FALSE, $root_public="") { // necess
                     <div class="user_menu">
                         <button class="btn_menu_user">&#8226;&#8226;&#8226;</button>
                         <div class="user_menu_content border">
-                            <button class="btn_ignr_user" class="btn_ignr_user" onclick='removeFriend("<?=htmlentities($friend["username"])?>");'>Supprimer</button>
+                            <button class="btn_ignr_user" class="btn_ignr_user" onclick='removeFriend(<?=json_encode($friend["username"])?>);'>Supprimer</button>
                         </div>
                     </div>
                     <div class="friend_porfile_espace"></div>
-                    <a href="dm.php?private=true&user=<?=htmlentities($friend["username"])?>">
+                    <a href="dm.php?private=true&user=<?=urlencode($friend["username"])?>">
                         <img class="msg_img" width="32" height="32" src="<?=$root_public?>assets/image/msg.png">
                     </a>
                 </div>
@@ -567,7 +571,7 @@ function profile_bloc($profile, $friend = null){
     ?>
         <div class = "mid_content" style="text-align: initial;">
         <div id = "profile">
-            <a href="/root_public/page/public/public_page.php?user=<?= htmlentities(trim($profile["public_name"])) ?>">
+            <a href= "<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($profile["public_name"]) ?>">
             <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
             </a>
             <div class="info_profile">
@@ -578,11 +582,11 @@ function profile_bloc($profile, $friend = null){
                 <?php
                     if(isset($friend) && !$friend){
                 ?>
-                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #56bb41;" onclick="ajouterAmis('<?= htmlentities(trim($profile["id"])) ?>');">Ajouter en amis</button>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #56bb41;" onclick='ajouterAmis(<?= "à corriger" ?>);'>Ajouter en amis</button>
                 <?php
                     }else if(isset($friend) && $friend){
                 ?>
-                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #bb4141;" onclick="supprimerAmis('<?= htmlentities(trim($profile["username"])) ?>')";>Supprimer l'amis</button>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #bb4141;" onclick='supprimerAmis(<?= json_encode($profile["username"]) ?>);>Supprimer l'amis</button>
                 <?php
                     }
                 ?>
@@ -593,7 +597,7 @@ function profile_bloc($profile, $friend = null){
                 ?>
                     <div class="desc_container">
                         <textarea id="description" class="post_add" name="desc" style="font-size: 18px;" placeholder="<?= trim(htmlentities($profile["description"]))?>" rows="2" maxlength="50"></textarea><br>
-                        <button class="submit_add" onclick="updateDesc('<?= trim(htmlentities($profile["description"]))?>');">Changer</button>
+                        <button class="submit_add" onclick="updateDesc(<?= json_encode($profile['description'])?>);">Changer</button>
                     </div>
                     <div id="container_add">
                         <textarea id="post_content" class="post_add" name="post_content" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
@@ -822,13 +826,16 @@ function post_js_add(){
 
 function post_bloc($post, $like = false, $reported = false, $connected = false){
     ?>
+    
     <div id = "post_id_<?= htmlentities(trim($post["id"])) ?>" class="mid_content" style="text-align: initial;">
         <div class="posts">
-            <a href="/root_public/page/public/public_page.php?user=<?= htmlentities(trim($post["public_name"])) ?>">
+            <a href="<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($post["public_name"]) ?>">
+
                 <img class="profile_img_posts" src="<?= getImagePath( $post["public_image"])  ?>">
+            
             </a>
             <div class="info_containt border" style="border-radius: 15px; padding: 10px 10px;">
-                <a href="/root_public/page/public/public_page.php?user=<?= htmlentities($post["public_name"]) ?>">
+                <a href="<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($post["public_name"]) ?>">
                     <span class="post_auteur" style="color: white; font-size: 20px"><?= htmlentities($post["public_name"]) ?></span><br>
                     <span class="post_date" style="color: lightgray; font-size: 14px"><?= date('d/m/Y H:i', htmlentities(trim($post["creation_date"]))); ?></span>
                 </a>

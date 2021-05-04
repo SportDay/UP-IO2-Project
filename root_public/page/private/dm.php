@@ -22,7 +22,7 @@
     }
 
     $friend  = isset($_GET["user"])    ? $_GET["user"]    : invalidPage("Requête invalide.");
-    $private = isset($_GET["private"]) ? $_GET["private"] : invalidPage("Requête invalide.");
+    $private = isset($_GET["private"]) ? $_GET["private"] == "true" : invalidPage("Requête invalide.");
 
     $connexion = mysqli_connect (
         $GLOBALS["DB_URL"],
@@ -41,7 +41,7 @@
     // lors d'un erreur de token, envoyé un client une erreur de token
     // le client va alors recharger sa page pour actualiser son token (javascript)
     // ajouter en post le messages en cours de redaction 
-    $page_token   = $SESSION["dm_token"] = randomString(); // base64 string
+    $page_token   = $_SESSION["dm_token"] = randomString(); // base64 string
     
     if (isset($_POST["last_message"])) { ?> <script>
         //send le message maintenant
@@ -77,12 +77,7 @@
                 
                 <!-- Messages -->
                 <div class="all_message_container border" id="all_message_container">
-                    
-                    <div class="message_container">
-                        <p class="date" style="color: white; font-size: 14px">Test Test<br>23:06<br>21/04/2021</p>
-                        <p class="message" style="color: white; font-size: 16px">test</p>
-                    </div>
-
+                    <span></span>
                 </div>
 
                 <!-- Send Messages -->
@@ -99,23 +94,98 @@
                 <script>
 
                     // scroll en bas de la bar des messages par défaut
-                    let messagesContainer = document.getElementById("all_message_container");
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    var messagesArea = document.getElementById("all_message_container");
+
+                    //persistents data
+                    const page_token    = "<?=$GLOBALS["page_token"]?>";
+                    const friend        = <?= json_encode($private ? $friend["username"] : $friend["public_name"]) ?>;
+                    const private       = <?= $private ? "true" :  "false" ?>;
+                    var   lastUpdate    = 0;
 
                     // auto refresh (5s)
                     // j'ai verifié, js est single threaded, 
                     // donc pas de problème d'effets de bords à refresh 2x en même temps
                     window.setInterval( refreshMessages, 5000 );
+                    refreshMessages(); // first iter
 
                     //////////////////
                     // fonctions 
                     
                     function sendMessage() {
+                        let sender = document.getElementById("msg_send_content");
 
+                        let data = new FormData();
+                        data.append("dm_token",     page_token);
+                        data.append("private",      private);
+                        data.append("friend",       friend);
+                        data.append("message",      sender.value);
+
+                        let xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/direct_message_send.php");
+                        xmlhttp.send( data );
+
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState === 4) // request done
+                                if (xmlhttp.status === 200) // successful return
+                                {
+                                    //alert(xmlhttp.responseText);
+                                    const feedback = JSON.parse(xmlhttp.responseText);
+                                    
+                                    if (feedback["success"])
+                                    {
+                                        refreshMessages();
+                                        sender.value = "";
+                                        sender.focus();
+
+                                    }
+                                    else
+                                    {
+
+                                        if (feedback["error"] == "token_error")
+                                        {
+                                            // normalement on reload cette page avec le message en post
+                                            // en attendant de trouver coment faire un post en js
+                                            // je reload juste la page
+
+                                            window.open(window.location.href, "_self");
+                                        }
+                                    }
+                                }
+                        }
                     }
 
+                    //var cnt = 0;
                     function refreshMessages() {
-                        
+                        //cnt++; if (cnt>5) return;
+
+                        let data = new FormData();
+                        data.append("dm_token",     page_token);
+                        data.append("private",      private);
+                        data.append("friend",       friend);
+                        data.append("last",         lastUpdate);
+
+                        let xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open('POST',
+                        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/direct_message_refresh.php");
+                        xmlhttp.send( data );
+
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState === 4) // request done
+                                if (xmlhttp.status === 200) // successful return
+                                {
+                                    //alert(xmlhttp.responseText);
+                                    const feedback = JSON.parse(xmlhttp.responseText);
+                                    
+                                    if (feedback["success"])
+                                    {
+                                        lastUpdate = feedback["last"];
+                                        messagesArea.innerHTML = messagesArea.innerHTML + feedback["html"];
+                                    }
+                                }
+                            
+                            messagesArea.scrollTop = messagesArea.scrollHeight;
+                        }
                     }
 
                 </script>
@@ -163,10 +233,11 @@
         pageContent( $friend, true );
 
     } 
-    else {        // check public  friend
+    else { // check public  friend
         // transformer friend en id
+
         $friend = $connexion->query(
-            "SELECT id FROM users WHERE public_name=\"" . $connexion->real_escape_string($friend) . "\";"
+            "SELECT * FROM users WHERE public_name=\"" . $connexion->real_escape_string($friend) . "\";"
         );
 
         if ($friend->num_rows == 0) 
@@ -185,7 +256,6 @@
         if ($link->num_rows != 2) 
             invalidPage("Compte invalide.");
 
-        $friend = $friend->fetch_assoc();
 
         // afficher la page
         pageContent( $friend, false );

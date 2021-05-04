@@ -73,6 +73,8 @@ CREATE TABLE `posts` (
     `id`            bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id`       bigint UNSIGNED NOT NULL,
 
+    `post_id`       varchar(128)    NOT NULL, -- Pour ne pas exposer l'id de message
+
     `public_image`  INT             DEFAULT 0,
     `public_name`   varchar(32)     DEFAULT NULL,
     
