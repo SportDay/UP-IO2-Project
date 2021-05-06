@@ -17,8 +17,8 @@ require($global_params["root"] . "assets/script/php/security.php");
 session_start();
 
 if (
-    !isset($_POST["unlike_post"]) || !isset($_SESSION["unlike_post"]) ||
-    ($_POST["unlike_post"]  !=        $_SESSION["unlike_post"])
+    !isset($_POST["ignore_post"]) || !isset($_SESSION["ignore_post"]) ||
+    ($_POST["ignore_post"]  !=        $_SESSION["ignore_post"])
 
     /*
          quelqu'un qui veut utiliser ce fichier doit obligatoirement
@@ -55,20 +55,22 @@ if (!$connexion) {
 }
 
 ////////////////////////////////////////////////////////////////////
+/*
+if(isset($_SESSION["admin"]) && $_SESSION["admin"] === true){
+    echo json_encode([
+        "success" => false,
+        "error"   => "Base de donnée hors d'accès."
+    ]); exit();
+}*/
 
-$post = $connexion->query(
-    "SELECT * FROM posts WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
-)->fetch_assoc();
 
 $connexion->query(
-    "UPDATE posts set like_num =\"". $connexion->real_escape_string($post["like_num"]-1) . "\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
+    "UPDATE posts set reported =\"0\", reportnum=\"0\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
 );
 
 $connexion->query(
-    "DELETE FROM likes WHERE (message_id=\"".$post["id"]."\") AND (user_id=\"".$_SESSION["id"]."\");"
-
+    "DELETE FROM reports WHERE (message_id=\"".$_POST["post_id"]."\");"
 );
-
 
 ////////////////////////////////////////////////////////////////////
 

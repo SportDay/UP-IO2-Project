@@ -129,15 +129,8 @@
         ?>
 
             <div class="message_container">
-                
-                <p class="date">
-                <?= htmlentities($private ? $message['username'] : $message['public_name']) ?><br>
-                <?= htmlentities(date('H:i d/m/Y', $message['creation_date'])) ?>
-                </p>
-                <p class="message">
-                <?=htmlentities($message["content"])?>
-                </p>
-
+                <p class="date"><?= htmlentities($private ? $message['username'] : $message['public_name']) ?><br><span style="font-size: 12px;"><?= htmlentities(date('H:i d/m/Y', $message['creation_date'])) ?></span></p>
+                <p class="message"><?=htmlentities($message["content"])?></p>
             </div>
 
         <?php

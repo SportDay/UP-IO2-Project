@@ -137,6 +137,16 @@
     margin-bottom: 0px;
 }
 
+.post_auteur{
+    color: white;
+    font-size: 20px;
+}
+
+.post_date{
+    color: lightgray;
+    font-size: 14px;
+}
+
 .post_content{
     grid-area: post_content;
     border-radius: 15px;

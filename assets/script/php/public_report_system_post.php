@@ -57,19 +57,26 @@ if (!$connexion) {
 ////////////////////////////////////////////////////////////////////
 
 
+$check_report = $connexion->query(
+    "SELECT * FROM reports WHERE message_id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\" AND user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\";"
+);
+
 $post = $connexion->query(
     "SELECT * FROM posts WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
 )->fetch_assoc();
+
+
+if($check_report->num_rows == 0){
 
 $connexion->query(
     "UPDATE posts set reportnum =\"". $connexion->real_escape_string($post["reportnum"]+1) . "\",  last_report =\"". $connexion->real_escape_string(time()) . "\"WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
 );
 
-$post1 = $connexion->query(
+$post = $connexion->query(
     "SELECT * FROM posts WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
 )->fetch_assoc();
 
-if($post1["reportnum"] >= 1){
+if($post["reportnum"] >= 1){
     $connexion->query(
         "UPDATE posts set reported =\"". $connexion->real_escape_string(1) . "\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
     );
@@ -77,12 +84,32 @@ if($post1["reportnum"] >= 1){
 $connexion->query(
     "INSERT INTO `reports` (`message_id`,`user_id`) VALUES (\"" . $connexion->real_escape_string($post["id"]) . "\", \"" . $connexion->real_escape_string($_SESSION["id"]) . "\");"
 );
+    $report= true;
+}else{
+    $connexion->query(
+        "UPDATE posts set reportnum =\"". $connexion->real_escape_string($post["reportnum"]-1) . "\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
+    );
+    $post = $connexion->query(
+        "SELECT * FROM posts WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
+    )->fetch_assoc();
+
+    if($post["reportnum"] <=0){
+        $connexion->query(
+            "UPDATE posts set reported =\"". $connexion->real_escape_string(0) . "\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
+        );
+    }
+    $connexion->query(
+        "DELETE FROM reports WHERE (message_id=\"".$post["id"]."\") AND (user_id=\"".$_SESSION["id"]."\");"
+    );
+    $report= false;
+}
 
 
 ////////////////////////////////////////////////////////////////////
 
 echo json_encode([
-    "success" => true
+    "success" => true,
+    "report" => $report
 ]);
 
 mysqli_close($connexion);

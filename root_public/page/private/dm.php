@@ -70,14 +70,14 @@
                     <?php } ?>
 
                     <div class="border">
-                        <span class="info_containt post_auteur"><?= $private ? $friend["username"] : $friend["public_name"] ?></span><br>
+                        <span class="post_auteur"><?= $private ? $friend["username"] : $friend["public_name"] ?></span><br>
                     </div>
                 
                 </div>
                 
                 <!-- Messages -->
                 <div class="all_message_container border" id="all_message_container">
-                    <span></span>
+
                 </div>
 
                 <!-- Send Messages -->

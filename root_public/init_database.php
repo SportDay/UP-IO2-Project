@@ -44,7 +44,7 @@ if (!$connexion) {
 // REMPLISSAGE DES TABLES
 
 $nBots = 20; // nombre de bots auto générés
-users = [   // vrais comptes
+$users = [   // vrais comptes
     [
         "username"  =>  "root",
         "password"  =>  "Vanille1", 
@@ -70,7 +70,7 @@ users = [   // vrais comptes
         "password"  =>  "Vanille6", 
         "admin"     =>  FALSE 
     ]
-]
+];
 
 
 // CREATION DE COMPTES CLASSIQUES (sans page publique par défaut)

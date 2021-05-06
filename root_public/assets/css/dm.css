@@ -124,3 +124,15 @@
     display: none;
 }
 
+#msg_send_content::placeholder{ /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: white;
+    opacity: 1; /* Firefox */
+}
+
+#msg_send_content:-ms-input-placeholder{ /* Internet Explorer 10-11 */
+    color: white;
+}
+
+#msg_send_content::-ms-input-placeholder{ /* Microsoft Edge */
+    color: white;
+}
