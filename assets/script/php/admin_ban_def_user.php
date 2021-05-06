@@ -17,8 +17,8 @@ require($global_params["root"] . "assets/script/php/security.php");
 session_start();
 
 if (
-    !isset($_POST["remove_post"]) || !isset($_SESSION["remove_post"]) ||
-    ($_POST["remove_post"]  !=        $_SESSION["remove_post"])
+    !isset($_POST["bandef"]) || !isset($_SESSION["bandef"]) ||
+    ($_POST["bandef"]  !=        $_SESSION["bandef"])
 
     /*
          quelqu'un qui veut utiliser ce fichier doit obligatoirement
@@ -32,7 +32,7 @@ if (
     ]); exit();
 }
 
-if (!isset($_POST["post_id"])) {
+if (!isset($_POST["user_id"])) {
     echo json_encode([
         "success" => false,
         "error"   => "Requête incorrecte."
@@ -55,29 +55,42 @@ if (!$connexion) {
 }
 
 ////////////////////////////////////////////////////////////////////
-
-$post = $connexion->query(
-    "SELECT * FROM posts WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
-)->fetch_assoc();
-
-if($post["user_id"] !== $_SESSION["id"] && !(isset($_SESSION["admin"]) && $_SESSION["admin"])){
+/*
+if(isset($_SESSION["admin"]) && $_SESSION["admin"] === true){
     echo json_encode([
         "success" => false,
         "error"   => "Base de donnée hors d'accès."
     ]); exit();
-}
+}*/
 
 
+// pages_liked | parents : | enfants : reports et likes
 $connexion->query(
-    "DELETE FROM `reports` WHERE `message_id`=" . $post["id"] . " ;"
+    "DELETE FROM `pages_liked` WHERE `user_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
 );
 
+// posts | parents : | enfants : reports et likes
 $connexion->query(
-    "DELETE FROM `likes` WHERE `message_id`=" . $post["id"] . " ;"
+    "DELETE FROM `reports` WHERE `user_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
+);
+$connexion->query(
+    "DELETE FROM `likes` WHERE `user_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
+);
+$connexion->query(
+    "DELETE FROM `posts` WHERE `user_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
 );
 
+// supprimer: friends direct_messages
+$connexion->query( // pas besoin de verifier que c'est privé
+    "DELETE FROM `friends` WHERE `user_id_0`=" . $connexion->real_escape_string($_POST["user_id"]) . " OR `user_id_1`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
+);
 $connexion->query(
-    "DELETE FROM posts WHERE (id=\"".$post["id"]."\");"
+    "DELETE FROM `direct_messages` WHERE `from_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " OR `to_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
+);
+
+// supprimer le compte: (users)
+$connexion->query(
+    "DELETE FROM `users` WHERE `id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
 );
 
 ////////////////////////////////////////////////////////////////////

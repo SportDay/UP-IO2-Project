@@ -32,7 +32,7 @@
         <?php
     }
 
-    $user_query = "SELECT * FROM users WHERE public_name=\"". $connexion->real_escape_string($_GET["user"]) . "\";";
+    $user_query = "SELECT * FROM users WHERE public_name=\"". $connexion->real_escape_string($_GET["user"]) . "\" AND enable_public;";
     $me = $connexion->query($user_query);
 
     if($me->num_rows == 0){
@@ -81,6 +81,7 @@
     if(isset($_SESSION["id"])){
         profile_js_bloc($me);
         post_js_bloc();
+        post_js_add();
     }
 ?>
 
