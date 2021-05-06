@@ -511,11 +511,7 @@ function profile_bloc($profile, $friend = null){
                 <span class="profile_espece"   >Espece: <?= htmlentities($profile["specie"])?></span>
                 <span class="profile_classe"   >Classe: <?= htmlentities($profile["class"])?></span>
                 <span class="profile_nlikes"   >Likes: <?= htmlentities($profile["likes"])?></span>
-                <?php if(isset($friend) && !$friend){ ?>
-                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #41bb41;" onclick='ajouterAmis(<?= "à corriger" ?>);'>Liker la page</button>
-                <?php }else if(isset($friend) && $friend){ ?>
-                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #bb4141;" onclick='supprimerAmis(<?= json_encode($profile["username"]) ?>);'>Unlike la page</button>
-                <?php } ?>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #41bb41;" onclick=''>Liker la page</button>
             </div>
         </div>
             <?php
@@ -548,9 +544,6 @@ function profile_bloc($profile, $friend = null){
 function profile_js_bloc($me) {
 
             ?> <script>
-            <?php
-            if(isset($_SESSION["username"]) && $_SESSION["username"] === $me["username"]){
-            ?>
                 function updateDesc(old_desc) {
                     let textZone = document.getElementById("description");
 
@@ -578,62 +571,6 @@ function profile_js_bloc($me) {
                             }
                     }
                 }
-            <?php
-            }else{
-            ?>
-                function ajouterAmis(friend_id){
-                    let textZone = document.getElementById("friend_add_btn");
-
-                    let data = new FormData();
-                    data.append("friend_id", friend_id);
-                    data.append("friend", "<?= $_SESSION["friend"] = randomString()?>");
-
-                    let xmlhttp = new XMLHttpRequest();
-                    xmlhttp.open('POST',
-                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/request_friend.php");
-                    xmlhttp.send( data );
-
-                    xmlhttp.onreadystatechange = function () {
-                        if (xmlhttp.readyState === 4) // request done
-                            if (xmlhttp.status === 200) // successful return
-                            {
-                                //alert(xmlhttp.responseText);
-                                const feedback = JSON.parse(xmlhttp.responseText);
-
-                                if (feedback["success"])
-                                    document.location.reload();
-
-                            }
-                    }
-
-                }
-                function supprimerAmis(username){
-                    let data = new FormData();
-                    data.append("username", username);
-                    data.append("remove_friend", "<?= $_SESSION["remove_friend"] = randomString() ?>");
-
-                    let xmlhttp = new XMLHttpRequest();
-                    xmlhttp.open('POST',
-                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/remove_friend.php");
-                    xmlhttp.send( data );
-
-                    xmlhttp.onreadystatechange = function () {
-                        if (xmlhttp.readyState === 4) // request done
-                            if (xmlhttp.status === 200) // successful return
-                            {
-                                //alert(xmlhttp.responseText);
-                                const feedback = JSON.parse(xmlhttp.responseText);
-
-                                if (feedback["success"])
-                                    document.location.reload();
-
-                            }
-                    }
-
-                }
-            <?php
-            }
-            ?>
         </script><?php
 }
 
