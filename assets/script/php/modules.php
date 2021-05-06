@@ -829,7 +829,7 @@ function post_js_bloc() {
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/likeSystemPost.php");
+                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/like_system_post.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -858,7 +858,7 @@ function post_js_bloc() {
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/reportSystemPost.php");
+                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/report_system_post.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
