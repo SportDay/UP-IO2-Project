@@ -33,6 +33,11 @@
     padding: 20px 0 20px ;
 }
 
+.nick_name_friend{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
 .cancelbtn_low_size {
     width: auto;
     margin-top: 5px;
