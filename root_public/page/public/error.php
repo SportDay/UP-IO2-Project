@@ -1,7 +1,7 @@
 <?php $global_params = [
     "root"        => "../../../",
     "root_public" => "../../",
-    "title"       => "Accueil",
+    "title"       => "Vous êtes perdu?",
     "css"         => "all.css",
     "redirect"    => FALSE
 ];?>
@@ -14,18 +14,10 @@
 ?>
     <!-- ------------------------------------------ -->
     <div class = "mid_content">
-
-        <section>
-            <h1>ERROR 404</h1>
-            <?php separator(); ?>
-        </section>
-        <?php separator(); ?>
-        <section id="section_fonctionnement">
-        </section>
-
-
-
-
+        <?php separator();?>
+        <p>Revenez dans quelques instants ou revenez à la page d'accueil.</p>
+        <button class="btn_button_btn" onclick="openPage('public/home_page.php');">Revenir a l'accueil</button>
+        <?php separator();?>
     </div>
     <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
