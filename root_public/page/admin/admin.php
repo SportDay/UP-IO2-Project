@@ -4,7 +4,8 @@
   "title"       => "Admin Panel",
   "css"         => "all.css",
   "css_add"     => ["public_page.css","posts.css","admin.css"],
-  "redirect"    => TRUE
+  "redirect"    => TRUE,
+  "admin_req"   => TRUE
 ];?>
 
 <?php
@@ -18,113 +19,66 @@
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
 <?php // FUNCTIONS (specific à cette page)
+$connexion = mysqli_connect (
+    $db_conf["DB_URL"],
+    $db_conf["DB_ACCOUNT"],
+    $db_conf["DB_PASSWORD"],
+    $db_conf["DB_NAME"]
+);
+
+if (!$connexion) {
+    echo "connection_error"; exit();
+}
+/*
+if(isset($_SESSION["admin"]) && $_SESSION["admin"] == "0"){
+    ?>
+    <script>window.location.href = "<?=$global_params["root_public"] . "/page/public/home_page.php"?>";</script>
+    <?php
+}*/
+
+
+$reported_post = $connexion->query("SELECT * FROM posts WHERE reported=\"1\" ORDER BY reportnum DESC;");
+while($report_post=$reported_post->fetch_assoc()) {
+
+    $like_query =
+        "SELECT id FROM likes WHERE ".
+        " user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) .
+        "\" AND message_id=\"" . $connexion->real_escape_string($report_post["id"]) . "\";";
+    $like = $connexion->query($like_query)->num_rows != 0;
+
+    $report_query =
+        "SELECT id FROM reports WHERE ".
+        " user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) .
+        "\" AND message_id=\"" . $connexion->real_escape_string($report_post["id"]) . "\";";
+    $reported = $connexion->query($report_query)->num_rows != 0;
+
+    post_reported_bloc($report_post, $like, $reported);
+}
+
+mysqli_close($connexion);
 
 ?>
 <!-- ------------------------------------------ -->
-
-    <div id = "mid_content" class="posts_and_user" style="text-align: initial;">
-            <div class="posts">
-                <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-                    <img class="profile_img_posts" src="<?= $global_params["root"] . "assets/profile/default.png" ?>">
-                </a>
-                <div class="info_containt border" style="border-radius: 15px; padding: 10px 10px;">
-                    <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-                        <span class="post_auteur" style="color: white; font-size: 20px">Test Test</span><br>
-                        <span class="post_date" style="color: lightgray; font-size: 14px">19/04/2021 19:24</span>
-                    </a>
-                    <div class="post_menu">
-                        <button class="btn_menu_post">&#8226;&#8226;&#8226;</button>
-                        <div class="supp_post border">
-                            <form action="/ignore_post.php" method="post">
-                                <input type="hidden" name="ignore_post" value="post_id">
-                                <button class="btn_ignr_post" type="submit">Ignorer</button>
-                            </form>
-                            <form action="/supp_post.php" method="post">
-                                <input type="hidden" name="sup_post" value="post_id">
-                                <button class="btn_sup_post" type="submit">Supprimer</button>
-                            </form>
-                            <form action="/def_ban_user.php" method="post">
-                                <input type="hidden" name="def_ban_user" value="user_id">
-                                <button class="btn_def_ban_user" type="submit">Ban définitif</button>
-                            </form>
-                            <button class="btn_tmp_ban_user" onclick="document.getElementById('tmp_ban').style.display='block'" type="submit">Ban temporaire</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="post_content border">
-                    <p style="color: white; font-size: 18px">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi aliquet fermentum odio. Nulla sed venenatis nulla. Pellentesque interdum ligula ac venenatis mattis. Nam nec lectus urna. Vestibulum finibus tellus a auctor feugiat. Morbi vel cursus orci, eu efficitur nisl. Vivamus congue mi sed metus condimentum aliquet. Aliquam tempus ante vel viverra vulputate. Phasellus eros lorem, imperdiet in ante vel, malesuada viverra orci. Curabitur laoreet porta quam nec rhoncus. Donec aliquet dui in rhoncus eleifend.
-
-                        Donec eleifend elementum bibendum. Quisque porta, lacus eget vehicula aliquam, augue ante dignissim lectus, eu porta neque magna sit amet odio. Morbi gravida quam a libero blandit, nec laoreet tortor finibus. In facilisis augue sed ante interdum, nec consequat arcu feugiat. Morbi sagittis justo non ligula luctus imperdiet. Integer ultrices diam vel venenatis sodales. Praesent nisl est, vulputate ut viverra quis, rhoncus et libero.</p>
-                </div>
-                <a href="#" class="btn_like">
-                    <img class="like_img" width="32" height="32" src="<?= $global_params["root_public"] . "assets/image/like.png"?>"><span class="like_num"">0</span>
-                </a>
-                <div class="espace" style="grid-area: espace;"></div>
-                <dfn title="Voulez-vous signaler?">
-                    <div class="btn_report">
-                        <a href="#" class="report_ref">
-                            <img class="report_img" width="32" height="32" src="<?= $global_params["root_public"] . "assets/image/report.png"?>">
-                        </a>
-                    </div>
-                </dfn>
-            </div>
-        </div>
-    <div id = "mid_content" class="posts_and_user" style="text-align: initial;">
-            <div id = "profile">
-                <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-                    <img class="profile_img_profile" src="<?= $global_params["root"] . "assets/profile/default.png" ?>">
-                </a>
-                <div class="info_profile">
-                    <span class="profile_nickname" style="color: white; font-size: 24px">Nom: </span>
-                    <span class="profile_titre" style="color: white; font-size: 24px">Titre: </span>
-                    <span class="profile_espece" style="color: white; font-size: 24px">Espece: </span>
-                    <span class="profile_classe" style="color: white; font-size: 24px">Classe: </span>
-                    <span class="profile_nlikes" style="color: white; font-size: 24px">Likes: </span>
-                    <div class="user_menu">
-                        <button class="btn_menu_user">&#8226;&#8226;&#8226;</button>
-                        <div class="user_menu_content border">
-                            <form action="/ignore_user.php" method="post">
-                                <input type="hidden" name="ignore_user" value="user_id">
-                                <button class="btn_ignr_user" type="submit">Ignorer</button>
-                            </form>
-                            <form action="/def_ban_user.php" method="post">
-                                <input type="hidden" name="def_ban_user" value="user_id">
-                                <button class="btn_def_ban_user" type="submit">Ban définitif</button>
-                            </form>
-                            <button class="btn_tmp_ban_user" onclick="document.getElementById('tmp_ban').style.display='block'" type="submit">Ban temporaire</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                <div class="container_desc border" style="border-radius: 15px">
-                    <p style="color: white; font-size: 20px; margin-top: 0px; margin-bottom: 0px;">Votre Description</p>
-                    <dfn title="Voulez-vous signaler?">
-                        <div class="btn_report" style="grid-area: desc_report;">
-                            <a href="#" class="report_ref">
-                                <img class="report_img" width="32" height="32" src="<?= $global_params["root_public"] . "assets/image/report.png"?>">
-                            </a>
-                        </div>
-                    </dfn>
-                </div>
-        </div>
     <div id="tmp_ban" class="tmp_ban_model">
-        <form class="modal-content animate" action="/tmp_ban_user.php" method="post">
+        <div class="modal-content animate">
             <div class="tmp_ban_form_container">
-                <span onclick="document.getElementById('tmp_ban').style.display='none'" class="close" title="Fermer">&times;</span>
-                <label class="form_title" for="ban_time"><b>Temps de ban en minute</b></label>
-                <input type="hidden" name="tmp_ban_user" value="user_id">
-                <input type="text" placeholder="1j = 1440m" name="ban_time" >
-                <button class="ban_user_temp" style="width: auto;" type="submit">Bannir</button>
-                <button type="button" style="width: auto; background-color: red;" class="ban_user_temp" onclick="document.getElementById('tmp_ban').style.display='none'" class="cancelbtn">Annuler</button>
+                <span onclick="hideTempBanBlock();" class="close" title="Fermer">&times;</span>
+                <label class="form_title"><b>Ban temporaire</b></label>
+                <input id="time_input" type="number" placeholder="Durée de la punition" name="ban_time" min="0" autocomplete="off">
+                <div class="ban_radio">
+                    <input label="Minute" type="radio" id="male" name="time" value="min">
+                    <input label="Heure" type="radio" id="female" name="time" value="hour" checked>
+                    <input label="Jour" type="radio" id="other" name="time" value="day">
+                    <input label="Mois" type="radio" id="other" name="time" value="month">
+                </div>
+                <button id="ban_btn" class="ban_user_temp" onclick="">Bannir</button>
+                <button id="cancel_ban" class="ban_user_temp" onclick="hideTempBanBlock();" class="cancelbtn">Annuler</button>
             </div>
+        </div>
     </div>
-
-    <script>
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('tmp_ban')) {
-                document.getElementById('tmp_ban').style.display = "none";
-            }
-        }
-    </script>
 <!-- ------------------------------------------ -->
+
+<?php
+post_reported_js_bloc();
+?>
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>

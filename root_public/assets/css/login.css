@@ -9,30 +9,40 @@ input[type=text], input[type=password] {
     box-sizing: border-box;
 }
 
-input:focus{
+input[type=text]:focus, input[type=password]:focus{
     outline: none;
     border: solid rgb(209, 176, 115);
 }
 
 
 button {
-    background-color: #FFC38A;
-    color: black;
-    padding: 14px 20px;
-    margin: 8px 0;
+    background-color: #505357;
+    color: rgb(230, 203, 152);
+    padding: 5px 5px;
+    margin: 5px 0;
     cursor: pointer;
     width: 100%;
     border: solid transparent;
     border-radius: 5px;
 }
 
-.form_title{
+.popup_form_title {
     font-size: 20px;
-    color: white;
+    color: rgb(238, 236, 228);
+}
+
+.popup_text {
+    color: rgb(250, 225, 173) !important;
 }
 
 button:hover {
     opacity: 0.9;
+}
+
+/* Extra styles for menu button */
+.login_right_button {
+    float: right;
+    margin-right: 4px;
 }
 
 /* Extra styles for the cancel button */

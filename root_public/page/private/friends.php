@@ -1,55 +1,128 @@
-      <?php $global_params = [
+<?php $global_params = [
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Amis",
   "css"         => "all.css",
-  "css_add"     => ["posts.css", "public_page.css","admin.css","friends.css"],
+  "css_add"     => [
+      "posts.css", "public_page.css","admin.css",
+      "friends.css","login.css"
+    ],
   "redirect"    => TRUE
 ];?>
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
-<?php // FUNCTIONS (specific à cette page)
 
-?>
-<!-- ------------------------------------------ -->
+    <!-- Ajout d'amis -->
+    <div class="add_friend_bar border">
+        <div id="search_container">
+            <div class="request_and_searchbtn_friend">
+                <input  id="add_friend_input" type="search" class="search_request_friend_bar search_input" autocomplete="off" placeholder="Pseudo à ajouter">
+                <button class="send_request_friend_bar btn_button_btn" onclick="addFriend();">Ajouter en amis</button>
+            </div>
+            <p id="add_friend_debug" style="display:none">Debug</p>
+        </div>
+    </div>
 
-      <div style="text-align: center; margin-bottom: 1em;">
-          <div id="search_container">
-              <form action="/search_ami.php" method="get">
-                  <input id="search_input" type="search" autocomplete="off" placeholder="Recherche">
-              </form>
-          </div>
-      </div>
-      <div id = "mid_content" class="posts_and_user" style="text-align: initial;">
-          <div id = "profile">
-              <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-                  <img class="profile_img_profile" src="<?= $global_params["root"] . "assets/profile/default.png" ?>">
-              </a>
-              <div class="info_profile">
-                  <span class="profile_nickname" style="color: white; font-size: 24px">Nom: </span>
-                  <span class="profile_titre" style="color: white; font-size: 24px">Titre: </span>
-                  <span class="profile_espece" style="color: white; font-size: 24px">Espece: </span>
-                  <span class="profile_classe" style="color: white; font-size: 24px">Classe: </span>
-                  <span class="profile_nlikes" style="color: white; font-size: 24px">Likes: </span>
-                  <div class="user_menu">
-                      <button class="btn_menu_user">&#8226;&#8226;&#8226;</button>
-                      <div class="user_menu_content border">
-                          <form action="/supp_friend.php" method="post">
-                              <input type="hidden" name="supp_friend" value="user_id">
-                              <button class="btn_ignr_user" type="submit">Supprimer</button>
-                          </form>
-                      </div>
-                  </div>
-                  <div class="espace2"></div>
-                  <a href="dm.php?id=">
-                    <img class="msg_img" width="32" height="32" src="../../assets/image/msg.png">
-                  </a>
-              </div>
-          </div>
-      </div>
+    <!-- Accepte demande d'amis -->
+    <?php
+        $connexion = mysqli_connect (
+            $GLOBALS["DB_URL"],
+            $GLOBALS["DB_ACCOUNT"],
+            $GLOBALS["DB_PASSWORD"],
+            $GLOBALS["DB_NAME"]
+        );
 
+        if (!$connexion) { 
+            echo "connection_error"; exit(); 
+        }    
+
+
+        $friends = $connexion->query( // enfin ça fonctionne !!
+            "select *
+            from
+            (
+                (SELECT user_id_0 as friend FROM `friends` WHERE (user_id_1=".$_SESSION["id"]." AND NOT accepted))
+            ) as t1
+            inner join users
+            on t1.friend=users.id
+            
+            ORDER BY last_join DESC
+            "
+        );
+
+        if ($friends->num_rows!=0)
+        { ?>
+            <div id="friends_request_list" class="mid_sub_content_friend border">
+                <h3 style="margin: 0;">Demandes d'amis en attente</h3>
+                <?php while($friend=$friends->fetch_assoc()) add_friend_bloc($friend); ?>
+            </div>
+        <?php }
+    ?>
+
+<!-- Liste d'amis -->
+
+    <div id="friend_blocs_area" >
+    <?php
+        $friends = $connexion->query( 
+            "select *
+            from
+            (
+                (SELECT user_id_1 as friend FROM `friends` WHERE (user_id_0=".$_SESSION["id"]." AND accepted))
+                    UNION 
+                (SELECT user_id_0 as friend FROM `friends` WHERE (user_id_1=".$_SESSION["id"]." AND accepted))
+            ) as t1
+            inner join users
+            on t1.friend=users.id
+            
+            ORDER BY last_join DESC
+            "
+        );
+
+        if ($friends->num_rows==0)
+        { ?>
+            <div class="mid_content">
+                <p>Vous n'avez pas des amis.</p>
+            </div>
+        <?php }
+
+        while($friend=$friends->fetch_assoc())
+            friend_bloc($friend);
+
+        mysqli_close($connexion);
+    ?>
+    </div>
+
+<?php friend_js_bloc(); add_friend_js_bloc(); ?>
+<script>
+        function addFriend() {
+            let requestFriend = document.getElementById("add_friend_input");
+            let debugHtml     = document.getElementById("add_friend_debug");
+
+            let data = new FormData();
+            data.append("username", requestFriend.value);
+            data.append("add_friend", "<?= $_SESSION["add_friend"] = randomString() ?>");
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST',
+            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/add_friend.php");
+            xmlhttp.send( data );
+
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4) // request done
+                    if (xmlhttp.status === 200) // successful return
+                    {
+                        //alert(xmlhttp.responseText);
+                        const feedback = JSON.parse(xmlhttp.responseText);
+                        
+                        requestFriend.value = "";
+                        debugHtml.style.display="block";
+                        debugHtml.innerHTML = feedback["error"];
+                    }
+            }
+        }
+</script>
 
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>

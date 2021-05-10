@@ -10,111 +10,87 @@
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
-<?php // FUNCTIONS (specific à cette page)
 
-?>
 <!-- ------------------------------------------ -->
     <!-- Faire des focntions qui verifie si la page a partient a l'utilisateur -->
-    <div style="text-align: center; margin-bottom: 1em;">
-    <div id="search_container">
-        <form action="/search.php" method="get">
-            <input id="search_input" type="search" autocomplete="off" placeholder="Recherche">
-        </form>
-    </div>
-    </div>
-    <div id = "mid_content" style="margin-top: 0px; text-align: initial;">
-        <div id = "profile">
-            <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-            <img class="profile_img_profile" src="<?= $global_params["root"] . "assets/profile/default.png" ?>">
-            </a>
-            <div class="info_profile">
-                <span class="profile_nickname" style="color: white; font-size: 24px">Nom: </span>
-                <span class="profile_titre" style="color: white; font-size: 24px">Titre: </span>
-                <span class="profile_espece" style="color: white; font-size: 24px">Espece: </span>
-                <span class="profile_classe" style="color: white; font-size: 24px">Classe: </span>
-                <span class="profile_nlikes" style="color: white; font-size: 24px">Likes: </span>
-            </div>
-        </div>
-        <?php
-            #if($_SESSION["user_id"] === $_GET["user_id"]){
-        if("test" == "test"){
-        ?>
-        <form action="/chng_desc.php" method="post">
-        <div class="container_desc border" style="border-radius: 15px">
-            <input type="text" maxlength="50" style="color: white; font-size: 20px; background-color: transparent; outline: none; border: none; margin-right: 20px" placeholder="Votre Description">
-            <dfn title="Voulez-vous signaler?">
-                <div class="btn_report" style="grid-area: desc_report;">
-                    <a href="#" class="report_ref">
-                        <img class="report_img" width="32" height="32" src="<?= $global_params["root_public"] . "assets/image/report.png"?>">
-                    </a>
-                </div>
-            </dfn>
-        </div>
-        </form>
-                <div id="container_add">
-                    <form id="form_post_add" action="/add_post.php" method="post">
-                        <textarea id="post_add" name="post_content" form="form_post_add" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
-                        <button id="submit_add" type="submit">Poster</button>
-                        <button id="inpirate" onclick="inspiration()">Inspiration</button>
-                    </form>
-                </div>
-        <?php
-            }else{
-        ?>
-                <div class="container_desc border" style="border-radius: 15px">
-                    <p style="color: white; font-size: 20px; margin-top: 0px; margin-bottom: 0px;">Votre Description</p>
-                    <dfn title="Voulez-vous signaler?">
-                        <div class="btn_report" style="grid-area: desc_report;">
-                            <a href="#" class="report_ref">
-                                <img class="report_img" width="32" height="32" src="<?= $global_params["root_public"] . "assets/image/report.png"?>">
-                            </a>
-                        </div>
-                    </dfn>
-                </div>
-        <?php
-            }
-        ?>
+    <?php // FUNCTIONS (specific à cette page)
 
-    </div>
-    <div id = "mid_content" style="margin-top: 0px; text-align: initial;">
-        <div class="posts">
-            <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-                <img class="profile_img_posts" src="<?= $global_params["root"] . "assets/profile/default.png" ?>">
-            </a>
-            <div class="info_containt border" style="border-radius: 15px; padding: 10px 10px;">
-            <a href="/UP-IO2-Project/root_public/page/public/public_page.php?id=">
-                <span class="post_auteur" style="color: white; font-size: 20px">Test Test</span><br>
-                <span class="post_date" style="color: lightgray; font-size: 14px">19/04/2021 19:24</span>
-            </a>
-                <div class="post_menu">
-                    <button class="btn_menu_post">&#8226;&#8226;&#8226;</button>
-                    <div class="supp_post border">
-                        <form action="/supp_post.php" method="post">
-                            <input type="hidden" name="sup_post" value="post_id">
-                            <button class="btn_sup_post" type="submit">Supprimer</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    $connexion = mysqli_connect (
+    $db_conf["DB_URL"],
+    $db_conf["DB_ACCOUNT"],
+    $db_conf["DB_PASSWORD"],
+    $db_conf["DB_NAME"]
+    );
 
-            <div class="post_content border">
-                <p style="color: white; font-size: 18px">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi aliquet fermentum odio. Nulla sed venenatis nulla. Pellentesque interdum ligula ac venenatis mattis. Nam nec lectus urna. Vestibulum finibus tellus a auctor feugiat. Morbi vel cursus orci, eu efficitur nisl. Vivamus congue mi sed metus condimentum aliquet. Aliquam tempus ante vel viverra vulputate. Phasellus eros lorem, imperdiet in ante vel, malesuada viverra orci. Curabitur laoreet porta quam nec rhoncus. Donec aliquet dui in rhoncus eleifend.
+    if (!$connexion) {
+        echo "connection_error"; exit();
+    }
 
-                    Donec eleifend elementum bibendum. Quisque porta, lacus eget vehicula aliquam, augue ante dignissim lectus, eu porta neque magna sit amet odio. Morbi gravida quam a libero blandit, nec laoreet tortor finibus. In facilisis augue sed ante interdum, nec consequat arcu feugiat. Morbi sagittis justo non ligula luctus imperdiet. Integer ultrices diam vel venenatis sodales. Praesent nisl est, vulputate ut viverra quis, rhoncus et libero.</p>
-            </div>
-            <a href="#" class="btn_like">
-                <img class="like_img" width="32" height="32" src="<?= $global_params["root_public"] . "assets/image/like.png"?>"><span class="like_num"">0</span>
-            </a>
-            <div class="espace" style="grid-area: espace;"></div>
-            <dfn title="Voulez-vous signaler?">
-                <div class="btn_report">
-                    <a href="#" class="report_ref">
-                        <img class="report_img" width="32" height="32" src="<?= $global_params["root_public"] . "assets/image/report.png"?>">
-                    </a>
-                </div>
-            </dfn>
+    if(!isset($_GET["user"])){
+        ?>
+            <script>window.location.href = "<?="home_page.php"?>";</script>
+        <?php
+    }
+
+    $user_query = "SELECT * FROM users WHERE public_name=\"". $connexion->real_escape_string($_GET["user"]) . "\" AND enable_public;";
+    $me = $connexion->query($user_query);
+
+    if($me->num_rows == 0){
+        ?>
+        <script>window.location.href = "<?="home_page.php"?>";</script>
+        <?php
+    }
+
+    $me = $me->fetch_assoc();
+
+    if(isset($_SESSION["id"]) && $me["id"] !== $_SESSION["id"]) {
+        $friend = false;
+        $friend1_query = "SELECT * FROM friends WHERE user_id_0=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND user_id_1=\"" . $connexion->real_escape_string($me["id"]) . "\";";
+        $friend2_query = "SELECT * FROM friends WHERE user_id_1=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND user_id_0=\"" . $connexion->real_escape_string($me["id"]) . "\";";
+        if (($connexion->query($friend1_query)->num_rows != 0) || ($connexion->query($friend2_query)->num_rows != 0)) {
+            $friend = true;
+        }
+        profile_bloc($me, $friend);
+    }else{
+        profile_bloc($me);
+    }
+
+
+    $post_query = "SELECT * FROM posts WHERE user_id=\"". $connexion->real_escape_string(trim(htmlentities($me["id"]))) . "\" ORDER BY creation_date DESC;";
+    $my_posts = $connexion->query($post_query);
+
+    if ($my_posts->num_rows==0)
+    { ?>
+        <div class="mid_content">
+            <p>Vous n'avez pas de post.</p>
         </div>
-    </div>
+    <?php }
+    while($my_post=$my_posts->fetch_assoc()) {
+        $like = false;
+        $reported = false;
+        if (isset($_SESSION["id"])){
+        $like_query = "SELECT * FROM likes WHERE user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND message_id=\"" . $connexion->real_escape_string($my_post["id"]) . "\";";
+        if ($connexion->query($like_query)->num_rows != 0) {
+            $like = true;
+        }
+
+        $report_query = "SELECT * FROM reports WHERE user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND message_id=\"" . $connexion->real_escape_string($my_post["id"]) . "\";";
+        if ($connexion->query($report_query)->num_rows != 0) {
+            $reported = true;
+        }
+            post_bloc($my_post, $like, $reported, true);
+        }else{
+            post_bloc($my_post, $like, $reported, false);
+        }
+    }
+
+    mysqli_close($connexion);
+    if(isset($_SESSION["id"])){
+        profile_js_bloc($me);
+        post_js_bloc();
+        post_js_add();
+    }
+?>
 
 
 <!-- ------------------------------------------ -->
