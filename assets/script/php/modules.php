@@ -519,7 +519,7 @@ function profile_bloc($profile, $friend = null){
                 ?>
                     <div class="desc_container">
                         <textarea id="description" class="post_add" name="desc" style="font-size: 18px;" placeholder="<?= trim(htmlentities($profile["description"]))?>" rows="2" maxlength="50"></textarea><br>
-                        <button class="submit_add" onclick="updateDesc(<?= json_encode($profile['description'])?>);">Changer</button>
+                        <button class="submit_add" onclick='updateDesc(<?= json_encode($profile['description'])?>);'>Changer</button>
                     </div>
                     <div id="container_add">
                         <textarea id="post_content" class="post_add" name="post_content" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
