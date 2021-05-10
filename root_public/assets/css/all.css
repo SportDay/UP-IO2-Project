@@ -25,7 +25,21 @@
     background: #555;
 }
 
+.mail_title{
+    margin-top: 0;
+    margin-bottom: 10px;
+}
 
+.copy_title{
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.mail_contact{
+    text-decoration: none;
+    color: black;
+
+}
 
 body{
     background-color: #14141a;

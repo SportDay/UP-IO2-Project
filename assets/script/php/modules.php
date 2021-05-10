@@ -519,7 +519,7 @@ function profile_bloc($profile, $friend = null){
                 ?>
                     <div class="desc_container">
                         <textarea id="description" class="post_add" name="desc" style="font-size: 18px;" placeholder="<?= trim(htmlentities($profile["description"]))?>" rows="2" maxlength="50"></textarea><br>
-                        <button class="submit_add" onclick="updateDesc(<?= json_encode($profile['description'])?>);">Changer</button>
+                        <button class="submit_add" onclick='updateDesc(<?= json_encode($profile['description'])?>);'>Changer</button>
                     </div>
                     <div id="container_add">
                         <textarea id="post_content" class="post_add" name="post_content" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
@@ -1008,6 +1008,45 @@ function post_reported_js_bloc(){?>
 
     </script>
 
+    <?php
+}
+
+function search_bar(){?>
+
+        <div id="search_container">
+            <form action="/page/public/search.php" method="get">
+                <div class="search_grid">
+                    <input class="search_input" type="search" autocomplete="off" placeholder="Recherche" name="search" required >
+                    <button id="btn_search" class="btn_search btn_button_btn" onclick="">
+                        <img id="img_search" class="img_search" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/search.png"?>">
+                    </button>
+                </div>
+            </form>
+        </div>
+
+<?php }
+
+function search_profil($profile){
+    ?>
+    <div class = "mid_content" style="text-align: initial;">
+        <div id = "profile">
+            <a href= "<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($profile["public_name"]) ?>">
+                <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
+            </a>
+            <div class="info_profile">
+                <span class="profile_nickname" >Nom: <?= htmlentities($profile["public_name"])?></span>
+                <span class="profile_titre"    >Titre: <?= htmlentities($profile["title"])?></span>
+                <span class="profile_espece"   >Espece: <?= htmlentities($profile["specie"])?></span>
+                <span class="profile_classe"   >Classe: <?= htmlentities($profile["class"])?></span>
+                <span class="profile_nlikes"   >Likes: <?= htmlentities($profile["likes"])?></span>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #41bb41;" onclick=''>Liker la page</button>
+            </div>
+        </div>
+        <div class="container_desc border" style="border-radius: 15px">
+            <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= htmlentities(trim($profile["description"]))?></p>
+        </div>
+
+    </div>
     <?php
 }
 

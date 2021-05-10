@@ -3,7 +3,7 @@
   "root_public" => "../../",
   "title"       => "Coeur de poudlard",
   "css"         => "all.css",
-  "css_add"     => ["posts.css"],
+  "css_add"     => ["posts.css","search.css"],
   "redirect"    => TRUE
 ];?>
 <!-- ------------------------------------------ -->
@@ -11,17 +11,12 @@
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
 <?php // FUNCTIONS (specific à cette page)
-
+search_bar();
 ?>
 <!-- ------------------------------------------ -->
 
-    <div style="text-align: center; margin-bottom: 1em;">
-        <div id="search_container">
-            <form action="/search.php" method="get">
-                <input class="search_input" type="search" autocomplete="off" placeholder="Recherche">
-            </form>
-        </div>
-    </div>
+
+
 
 
 
@@ -55,6 +50,12 @@ $my_posts = $connexion->query("select * from ( ".
 
 post_add();
 
+    if ($my_posts->num_rows==0)
+    { ?>
+        <div class="mid_content">
+            <p>C'est vide par ici.</p>
+        </div>
+    <?php }
 while($my_post=$my_posts->fetch_assoc()) {
 
     $like_query = 

@@ -58,6 +58,13 @@
 
     $post_query = "SELECT * FROM posts WHERE user_id=\"". $connexion->real_escape_string(trim(htmlentities($me["id"]))) . "\" ORDER BY creation_date DESC;";
     $my_posts = $connexion->query($post_query);
+
+    if ($my_posts->num_rows==0)
+    { ?>
+        <div class="mid_content">
+            <p>Vous n'avez pas de post.</p>
+        </div>
+    <?php }
     while($my_post=$my_posts->fetch_assoc()) {
         $like = false;
         $reported = false;

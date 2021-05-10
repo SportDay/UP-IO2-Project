@@ -80,6 +80,13 @@
             "
         );
 
+        if ($friends->num_rows==0)
+        { ?>
+            <div class="mid_content">
+                <p>Vous n'avez pas des amis.</p>
+            </div>
+        <?php }
+
         while($friend=$friends->fetch_assoc())
             friend_bloc($friend);
 
