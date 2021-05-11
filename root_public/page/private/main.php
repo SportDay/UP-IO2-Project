@@ -12,8 +12,6 @@
 <!-- ------------------------------------------ -->
 <?php
 
-    search_bar();
-
     $connexion = mysqli_connect (
         $db_conf["DB_URL"],
         $db_conf["DB_ACCOUNT"],

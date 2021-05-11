@@ -84,6 +84,7 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
     if (isset($global_params["css"])) echo $global_params["css"];
     else                              echo "all.css";
     ?>>
+    <link rel="stylesheet" type="text/css" href="<?= $global_params["root_public"]."assets/css/search.css"?>">
     <!-- additionnal css and style -->
     <?php
     if (!$_SESSION["connected"])
@@ -164,4 +165,5 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
 
 <div id = "mid_panel">
     <div id = "mid_container">
-        <div style="text-align: center; margin: 7em auto 1em;"></div>
+    
+    <?php search_bar(); ?>

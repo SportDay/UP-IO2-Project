@@ -14,52 +14,52 @@
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
 
-    <!-- Ajout d'amis -->
-    <div class="add_friend_bar border">
-        <div id="search_container">
-            <div class="request_and_searchbtn_friend">
-                <input  id="add_friend_input" type="search" class="search_request_friend_bar search_input" autocomplete="off" placeholder="Pseudo à ajouter">
-                <button class="send_request_friend_bar btn_button_btn" onclick="addFriend();">Ajouter en amis</button>
-            </div>
-            <p id="add_friend_debug" style="display:none">Debug</p>
+<!-- Ajout d'amis -->
+<div class="add_friend_bar border">
+    <div id="search_container">
+        <div class="request_and_searchbtn_friend">
+            <input  id="add_friend_input" type="search" class="search_request_friend_bar search_input" autocomplete="off" placeholder="Pseudo à ajouter">
+            <button class="send_request_friend_bar btn_button_btn" onclick="addFriend();">Ajouter en amis</button>
         </div>
+        <p id="add_friend_debug" style="display:none">Debug</p>
     </div>
+</div>
 
-    <!-- Accepte demande d'amis -->
-    <?php
-        $connexion = mysqli_connect (
-            $GLOBALS["DB_URL"],
-            $GLOBALS["DB_ACCOUNT"],
-            $GLOBALS["DB_PASSWORD"],
-            $GLOBALS["DB_NAME"]
-        );
+<!-- Accepte demande d'amis -->
+<?php
+    $connexion = mysqli_connect (
+        $GLOBALS["DB_URL"],
+        $GLOBALS["DB_ACCOUNT"],
+        $GLOBALS["DB_PASSWORD"],
+        $GLOBALS["DB_NAME"]
+    );
 
-        if (!$connexion) { 
-            echo "connection_error"; exit(); 
-        }    
+    if (!$connexion) { 
+        echo "connection_error"; exit(); 
+    }    
 
 
-        $friends = $connexion->query( // enfin ça fonctionne !!
-            "select *
-            from
-            (
-                (SELECT user_id_0 as friend FROM `friends` WHERE (user_id_1=".$_SESSION["id"]." AND NOT accepted))
-            ) as t1
-            inner join users
-            on t1.friend=users.id
-            
-            ORDER BY last_join DESC
-            "
-        );
+    $friends = $connexion->query( // enfin ça fonctionne !!
+        "select *
+        from
+        (
+            (SELECT user_id_0 as friend FROM `friends` WHERE (user_id_1=".$_SESSION["id"]." AND NOT accepted))
+        ) as t1
+        inner join users
+        on t1.friend=users.id
+        
+        ORDER BY last_join DESC
+        "
+    );
 
-        if ($friends->num_rows!=0)
-        { ?>
-            <div id="friends_request_list" class="mid_sub_content_friend border">
-                <h3 style="margin: 0;">Demandes d'amis en attente</h3>
-                <?php while($friend=$friends->fetch_assoc()) add_friend_bloc($friend); ?>
-            </div>
-        <?php }
-    ?>
+    if ($friends->num_rows!=0)
+    { ?>
+        <div id="friends_request_list" class="mid_sub_content_friend border">
+            <h3 style="margin: 0;">Demandes d'amis en attente</h3>
+            <?php while($friend=$friends->fetch_assoc()) add_friend_bloc($friend); ?>
+        </div>
+    <?php }
+?>
 
 <!-- Liste d'amis -->
 
@@ -83,7 +83,7 @@
         if ($friends->num_rows==0)
         { ?>
             <div class="mid_content">
-                <p>Vous n'avez pas des amis.</p>
+                <p>Vous n'avez pas d'amis.</p>
             </div>
         <?php }
 

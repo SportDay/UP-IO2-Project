@@ -3,18 +3,13 @@
   "root_public" => "../../",
   "title"       => "Accueil",
   "css"         => "all.css",
-  "css_add"     => ["posts.css","search.css"],
+  "css_add"     => ["posts.css"],
   "redirect"    => FALSE
 ];?>
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
-
-<?php 
-    search_bar();
-?>
-
 <div class = "mid_content">
 
   <section>

@@ -155,12 +155,16 @@ body{
     display: flex;
     flex-direction: column;
     height: 100vh;
+    margin-top: 7em auto 1em;
+    
 }
 
 #mid_container{
     flex: 1 0 auto;
     margin-left: 20px;
     margin-right: 20px;
+    text-align: center; 
+    padding-top: 7em;
 }
 #down_panel {
     background-color: #ffc38a;
