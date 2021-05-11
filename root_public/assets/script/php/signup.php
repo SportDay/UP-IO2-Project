@@ -75,18 +75,11 @@
     
     $connexion->query(
                         "INSERT INTO `users` (`username`,    `password`) VALUES " .
-                        "(\"" . $connexion->real_escape_string($username) . "\", \"none\");"
+                        "(\"" . $connexion->real_escape_string($username)                                   . "\", " .
+                         "\"" . $connexion->real_escape_string(password_hash($password, PASSWORD_DEFAULT))  . "\");"
                     );
 
     $result = $connexion->query($user_query)->fetch_assoc();
-    $hashed_password = hashPassword($password, $result);
-
-    mysqli_query($connexion, 
-            "UPDATE users SET " . 
-            "password=\""   . $connexion->real_escape_string($hashed_password) . "\" " .
-            "WHERE `id`=\"" . $result["id"] . "\" ;"
-        );
-
 
     // SIGN IN
     $_SESSION["id"]             = $result["id"];
@@ -104,7 +97,7 @@
 
     $_SESSION["connected"]      = true;
 
-    mysqli_query($connexion, 
+    $connexion->query(
                 "UPDATE users SET last_join=" . $_SESSION["last_time"] 
                 . " WHERE `id`=" . $_SESSION["id"]
             );

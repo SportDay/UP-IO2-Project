@@ -68,10 +68,7 @@
         "SELECT * FROM users WHERE id=\"". $connexion->real_escape_string($_SESSION["id"]) . "\";" 
         )->fetch_assoc();
 
-    $hashed_old_password = hashPassword($old_password, $result);
-    $hashed_new_password = hashPassword($new_password, $result);
-
-    if ($hashed_old_password != $result["password"] ) {
+    if (!password_verify($old_password, $result["password"])) {
         echo json_encode([
             "success" => false,
             "error"   => "Entrées incorrectes."
@@ -81,9 +78,9 @@
     ////////////////////////////////////////////////////////////////////
     // CHANGEMENT MOT DE PASSE
 
-    mysqli_query($connexion, 
+    $connexion->query(
             "UPDATE users SET " . 
-            "password=\""   . $connexion->real_escape_string($hashed_new_password) . "\" " .
+            "password=\""   . $connexion->real_escape_string(password_hash($new_password, PASSWORD_DEFAULT)) . "\" " .
             "WHERE `id`=\"" . $result["id"] . "\" ;"
         );
 

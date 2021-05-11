@@ -61,8 +61,7 @@
         "SELECT * FROM users WHERE id=\"". $connexion->real_escape_string($_SESSION["id"]) . "\";" 
         )->fetch_assoc();
 
-    $hashed_password = hashPassword($password, $result);
-    if ($hashed_password != $result["password"] || $username != $_SESSION["username"]) {
+    if (!password_verify($password, $result["password"]) || $username != $_SESSION["username"]) {
         echo json_encode([
             "success" => false,
             "error"   => "Entrées incorrectes."

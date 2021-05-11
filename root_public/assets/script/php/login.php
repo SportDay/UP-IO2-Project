@@ -76,8 +76,6 @@
 
     // COMPARER A LA BASE DE DONNEE
 
-    $hashed_password = hashPassword($password, $result);
-
     if ($result["last_try"] - time() > 2) // X seconds entre chaques tentives
     {
         echo json_encode([
@@ -86,7 +84,7 @@
         ]); exit();
     }
 
-    if ($hashed_password != $result["password"]) {
+    if (!password_verify($password, $result["password"])) {
         // wrong password error
         echo json_encode([
             "success" => false,
@@ -110,7 +108,7 @@
 
     $_SESSION["connected"]      = true;
 
-    mysqli_query($connexion, 
+    $connexion->query( 
                 "UPDATE users SET last_join=" . $_SESSION["last_time"] 
                 . " WHERE `id`=" . $_SESSION["id"]
             );

@@ -69,22 +69,6 @@
             !(preg_match("/!?\-\*\+\(\)\|\[\]@/"            , $str) === 0) ;
     }
 
-    function hashPassword ($pass, $row) {
-        // concatener le mot de passe avec des informations de la base de donnée
-        // utiliser le hash de php
-        
-        $pass .= $row["id"] . $row["creation_date"] . $pass . $row["username"]; // SALT
-        return hash('sha512', hash('md5', $pass, false) . $pass, false); 
-
-        // NOT SAFE : hash1(hash2(hash3(...hashn(pass+salt)+salt)+salt)...)+salt)
-        // SAFE     : hash1(hash2(hash3(...hashn(pass + salt) + pass + salt) + pass + salt)...) + pass + salt)
-        // je me base sur les conseils de cette page :
-        // https://softwareengineering.stackexchange.com/questions/115406/is-it-more-secure-to-hash-a-password-multiple-times
-        
-        //return md5($pass); // changer ça en SHA
-        //return password_hash($pass, PASSWORD_DEFAULT);
-    }
-
     function randomString($length=20) { // mettre en 80 par défaut ??? var(128)
         //return bin2hex(random_bytes($length)); // faudrait peut être passer en base64??
         return base64_encode(random_bytes($length)) ;
@@ -226,10 +210,10 @@
             return "Description";
         }
 
-        $query = "SELECT class FROM users WHERE username=\"". $connexion->real_escape_string($_SESSION["username"]) . "\";";
-        
         if ($class==="-1")
-            $class = $connexion->query($query)->fetch_assoc();
+            $class = $connexion->query(
+                "SELECT class FROM users WHERE username=\"". $connexion->real_escape_string($_SESSION["username"]) . "\";"
+            )->fetch_assoc();
         else
             $class = ["class" => $class];
 
