@@ -25,7 +25,7 @@
     }
 
     if(!isset($_GET["search"]))
-        $_GET = "Voldemort";
+        $_GET["search"] = "Voldemort";
 
     $search_profiles = $_SESSION["connected"] ? 
         $connexion->query("select * from ( ".

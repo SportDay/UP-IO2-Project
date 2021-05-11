@@ -21,31 +21,38 @@ $addBotFriends  = TRUE;
 $addPageLikes   = TRUE;
 $addBotMessages = TRUE;
 $nBots = 10; // nombre de bots auto générés
+$botPassword = "BotPassword";
 $users = [   // vrais comptes
     [
-        "username"  =>  "root",
-        "password"  =>  "Vanille1", 
-        "admin"     =>  TRUE 
+        "username"      =>  "root",
+        "password"      =>  "Vanille1", 
+        "admin"         =>  TRUE,
+        "enable_public" =>  FALSE
     ],[
-        "username"  =>  "Carl",
-        "password"  =>  "Vanille2", 
-        "admin"     =>  TRUE 
+        "username"      =>  "Carl",
+        "password"      =>  "Vanille2", 
+        "admin"         =>  TRUE,
+        "enable_public" =>  TRUE
     ],[
-        "username"  =>  "SportDay",
-        "password"  =>  "Vanille3", 
-        "admin"     =>  TRUE 
+        "username"      =>  "SportDay",
+        "password"      =>  "Vanille3", 
+        "admin"         =>  TRUE,
+        "enable_public" =>  TRUE
     ],[
-        "username"  =>  "Wilfrid",
-        "password"  =>  "Vanille4", 
-        "admin"     =>  FALSE 
+        "username"      =>  "Wilfrid",
+        "password"      =>  "Password", 
+        "admin"         =>  FALSE,
+        "enable_public" =>  TRUE
     ],[
-        "username"  =>  "Leila",
-        "password"  =>  "Vanille5", 
-        "admin"     =>  FALSE
+        "username"      =>  "Leila",
+        "password"      =>  "Password", 
+        "admin"         =>  FALSE,
+        "enable_public" =>  TRUE
     ],[
-        "username"  =>  "Fred",
-        "password"  =>  "Vanille6", 
-        "admin"     =>  FALSE 
+        "username"      =>  "Fred",
+        "password"      =>  "Password", 
+        "admin"         =>  FALSE,
+        "enable_public" =>  FALSE
     ]
 ];
 
@@ -199,42 +206,46 @@ function addUser($user) {
          "\"" . $connexion->real_escape_string($user["admin"])                                      . "\");"
     );
 
-    return $user + 
+    $user += 
         [
             "id"=> $connexion->query(
                 "SELECT id, class FROM users WHERE username=\"".$connexion->real_escape_string($user["username"])."\""
             )->fetch_assoc()["id"]
         ];
 
+    if ($user["enable_public"])
+    {
+        $public_page = generateRandomPublicData();
+
+        $connexion->query(
+            "UPDATE `users` SET " . 
+            "`enable_public`=TRUE, " .
+            "`public_name`=\""  . $connexion->real_escape_string($public_page["public_name"]) . "\", " .
+            "`public_image`=" . $public_page["public_image"] . ", " .
+            "`last_reroll`="  . time() . ", " .
+            "`description`=\""  . $connexion->real_escape_string(inspirate($public_page["class"])) . "\", " .
+
+            "`specie`=\"" . $connexion->real_escape_string($public_page["specie"]) . "\", " .
+            "`class`=\""  . $connexion->real_escape_string($public_page["class"])  . "\", " .
+            "`title`=\""  . $connexion->real_escape_string($public_page["title"])  . "\" " .
+
+
+            " WHERE `id`=" . $user["id"] . " ;"
+        );
+    }
+
+    return $user;
 }
 
 function addBot($index) {
     
     $username = "Bot_" . str_pad($index, 4, "0", STR_PAD_LEFT);
     $bot = addUser([
-        "username"  =>  $username,
-        "password"  =>  "BotPassword", 
-        "admin"     =>  FALSE 
+        "username"      =>  $username,
+        "password"      =>  $GLOBALS["botPassword"], 
+        "admin"         =>  FALSE,
+        "enable_public" =>  TRUE
     ]);
-
-    $public_page = generateRandomPublicData();
-
-    $connexion = $GLOBALS["connexion"];
-    $connexion->query(
-        "UPDATE `users` SET " . 
-        "`enable_public`=TRUE, " .
-        "`public_name`=\""  . $connexion->real_escape_string($public_page["public_name"]) . "\", " .
-        "`public_image`=" . $public_page["public_image"] . ", " .
-        "`last_reroll`="  . time() . ", " .
-        "`description`=\""  . $connexion->real_escape_string(inspirate($public_page["class"])) . "\", " .
-
-        "`specie`=\"" . $connexion->real_escape_string($public_page["specie"]) . "\", " .
-        "`class`=\""  . $connexion->real_escape_string($public_page["class"])  . "\", " .
-        "`title`=\""  . $connexion->real_escape_string($public_page["title"])  . "\" " .
-
-
-        " WHERE `id`=" . $bot["id"] . " ;"
-    );
 
     return $bot;
 }
