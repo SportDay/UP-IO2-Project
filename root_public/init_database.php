@@ -173,16 +173,7 @@ if ($addBotMessages) {
                 $bot["id"]. ", ".
                 $botInfos["public_image"]. ", ".
                 "\"". $connexion->real_escape_string( $botInfos["public_name"]      ) ."\", ".
-                "\"". $connexion->real_escape_string( inspirate($botInfos["class"]) ) ."\", ".
-                ");"
-            );
-
-            write(
-                "INSERT INTO posts (user_id, public_image, public_name, content) VALUES (".
-                $bot["id"]. ", ".
-                $botInfos["public_image"]. ", ".
-                "\"". $connexion->real_escape_string( $botInfos["public_name"]      ) ."\", ".
-                "\"". $connexion->real_escape_string( inspirate($botInfos["class"]) ) ."\", ".
+                "\"". $connexion->real_escape_string( inspirate($botInfos["class"]) ) ."\" ".
                 ");"
             );
         }
