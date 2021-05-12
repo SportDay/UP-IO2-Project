@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     height: 71vh;
+    padding-bottom: 3em;
 }
 
 .container_message{

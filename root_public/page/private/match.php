@@ -1,7 +1,7 @@
 <?php $global_params = [
   "root"        => "../../../",
   "root_public" => "../../",
-  "title"       => "Matchs",
+  "title"       => "Vos rencontres",
   "css"         => "all.css",
   "css_add"     => [
       "posts.css", "public_page.css","admin.css",
@@ -13,8 +13,6 @@
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
-
-    <div class="mid_content"><p>Work in progress</p></div>
 
     <!-- Liste de matchs -->
 
@@ -32,15 +30,16 @@
         }
 
         $matchs = $connexion->query( 
-            "select *
+            "
+            select *
             from
             (
-                (SELECT user_id_1 as friend FROM `friends` WHERE (user_id_0=".$_SESSION["id"]." AND accepted))
-                    UNION 
-                (SELECT user_id_0 as friend FROM `friends` WHERE (user_id_1=".$_SESSION["id"]." AND accepted))
+                SELECT user_id FROM pages_liked WHERE like_id=".$_SESSION["id"]." AND user_id IN (
+                    SELECT like_id FROM pages_liked WHERE (user_id=".$_SESSION["id"].")
+                )
             ) as t1
             inner join users
-            on t1.friend=users.id
+            on t1.user_id=users.id
             
             ORDER BY last_join DESC
             "
@@ -49,18 +48,20 @@
         if ($matchs->num_rows==0)
         { ?>
             <div class="mid_content">
-                <p>Aucun match.</p>
+                <p>Aucune rencontre.</p>
             </div>
         <?php }
 
         while($match=$matchs->fetch_assoc())
-            friend_bloc($match);
+        {
+            match_bloc($match); // remplacer par match bloc
+        }
 
         mysqli_close($connexion);
     ?>
     </div>
 
-<?php friend_js_bloc(); add_friend_js_bloc(); ?>
+<?php match_js_bloc(); ?>
 
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>

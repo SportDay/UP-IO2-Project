@@ -78,19 +78,21 @@
         );*/
     }
 
-    function getImagePath($image, $specific_root=FALSE, $root_public="") {
+    function getImagePath($image, $specific_root=FALSE, $root_public="", $short=false) {
         if (!$specific_root)
             $root_public = $GLOBALS["global_params"]["root_public"];
 
         $folder     = $root_public                             . "assets/profile/";
         $folderThis = $GLOBALS["global_params"]["root_public"] . "assets/profile/"; 
 
+        if ($short) $folder = "";
+
         $where = "";
 
         if ($image < 36)
-            $where = $folder . "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".webp";
+            $where = "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".webp";
         else
-            $where = $folder . "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".jpg";        
+            $where = "profile_" . str_pad($image, 4, "0", STR_PAD_LEFT) . ".jpg";        
 
         if (file_exists($folderThis . $where))
             return $folder . $where;

@@ -13,9 +13,11 @@
 <?php 
     
     function invalidPage($debug) {
-        if (isset($debug)) {
-            write($debug);
-        }
+        if (isset($debug)) { ?>
+            <div class="mid_content">
+            <?php write($debug); ?>
+            </div>
+        <?php }
 
         require($GLOBALS["global_params"]["root"] . "assets/script/php/footer.php");
         exit();
@@ -141,7 +143,6 @@
                                     }
                                     else
                                     {
-
                                         if (feedback["error"] == "token_error")
                                         {
                                             // normalement on reload cette page avec le message en post
@@ -182,6 +183,15 @@
                                         lastUpdate = feedback["last"];
                                         messagesArea.innerHTML = messagesArea.innerHTML + feedback["html"];
                                     }
+
+                                    if (feedback["error"] == "token_error")
+                                    {
+                                        // normalement on reload cette page avec le message en post
+                                        // en attendant de trouver coment faire un post en js
+                                        // je reload juste la page
+
+                                        window.open(window.location.href, "_self");
+                                    }
                                 }
                             
                             messagesArea.scrollTop = messagesArea.scrollHeight;
@@ -198,6 +208,8 @@
 
 ?>
 <!-- ------------------------------------------ -->
+</br>
+
 <?php
 
     if ($private) { // check private friend   
@@ -262,6 +274,5 @@
     }
 
 ?>
-
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
