@@ -38,6 +38,14 @@ if(isset($_SESSION["admin"]) && $_SESSION["admin"] == "0"){
 
 
 $reported_post = $connexion->query("SELECT * FROM posts WHERE reported=\"1\" ORDER BY reportnum DESC;");
+
+if ($reported_post->num_rows==0)
+{ ?>
+    <div class="mid_content">
+        <p>C'est vide par ici.</p>
+    </div>
+<?php }
+
 while($report_post=$reported_post->fetch_assoc()) {
 
     $like_query =

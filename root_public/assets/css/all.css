@@ -2,6 +2,7 @@
 
 *{
     text-decoration: none;
+    word-break: break-all;
 }
 
 /* width */

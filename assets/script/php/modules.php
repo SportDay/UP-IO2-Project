@@ -631,15 +631,26 @@ function profile_bloc($profile, $friend = null){
                 <span class="profile_espece"   >Espece: <?= htmlentities($profile["specie"])?></span>
                 <span class="profile_classe"   >Classe: <?= htmlentities($profile["class"])?></span>
                 <span class="profile_nlikes"   >Likes: <?= htmlentities($profile["likes"])?></span>
-                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #41bb41;" onclick=''>Liker la page</button>
+                <?php
+                if(isset($_SESSION["id"]) && $_SESSION["id"] === $profile["id"] || !isset($_SESSION["id"])){
+                ?>
+                    <div style="grid-area: btn_friend_porfile_add;"></div>
+                    <?php
+                }else{
+                    ?>
+
+                    <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #41bb41;" onclick=''>Liker la page</button>
+                    <?php
+                }
+                ?>
             </div>
         </div>
             <?php
             if(isset($_SESSION["id"]) && $_SESSION["id"] === $profile["id"]){
                 ?>
                     <div class="desc_container">
-                        <textarea id="description" class="post_add" name="desc" style="font-size: 18px;" placeholder="<?= trim(htmlentities($profile["description"]))?>" rows="2" maxlength="50"></textarea><br>
-                        <button class="submit_add" onclick='updateDesc(<?= json_encode($profile['description'])?>);'>Changer</button>
+                        <textarea id="description" class="post_add" name="desc" style="font-size: 18px;" placeholder="<?= htmlentities(trim($profile["description"]))?>" rows="2" maxlength="50"></textarea><br>
+                        <button class="submit_add" onclick='updateDesc();'>Changer</button>
                     </div>
                     <div id="container_add">
                         <textarea id="post_content" class="post_add" name="post_content" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
@@ -664,12 +675,11 @@ function profile_bloc($profile, $friend = null){
 function profile_js_bloc($me) {
 
             ?> <script>
-                function updateDesc(old_desc) {
+                function updateDesc() {
                     let textZone = document.getElementById("description");
 
                     let data = new FormData();
                     data.append("user_id", <?= $_SESSION["id"] ?>);
-                    data.append("old_desc", old_desc);
                     data.append("new_desc", textZone.value);
                     data.append("update_desc", "<?= $_SESSION["update_desc"] = randomString()?>");
 

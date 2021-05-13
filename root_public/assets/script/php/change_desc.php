@@ -32,14 +32,7 @@ if (
     ]); exit();
 }
 
-if (!isset($_POST["user_id"]) || !isset($_POST["old_desc"]) || !isset($_POST["new_desc"])) {
-    echo json_encode([
-        "success" => false,
-        "error"   => "Requête incorrecte."
-    ]); exit();
-}
-
-if(($_POST["old_desc"] === $_POST["new_desc"]) || $_POST["new_desc"] === "" || strlen($_POST["new_desc"]) >= 50){
+if (!isset($_POST["user_id"]) || !isset($_POST["new_desc"])) {
     echo json_encode([
         "success" => false,
         "error"   => "Requête incorrecte."
@@ -61,6 +54,16 @@ if (!$connexion) {
     ]); exit();
 }
 
+$old_desc = $connexion->query("SELECT description FROM users WHERE id=\"" . $connexion->real_escape_string($_POST["user_id"]) . "\";")->fetch_assoc();
+
+if(($old_desc["description"] === $_POST["new_desc"]) || $_POST["new_desc"] === "" || strlen($_POST["new_desc"]) > 50){
+    echo json_encode([
+        "success" => false,
+        "error"   => "Requête incorrecte."
+    ]); exit();
+}
+
+
 ////////////////////////////////////////////////////////////////////
 
 $connexion->query(
@@ -71,7 +74,8 @@ $connexion->query(
 ////////////////////////////////////////////////////////////////////
 
 echo json_encode([
-    "success" => true
+    "success" => true,
+    "test" => $old_desc
 ]);
 
 mysqli_close($connexion);
