@@ -27,7 +27,7 @@ CREATE TABLE `users` (
     `cookie_id`     varchar(32)     DEFAULT NULL,
 
     `username`      varchar(32)     DEFAULT NULL,
-    `password`      varchar(128)    DEFAULT NULL, -- 128 POUR base 16
+    `password`      varchar(255)    DEFAULT NULL, -- 255 au lieu de 60 en cas d'evolution de la fonction password_hash
     `creation_date` INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
 
     `last_join`     INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
@@ -72,8 +72,6 @@ CREATE TABLE pages_liked (
 CREATE TABLE `posts` (
     `id`            bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id`       bigint UNSIGNED NOT NULL,
-
-    `post_id`       varchar(128)    NOT NULL, -- Pour ne pas exposer l'id de message
 
     `public_image`  INT             DEFAULT 0,
     `public_name`   varchar(32)     DEFAULT NULL,

@@ -10,11 +10,13 @@
     // ACTUALISATION DE LA SESSION (s'execute avant l'execution de chaque page)
 
     function simple_disconnect () { // reset de session
+        
         /*
         session_unset();
         session_destroy();
         session_start();
         */
+
         $_SESSION["connected"] = false;
         $_SESSION["admin"]     = false;
     }
@@ -122,53 +124,53 @@
     // SUPPRESSION DES DONNEES
 
     function removeAccount($currentAccount=TRUE, $id=0) {
-    if ($currentAccount) $id = $_SESSION["id"];
+        if ($currentAccount) $id = $_SESSION["id"];
 
-    if (!( ($error = removePublicPage($currentAccount, $id)) === FALSE))
-        return $error;
+        if (!( ($error = removePublicPage($currentAccount, $id)) === FALSE))
+            return $error;
 
-    //////////////
-    $connexion = mysqli_connect (
-        $GLOBALS["DB_URL"],
-        $GLOBALS["DB_ACCOUNT"],
-        $GLOBALS["DB_PASSWORD"],
-        $GLOBALS["DB_NAME"]
-    );
-    if (!$connexion) {
-        return "Can't connect to database.";
+        //////////////
+        $connexion = mysqli_connect (
+            $GLOBALS["DB_URL"],
+            $GLOBALS["DB_ACCOUNT"],
+            $GLOBALS["DB_PASSWORD"],
+            $GLOBALS["DB_NAME"]
+        );
+        if (!$connexion) {
+            return "Can't connect to database.";
+        }
+        mysqli_set_charset($connexion, "utf8");
+
+
+        // supprimer: friends direct_messages
+        $connexion->query( // pas besoin de verifier que c'est privé
+            "DELETE FROM `friends` WHERE `user_id_0`=" . $id . " OR `user_id_1`=" . $id . " ;"
+        );
+        $connexion->query(
+            "DELETE FROM `direct_messages` WHERE `from_id`=" . $id . " OR `to_id`=" . $id . " ;"
+        );
+
+        // supprimer le compte: (users)
+        $connexion->query(
+            "DELETE FROM `users` WHERE `id`=" . $id . " ;"
+        );
+
+        if ($currentAccount)
+        {
+            // mettre fin aux cookies/session
+            setcookie("cookie_id",      "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
+            setcookie("cookie_pass",    "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
+            setcookie("cookie_expire",  "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
+
+            session_unset();
+            session_destroy();
+            session_start();
+
+        }
+
+        mysqli_close($connexion);
+        return false;
     }
-    mysqli_set_charset($connexion, "utf8");
-
-
-    // supprimer: friends direct_messages
-    $connexion->query( // pas besoin de verifier que c'est privé
-        "DELETE FROM `friends` WHERE `user_id_0`=" . $id . " OR `user_id_1`=" . $id . " ;"
-    );
-    $connexion->query(
-        "DELETE FROM `direct_messages` WHERE `from_id`=" . $id . " OR `to_id`=" . $id . " ;"
-    );
-
-    // supprimer le compte: (users)
-    $connexion->query(
-        "DELETE FROM `users` WHERE `id`=" . $id . " ;"
-    );
-
-    if ($currentAccount)
-    {
-        // mettre fin aux cookies/session
-        setcookie("cookie_id",      "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
-        setcookie("cookie_pass",    "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
-        setcookie("cookie_expire",  "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
-
-        session_unset();
-        session_destroy();
-        session_start();
-
-    }
-
-    mysqli_close($connexion);
-    return false;
-}
 
     function removePublicPage($currentAccount=TRUE, $id=0) {
         if ($currentAccount) $id = $_SESSION["id"];
@@ -198,7 +200,11 @@
 
         // pages_liked | parents : | enfants : reports et likes
         $connexion->query(
-            "DELETE FROM `pages_liked` WHERE `user_id`=" . $id . " ;"
+            "DELETE FROM `pages_liked` WHERE (".
+            "`user_id`=" . $id .
+            " OR " .
+            "`like_id`=" . $id .
+            " );"
         );
 
         // posts | parents : | enfants : reports et likes
@@ -221,6 +227,7 @@
         // desactiver la page publique (dans users)
         $connexion->query(
             "UPDATE users SET " .
+            "likes=0," .
             "enable_public=FALSE, " .
             "memory_public=TRUE  " .
             // etant donné qu'on ne peut pas reroll n'importe quand,

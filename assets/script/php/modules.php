@@ -309,8 +309,47 @@ function menu_when_connected () {
 
 ////////////////////////////////////////////////
 // BARRE DE RECHERCHE
-function search($query) { // WIP
-    return [ 1, 2, 3, 4 ]; // retourner une liste d'id de message
+
+function search_bar(){
+    ?>
+
+    <div id="search_container">
+        <form action=<?= $GLOBALS["global_params"]["root_public"]."/page/public/search.php"?> method="get">
+            <div class="search_grid">
+                <input class="search_input" type="search" autocomplete="off" placeholder="Recherche" name="search" required >
+                <button id="btn_search" class="btn_search btn_button_btn" onclick="">
+                    <img id="img_search" class="img_search" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/search.png"?>">
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <?php 
+}
+
+function search_profil($profile){
+    ?>
+    
+    <div class = "mid_content" style="text-align: initial;">
+        <div id = "profile">
+            <a href= "<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($profile["public_name"]) ?>">
+                <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
+            </a>
+            <div class="info_profile">
+                <span class="profile_nickname" >Nom: <?= htmlentities($profile["public_name"])?></span>
+                <span class="profile_titre"    >Titre: <?= htmlentities($profile["title"])?></span>
+                <span class="profile_espece"   >Espece: <?= htmlentities($profile["specie"])?></span>
+                <span class="profile_classe"   >Classe: <?= htmlentities($profile["class"])?></span>
+                <span class="profile_nlikes"   >Likes: <?= htmlentities($profile["likes"])?></span>
+                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #41bb41;" onclick=''>Liker la page</button>
+            </div>
+        </div>
+        <div class="container_desc border" style="border-radius: 15px">
+            <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= htmlentities(trim($profile["description"]))?></p>
+        </div>
+
+    </div>
+    <?php
 }
 
 ////////////////////////////////////////////////
@@ -495,6 +534,87 @@ function friend_js_bloc() {
         }
     </script><?php
 }
+
+////////////////////////////////////////////////
+// MATCHS
+
+function match_bloc($friend, $specific_root=FALSE, $root_public="") { // necessite un friend_js_bloc sur la même page
+
+    if (!$specific_root)
+        $root_public = $GLOBALS["global_params"]["root_public"];
+
+    ?>
+
+        <div id="friend_bloc_<?=htmlentities($friend["public_name"])?>" class="mid_content" style="text-align: initial;">
+            <div id = "profile">
+
+
+                <?php if($friend["enable_public"]) { ?>
+                <a href="<?=$root_public?>page/public/public_page.php?user=<?=urlencode($friend["public_name"])?>">
+                    <img class="profile_img_profile" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
+                </a>
+                <?php } else { ?>
+                    <img class="profile_img_profile" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
+                <?php } ?>
+
+
+                <div class="info_profile">
+                    
+                    <span class="profile_private_name">Nom: <?=   htmlentities($friend["public_name"])?></span>
+                    <span class="profile_public_name" >Titre: <?= htmlentities($friend["title"])?></span>
+                    <span class="profile_specie"      >Espece: <?=htmlentities($friend["specie"])?></span>
+                    <span class="profile_class"       >Classe: <?=htmlentities($friend["class"])?></span>
+                    <span></span>
+
+                    <div class="user_menu">
+                        <button class="btn_menu_user">&#8226;&#8226;&#8226;</button>
+                        <div class="user_menu_content border">
+                            <button class="btn_ignr_user" class="btn_ignr_user" onclick='removeMatch(<?=json_encode($friend["public_name"])?>);'>Supprimer</button>
+                        </div>
+                    </div>
+                    <div class="friend_porfile_espace"></div>
+                    <a href="dm.php?private=false&user=<?=urlencode($friend["public_name"])?>">
+                        <img class="msg_img" width="32" height="32" src="<?=$root_public?>assets/image/msg.png">
+                    </a>
+                </div>
+
+
+            </div>
+        </div>
+    <?php
+
+}
+
+function match_js_bloc() {
+    ?> <script>
+        function removeMatch(username) {
+            let friendBloc = document.getElementById("friend_bloc_"+username);
+
+            let data = new FormData();
+            data.append("username", username);
+            data.append("toggle_like", "<?= $_SESSION["toggle_like"] = randomString() ?>");
+
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST',
+            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/toggle_like.php");
+            xmlhttp.send( data );
+
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4)   // request done
+                    if (xmlhttp.status === 200) // successful return
+                    {
+                        //alert(xmlhttp.responseText);
+                        const feedback = JSON.parse(xmlhttp.responseText);
+
+                        if (feedback["success"])
+                            friendBloc.parentNode.removeChild(friendBloc);
+
+                    }
+            }
+        }
+    </script><?php
+}
+
 
 ////////////////////////////////////////////////
 // PROFILES BLOC
@@ -1008,45 +1128,6 @@ function post_reported_js_bloc(){?>
 
     </script>
 
-    <?php
-}
-
-function search_bar(){?>
-
-        <div id="search_container">
-            <form action="/page/public/search.php" method="get">
-                <div class="search_grid">
-                    <input class="search_input" type="search" autocomplete="off" placeholder="Recherche" name="search" required >
-                    <button id="btn_search" class="btn_search btn_button_btn" onclick="">
-                        <img id="img_search" class="img_search" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/search.png"?>">
-                    </button>
-                </div>
-            </form>
-        </div>
-
-<?php }
-
-function search_profil($profile){
-    ?>
-    <div class = "mid_content" style="text-align: initial;">
-        <div id = "profile">
-            <a href= "<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($profile["public_name"]) ?>">
-                <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
-            </a>
-            <div class="info_profile">
-                <span class="profile_nickname" >Nom: <?= htmlentities($profile["public_name"])?></span>
-                <span class="profile_titre"    >Titre: <?= htmlentities($profile["title"])?></span>
-                <span class="profile_espece"   >Espece: <?= htmlentities($profile["specie"])?></span>
-                <span class="profile_classe"   >Classe: <?= htmlentities($profile["class"])?></span>
-                <span class="profile_nlikes"   >Likes: <?= htmlentities($profile["likes"])?></span>
-                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #41bb41;" onclick=''>Liker la page</button>
-            </div>
-        </div>
-        <div class="container_desc border" style="border-radius: 15px">
-            <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= htmlentities(trim($profile["description"]))?></p>
-        </div>
-
-    </div>
     <?php
 }
 
