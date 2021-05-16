@@ -32,7 +32,7 @@ if (!isset($_POST["new_desc"])) {
     ]); exit();
 }
 
-if( $_POST["new_desc"] === "" || strlen($_POST["new_desc"]) >= 50) {
+if( $_POST["new_desc"] === "") {
     echo json_encode([
         "success" => false,
         "error"   => "Requête incorrecte."
