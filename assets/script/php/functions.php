@@ -105,7 +105,7 @@
 
     function generateRandomPublicData() {
         $roles = json_decode( file_get_contents(
-            $GLOBALS["global_params"]["root_public"] . "assets/rp_data/procedural_role.json"
+            $GLOBALS["global_params"]["root"] . "assets/rp_data/procedural_role.json"
         , true) );
 
         /////////////////////////////////////
@@ -197,7 +197,7 @@
     function inspirate($class="-1")
     {
         $messages = json_decode(file_get_contents(
-            $GLOBALS["global_params"]["root_public"] . "assets/rp_data/procedural_phrase.json"
+            $GLOBALS["global_params"]["root"] . "assets/rp_data/procedural_phrase.json"
             , true));
 
         /////////////////////////////////////
