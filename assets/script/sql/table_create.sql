@@ -57,9 +57,11 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE pages_liked (
-    `id`           bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id`      bigint UNSIGNED NOT NULL,
-    `like_id`      bigint UNSIGNED NOT NULL,
+    `id`           bigint   UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id`      bigint   UNSIGNED NOT NULL,
+    `like_id`      bigint   UNSIGNED NOT NULL,
+
+    `priority`     BOOLEAN  DEFAULT TRUE,
 
     PRIMARY KEY(id),
     FOREIGN KEY (`user_id`) REFERENCES users(`id`),

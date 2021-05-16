@@ -63,9 +63,9 @@
 
         }
         else {
-            // de base ça devait annuler le potentiel like de l'autre personne
-            // mais entant donné qu'on se sert des page_liked aussi pour le système de follow
-            // dislike un profile va juste faire qu'on ne le like pas
+            $connexion->query(
+                "UPDATE pages_liked SET priority=FALSE WHERE user_id=".$_SESSION["like_cache_id"]." AND like_id=".$_SESSION["id"]
+            );
         }
     }
 
@@ -75,7 +75,7 @@
         SELECT *
         FROM
         (
-            SELECT user_id FROM pages_liked WHERE like_id=".$_SESSION["id"]." AND user_id NOT IN (
+            SELECT user_id FROM pages_liked WHERE priority AND like_id=".$_SESSION["id"]." AND user_id NOT IN (
                 SELECT like_id FROM pages_liked WHERE (user_id=".$_SESSION["id"].")
             )
         ) as t1
@@ -87,7 +87,7 @@
         "
     );
 
-    if ($new_user->num_rows == 0) // si on ne trouve personne ressayer mais avec un profile qui ne nous a pas liké
+    if ($new_user->num_rows == 0 || rand(0,3)!=0) // mélangé avec des profiles classique
         $new_user = $connexion->query(
             "SELECT * FROM users WHERE (".
             "    enable_public AND (NOT id=".$_SESSION["id"].") AND id NOT IN (".
