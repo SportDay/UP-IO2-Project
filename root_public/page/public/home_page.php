@@ -3,19 +3,18 @@
   "root_public" => "../../",
   "title"       => "Accueil",
   "css"         => "all.css",
+  "css_add"     => ["posts.css"],
   "redirect"    => FALSE
 ];?>
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
-<?php // FUNCTIONS (specific à cette page)
+<?php search_bar(); ?>
 
-?>
-<!-- ------------------------------------------ -->
 <div class = "mid_content">
 
-  <section id="">
+  <section>
     <h1>Harry Potter | Role Play</h1>
     <?php separator(); ?>
     <p>

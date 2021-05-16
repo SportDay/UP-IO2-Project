@@ -8,8 +8,8 @@
 
 */
 
-require($global_params["root"] . "assets/script/php/security.php");
-require($global_params["root"] . "assets/script/php/modules.php");
+require_once($global_params["root"] . "assets/script/php/security.php");
+require_once($global_params["root"] . "assets/script/php/modules.php");
 
 // IMPERATIF POUR LE FONCTIONNEMENT DU HEADER
 if (!isset($global_params["root_public"]) || !isset($global_params["root"]))
@@ -33,7 +33,7 @@ Liste des cookies :
 /*///////////////////////////////////////////
 // CONSTANTES :
 
-require($global_params["root"] . "assets/script/php/constants.php");
+require_once($global_params["root"] . "assets/script/php/constants.php");
 
 //////////////////////
 
@@ -55,8 +55,6 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
     redirectNotAdmin();
 }
 
-date_default_timezone_set("Etc/GMT-2");
-
 ?>
 
 
@@ -66,7 +64,7 @@ date_default_timezone_set("Etc/GMT-2");
 <head>
 
     <meta charset="utf-8">
-    <link rel="icon" href=<?php echo $global_params["root_public"] . "/assets/image/logo-rond.ico" ; ?> />
+    <link rel="icon" href=<?php echo $global_params["root_public"] . "assets/image/logo-rond.ico" ; ?> />
 
     <title>
         <?php
@@ -86,6 +84,7 @@ date_default_timezone_set("Etc/GMT-2");
     if (isset($global_params["css"])) echo $global_params["css"];
     else                              echo "all.css";
     ?>>
+    <link rel="stylesheet" type="text/css" href="<?= $global_params["root_public"]."assets/css/search.css"?>">
     <!-- additionnal css and style -->
     <?php
     if (!$_SESSION["connected"])
@@ -166,4 +165,3 @@ date_default_timezone_set("Etc/GMT-2");
 
 <div id = "mid_panel">
     <div id = "mid_container">
-        <div style="text-align: center; margin: 7em auto 1em;"></div>

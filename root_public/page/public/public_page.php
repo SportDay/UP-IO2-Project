@@ -6,85 +6,81 @@
   "css_add"     => ["public_page.css", "posts.css"],
   "redirect"    => FALSE // J'hésite à mettre ça en true
 ];?>
-<!-- ------------------------------------------ -->
-<?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
-<?php require($global_params["root"] . "assets/script/php/header.php"); ?>
-<!-- ------------------------------------------ -->
 
-<!-- ------------------------------------------ -->
-    <!-- Faire des focntions qui verifie si la page a partient a l'utilisateur -->
-    <?php // FUNCTIONS (specific à cette page)
+<?php // verification de l'existence de la page
 
+    require_once($global_params["root"] . "assets/script/php/constants.php");
+    //////////////////////////////////////////////////////////
+    // connexion sql
     $connexion = mysqli_connect (
-    $db_conf["DB_URL"],
-    $db_conf["DB_ACCOUNT"],
-    $db_conf["DB_PASSWORD"],
-    $db_conf["DB_NAME"]
-    );
+        $db_conf["DB_URL"],
+        $db_conf["DB_ACCOUNT"],
+        $db_conf["DB_PASSWORD"],
+        $db_conf["DB_NAME"]
+        );
 
     if (!$connexion) {
         echo "connection_error"; exit();
     }
 
+    //////////////////////////////////////////////////////////
+    // generation page en fonction du get
+
     if(!isset($_GET["user"])){
-        ?>
-            <script>window.location.href = "<?="home_page.php"?>";</script>
-        <?php
+        header("Location: " . $global_params["root_public"] ."page/public/home_page.php");
+        exit();
     }
 
     $user_query = "SELECT * FROM users WHERE public_name=\"". $connexion->real_escape_string($_GET["user"]) . "\" AND enable_public;";
-    $me = $connexion->query($user_query);
+    $page_user = $connexion->query($user_query);
 
-    if($me->num_rows == 0){
-        ?>
-        <script>window.location.href = "<?="home_page.php"?>";</script>
-        <?php
+    if($page_user->num_rows == 0)
+    {
+        header("Location: " . $global_params["root_public"] ."page/public/home_page.php");
+        exit();
     }
 
-    $me = $me->fetch_assoc();
+?>
 
-    if(isset($_SESSION["id"]) && $me["id"] !== $_SESSION["id"]) {
-        $friend = false;
-        $friend1_query = "SELECT * FROM friends WHERE user_id_0=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND user_id_1=\"" . $connexion->real_escape_string($me["id"]) . "\";";
-        $friend2_query = "SELECT * FROM friends WHERE user_id_1=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND user_id_0=\"" . $connexion->real_escape_string($me["id"]) . "\";";
-        if (($connexion->query($friend1_query)->num_rows != 0) || ($connexion->query($friend2_query)->num_rows != 0)) {
-            $friend = true;
-        }
-        profile_bloc($me, $friend);
-    }else{
-        profile_bloc($me);
-    }
+<!-- ------------------------------------------ -->
+<?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
+<?php require($global_params["root"] . "assets/script/php/header.php"); ?>
+<!-- ------------------------------------------ -->
+<?php search_bar(); ?>
+<!-- ------------------------------------------ -->
+<?php
 
+    //////////////////
+    // generation du bloc profile 
+    profile_bloc($page_user = $page_user->fetch_assoc());
 
-    $post_query = "SELECT * FROM posts WHERE user_id=\"". $connexion->real_escape_string(trim(htmlentities($me["id"]))) . "\" ORDER BY creation_date DESC;";
-    $my_posts = $connexion->query($post_query);
-    while($my_post=$my_posts->fetch_assoc()) {
-        $like = false;
-        $reported = false;
-        if (isset($_SESSION["id"])){
-        $like_query = "SELECT * FROM likes WHERE user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND message_id=\"" . $connexion->real_escape_string($my_post["id"]) . "\";";
-        if ($connexion->query($like_query)->num_rows != 0) {
-            $like = true;
-        }
+    //////////////////
+    // ajout des posts
 
-        $report_query = "SELECT * FROM reports WHERE user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) . "\" AND message_id=\"" . $connexion->real_escape_string($my_post["id"]) . "\";";
-        if ($connexion->query($report_query)->num_rows != 0) {
-            $reported = true;
-        }
-            post_bloc($my_post, $like, $reported, true);
-        }else{
-            post_bloc($my_post, $like, $reported, false);
-        }
-    }
+    $posts = $connexion->query(
+        "SELECT * FROM posts WHERE user_id=".$page_user["id"]." ORDER BY creation_date DESC;"
+    );
+
+    if ($posts->num_rows==0)
+    { ?>
+        <div class="mid_content">
+            <p>Aucun post.</p>
+        </div>
+    <?php }
+
+    while($post=$posts->fetch_assoc())
+        post_bloc($post);
+    
+    /////////////////////////////
+    // fonctions en javascript
 
     mysqli_close($connexion);
-    if(isset($_SESSION["id"])){
-        profile_js_bloc($me);
+    if($_SESSION["connected"]){
+        profile_js_bloc($page_user);
         post_js_bloc();
         post_js_add();
     }
+
 ?>
-
-
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>

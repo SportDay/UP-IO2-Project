@@ -60,16 +60,6 @@
     padding: 20px 0;
 }
 
-.search_input{
-    width: 100%;
-    min-width: 500px;
-}
-
-#search_container{
-    margin-right: 20px;
-    margin-left: 20px;
-}
-
 #add_friend_debug{
     color: white;
     margin-top: 11px;
@@ -88,6 +78,8 @@
     grid-template-columns: auto 125px;
     grid-template-rows: auto;
     gap: 0px 20px;
+    margin-left:    20px;
+    margin-right:   20px;
     grid-template-areas:
     "search_request_friend_bar send_request_friend_bar";
 }

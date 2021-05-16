@@ -27,7 +27,7 @@ CREATE TABLE `users` (
     `cookie_id`     varchar(32)     DEFAULT NULL,
 
     `username`      varchar(32)     DEFAULT NULL,
-    `password`      varchar(128)    DEFAULT NULL, -- 128 POUR base 16
+    `password`      varchar(255)    DEFAULT NULL, -- 255 au lieu de 60 en cas d'evolution de la fonction password_hash
     `creation_date` INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
 
     `last_join`     INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
@@ -57,13 +57,15 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE pages_liked (
-    `id`           bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user_id`      bigint UNSIGNED NOT NULL,
-    `like_id`      bigint UNSIGNED NOT NULL,
+    `id`           bigint   UNSIGNED NOT NULL AUTO_INCREMENT,
+    `user_id`      bigint   UNSIGNED NOT NULL,
+    `like_id`      bigint   UNSIGNED NOT NULL,
+
+    `priority`     BOOLEAN  DEFAULT TRUE,
 
     PRIMARY KEY(id),
-    FOREIGN KEY (`user_id`) REFERENCES users(`id`),
-    FOREIGN KEY (`like_id`) REFERENCES users(`id`)
+    FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`like_id`) REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- ##########################################################
@@ -73,12 +75,9 @@ CREATE TABLE `posts` (
     `id`            bigint UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id`       bigint UNSIGNED NOT NULL,
 
-    `post_id`       varchar(128)    NOT NULL, -- Pour ne pas exposer l'id de message
-
     `public_image`  INT             DEFAULT 0,
     `public_name`   varchar(32)     DEFAULT NULL,
     
-    `reported`      BOOLEAN         DEFAULT FALSE,
     `reportnum`     INT             DEFAULT 0,
     `last_report`   INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
     `creation_date` INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
@@ -88,7 +87,7 @@ CREATE TABLE `posts` (
     `response_id`   bigint UNSIGNED DEFAULT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id)      REFERENCES users(id),
+    FOREIGN KEY (user_id)      REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (response_id)  REFERENCES posts(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
@@ -98,8 +97,8 @@ CREATE TABLE likes (
     `user_id`        bigint UNSIGNED NOT NULL,
 
     PRIMARY KEY(id),
-    FOREIGN KEY (`message_id`) REFERENCES posts(`id`),
-    FOREIGN KEY (`user_id`)    REFERENCES users(`id`)
+    FOREIGN KEY (`message_id`) REFERENCES posts(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`)    REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE reports (
@@ -108,8 +107,8 @@ CREATE TABLE reports (
     `user_id`        bigint UNSIGNED NOT NULL,
 
     PRIMARY KEY(id),
-    FOREIGN KEY (`message_id`) REFERENCES posts(`id`),
-    FOREIGN KEY (`user_id`)    REFERENCES users(`id`)
+    FOREIGN KEY (`message_id`) REFERENCES posts(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`)    REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- ##########################################################
@@ -122,8 +121,8 @@ CREATE TABLE friends (
     `accepted`         BOOLEAN         DEFAULT FALSE,
 
     PRIMARY KEY(id),
-    FOREIGN KEY (`user_id_1`)   REFERENCES users(`id`),
-    FOREIGN KEY (`user_id_0`)   REFERENCES users(`id`)
+    FOREIGN KEY (`user_id_1`)   REFERENCES users(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id_0`)   REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- ##########################################################
@@ -138,6 +137,6 @@ CREATE TABLE direct_messages (
     `private`       BOOLEAN         DEFAULT TRUE, -- Pour differencier les messages de match et d'amis
 
     PRIMARY KEY(id),
-    FOREIGN KEY(from_id) REFERENCES users(id),
-    FOREIGN KEY(to_id)   REFERENCES users(id)
+    FOREIGN KEY(from_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(to_id)   REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;

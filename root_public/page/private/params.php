@@ -27,7 +27,7 @@
         
         <?php 
             if ($_SESSION["banned"]) { ?>
-                <p>Vous êtes bannie de la partie publique du site: <?= date('H:i d/m/Y', htmlentities(trim($_SESSION["banned_to"]))); ?></p>
+                <p>Vous êtes bannie de la partie publique du site jusqu'aux: <?= date('H:i d/m/Y', htmlentities(trim($_SESSION["banned_to"]))); ?></p>
             <?php } else {
 
                 if ($_SESSION["enable_public"]) { ?>
@@ -155,7 +155,7 @@
             if (xmlhttp.readyState === 4)
                 if (xmlhttp.status === 200)
                 {
-                    //alert(xmlhttp.responseText);
+                    alert(xmlhttp.responseText);
                     const feedback = JSON.parse(xmlhttp.responseText);
 
                     if (feedback["success"])

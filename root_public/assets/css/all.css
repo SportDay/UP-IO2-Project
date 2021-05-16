@@ -2,6 +2,7 @@
 
 *{
     text-decoration: none;
+    word-break: break-all;
 }
 
 /* width */
@@ -25,7 +26,21 @@
     background: #555;
 }
 
+.mail_title{
+    margin-top: 0;
+    margin-bottom: 10px;
+}
 
+.copy_title{
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.mail_contact{
+    text-decoration: none;
+    color: black;
+
+}
 
 body{
     background-color: #14141a;
@@ -141,12 +156,16 @@ body{
     display: flex;
     flex-direction: column;
     height: 100vh;
+    margin-top: 7em auto 1em;
+    
 }
 
 #mid_container{
     flex: 1 0 auto;
     margin-left: 20px;
     margin-right: 20px;
+    text-align: center; 
+    padding-top: 8em;
 }
 #down_panel {
     background-color: #ffc38a;
