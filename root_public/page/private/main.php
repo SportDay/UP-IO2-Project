@@ -11,6 +11,10 @@
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
 <?php
+    
+    search_bar();
+
+    ///////////////////////
 
     $connexion = mysqli_connect (
         $db_conf["DB_URL"],

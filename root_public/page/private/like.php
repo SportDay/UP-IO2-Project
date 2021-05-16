@@ -14,16 +14,17 @@
     <div class = "mid_content">
         <div class="img_btn_like">
             <button class="like btn_button_btn" onclick="matchChoice(true)" 
-            >Like</button>
+            >Suivre</button>
             
-            <img
+            <a href=""> <img
                 id = "image_profile"
                 class="img_profile border" 
-                width="256" height="256" 
-                src="<?= $global_params["root_public"] . "assets/profile/default.png"?>" >
+                width="128" height="128" 
+                src="<?= $global_params["root_public"] . "assets/profile/default.png"?>" 
+                > </a>
             
             <button class="dislike btn_button_btn" onclick="matchChoice(false)" 
-            >Dislike</button>
+            >Ne pas suivre</button>
         
         </div>
 
@@ -57,9 +58,43 @@
         //////////////////////////
 
         function matchChoice(isLike) {
-             
+            let data = new FormData();
+            data.append("like_token_0", pageToken);
+            data.append("like_token_1", likeToken);
+            data.append("isLike",       isLike ? "true" : "false");
 
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST',
+            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/match_choice.php");
+            xmlhttp.send( data );
 
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4)
+                    if (xmlhttp.status === 200)
+                    {
+                        //alert(xmlhttp.responseText);
+                        const feedback = JSON.parse(xmlhttp.responseText);
+                        
+                        if (feedback["success"])
+                        {
+                            otp_image           .src  = "<?=$global_params["root_public"] . "assets/profile/"?>" + feedback["image"];
+                            otp_image.parentNode.href = "<?=$global_params["root_public"] . "page/public/public_page.php?user="?>" + encodeURI(feedback["name"]);
+
+                            otp_name    .innerHTML  = "Nom: "    + feedback["name"];
+                            otp_title   .innerHTML  = "Titre: "  + feedback["title"];
+                            otp_specie  .innerHTML  = "Espece: " + feedback["specie"];
+                            otp_class   .innerHTML  = "Classe: " + feedback["class"];
+                            otp_desc    .innerHTML  = feedback["desc"];
+
+                            likeToken = feedback["like_token_1"];
+                        }
+                        else
+                        {
+                            if (feedback["error"] == "token_error")
+                                window.open(window.location.href, "_self");
+                        }
+                    }
+            }
         }
 
     </script>

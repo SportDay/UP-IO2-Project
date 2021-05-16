@@ -165,5 +165,3 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
 
 <div id = "mid_panel">
     <div id = "mid_container">
-    
-    <?php search_bar(); ?>

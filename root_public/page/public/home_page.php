@@ -10,6 +10,8 @@
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
+<?php search_bar(); ?>
+
 <div class = "mid_content">
 
   <section>

@@ -9,7 +9,9 @@
     A noter que les scripts (javascript) prennent beaucoup de place.
     Il est à envisager de créer des fichiers .js dans root_public/assets/script/js/*.js
     Et d'y mettre tout ces scripts.
-    Pour les variables de pages, on pourrait utiliser des var qui serait set dans un <script></script> au préalable
+    Pour garder la compatibilité avec
+    les variables de pages, 
+    on pourrait utiliser des var qui serait set dans un <script></script> au préalable
 
 */
 
@@ -614,7 +616,6 @@ function match_js_bloc() {
         }
     </script><?php
 }
-
 
 ////////////////////////////////////////////////
 // PROFILES BLOC

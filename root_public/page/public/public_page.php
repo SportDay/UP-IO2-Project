@@ -10,7 +10,7 @@
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
-
+<?php search_bar(); ?>
 <!-- ------------------------------------------ -->
     <!-- Faire des focntions qui verifie si la page a partient a l'utilisateur -->
     <?php // FUNCTIONS (specific à cette page)
