@@ -1,9 +1,9 @@
 -- #########################################################
 -- POUR INITIALISER LA BASE DE DONNER (ALLEZ DANS : /public_root/init_database.php)
 
-drop database if exists reseau;
-create database reseau;
-use reseau;
+drop database if exists hrp_project;
+create database hrp_project;
+use hrp_project;
 
 -- ##########################################################
 -- CLEAN (attention à bien supprimer les parents après les enfants !!)
