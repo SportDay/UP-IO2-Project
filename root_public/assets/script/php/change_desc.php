@@ -7,7 +7,6 @@ $global_params = [
 
 require_once($global_params["root"] . "assets/script/php/constants.php");
 require_once($global_params["root"] . "assets/script/php/functions.php");
-require_once($global_params["root"] . "assets/script/php/security.php");
 
 ////////////////////////////////////////////////////////////////////
 // ETABLISSEMENT DE LA CONNECTION
@@ -21,7 +20,7 @@ if (
 {
     echo json_encode([
         "success" => false,
-        "error"   => "token_error."
+        "error"   => "token_error"
     ]); exit();
 }
 

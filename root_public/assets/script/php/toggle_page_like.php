@@ -16,11 +16,6 @@ session_start();
 if (
     !isset($_POST["toggle_like"]) || !isset($_SESSION["toggle_like"]) ||
           ($_POST["toggle_like"]  !=        $_SESSION["toggle_like"])
-
-    /*
-         quelqu'un qui veut utiliser ce fichier doit obligatoirement
-         recevoir un code attribué sur la page
-    */
 )
 {
     echo json_encode([
@@ -51,7 +46,9 @@ if (!$connexion) {
 }
 ////////////////////////////////////////////////////////////////////
 
-$profile    = $connexion->query("SELECT id, likes FROM users WHERE public_name=\"".$connexion->real_escape_string($_POST["public_name"])."\"");
+$profile    = $connexion->query(
+    "SELECT id, likes FROM users WHERE public_name=\"".$connexion->real_escape_string($_POST["public_name"])."\""
+);
 if ($profile->num_rows==0) {
     echo json_encode([
         "success" => false,

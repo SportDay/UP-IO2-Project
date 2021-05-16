@@ -15,12 +15,12 @@ session_start();
 
 if (
     !isset($_POST["report_post"]) || !isset($_SESSION["report_post"]) ||
-    ($_POST["report_post"]  !=        $_SESSION["report_post"])
+          ($_POST["report_post"]  !=        $_SESSION["report_post"])
 )
 {
     echo json_encode([
         "success" => false,
-        "error"   => "Requête incorrecte."
+        "error"   => "token_error"
     ]); exit();
 }
 
@@ -51,7 +51,14 @@ if (!$connexion) {
 // on recupere le post
 $post = $connexion->query(
     "SELECT * FROM posts WHERE id=\"".$connexion->real_escape_string($_POST["post_id"])."\";"
-)->fetch_assoc();
+);
+if ($post->num_rows==0)
+{
+    echo json_encode([
+        "success" => false,
+        "error"   => "Base de donnée hors d'accès."
+    ]); exit();
+} $post = $post->fetch_assoc();
 
 // on verifie si on on l'a déjà report le post
 $reported = $connexion->query(

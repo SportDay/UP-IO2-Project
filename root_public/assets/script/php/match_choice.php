@@ -114,7 +114,7 @@
             "title"         => "",
             "specie"        => "",
             "class"         => "",
-            "public_image"  => 0,//getImagePath(0, false, "", true),
+            "public_image"  => -1,//getImagePath(0, false, "", true),
             "description"   => "Personne à l'horizon. Veuillez réessayer plus tard.",
             "like_token_1"  => "none"
         ];

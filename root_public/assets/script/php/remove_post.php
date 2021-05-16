@@ -17,17 +17,12 @@ session_start();
 
 if (
     !isset($_POST["remove_post"]) || !isset($_SESSION["remove_post"]) ||
-    ($_POST["remove_post"]  !=        $_SESSION["remove_post"])
-
-    /*
-         quelqu'un qui veut utiliser ce fichier doit obligatoirement
-         recevoir un code attribué sur la page
-    */
+          ($_POST["remove_post"]  !=        $_SESSION["remove_post"])
 )
 {
     echo json_encode([
         "success" => false,
-        "error"   => "Requête incorrecte."
+        "error"   => "token_error"
     ]); exit();
 }
 
