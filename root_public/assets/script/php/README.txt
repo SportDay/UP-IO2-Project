@@ -1,2 +1,1 @@
-Les fichiers présents sont des fichiers de redirection.
-Ils pointent vers les fonctions du site en dehors du serveur publique.
+L'ensemble des fonctions qui peuvent être appellés par requete xmlhttp (ajax).

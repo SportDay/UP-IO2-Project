@@ -1,7 +1,5 @@
 <?php
 
-// ATTENTION
-// LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
 $global_params = [
     "root"        => "../../../../",
     "root_public" => "../../../../root_public/",
@@ -9,7 +7,6 @@ $global_params = [
 
 require_once($global_params["root"] . "assets/script/php/constants.php");
 require_once($global_params["root"] . "assets/script/php/functions.php");
-require_once($global_params["root"] . "assets/script/php/security.php");
 
 ////////////////////////////////////////////////////////////////////
 // ETABLISSEMENT DE LA CONNECTION
@@ -17,17 +14,17 @@ require_once($global_params["root"] . "assets/script/php/security.php");
 session_start();
 
 if (
-    !isset($_POST["bandef"]) || !isset($_SESSION["bandef"]) &&
-          ($_POST["bandef"]  !=        $_SESSION["bandef"])
+    !isset($_POST["update_desc"]) || !isset($_SESSION["update_desc"]) ||
+          ($_POST["update_desc"]  !=        $_SESSION["update_desc"])
 )
 {
     echo json_encode([
         "success" => false,
-        "error"   => "Requête incorrecte."
+        "error"   => "token_error"
     ]); exit();
 }
 
-if (!isset($_POST["user_id"])) {
+if (!isset($_POST["new_desc"])) {
     echo json_encode([
         "success" => false,
         "error"   => "Requête incorrecte."
@@ -51,16 +48,9 @@ if (!$connexion) {
 
 ////////////////////////////////////////////////////////////////////
 
-$id = $connexion->query("SELECT id FROM users WHERE id=\"".$connexion->real_escape_string($_POST["user_id"])."\"");
-
-if ($id->num_rows == 0) {
-    echo json_encode([
-        "success" => false,
-        "error"   => "Utilisateur incorrect."
-    ]); exit();
-}
-
-removeAccount(false, $id->fetch_assoc()["id"]);
+$connexion->query(
+    "UPDATE users SET description = \"" . $connexion->real_escape_string($_POST["new_desc"]) . "\" WHERE id=\"" . $_SESSION["id"] . "\";"
+);
 
 ////////////////////////////////////////////////////////////////////
 

@@ -224,6 +224,4 @@
 
         return $message;
     }
-
-
 ?>

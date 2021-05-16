@@ -155,7 +155,7 @@
             if (xmlhttp.readyState === 4)
                 if (xmlhttp.status === 200)
                 {
-                    //alert(xmlhttp.responseText);
+                    alert(xmlhttp.responseText);
                     const feedback = JSON.parse(xmlhttp.responseText);
 
                     if (feedback["success"])

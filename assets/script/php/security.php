@@ -125,10 +125,7 @@
 
     function removeAccount($currentAccount=TRUE, $id=0) {
         if ($currentAccount) $id = $_SESSION["id"];
-
-        if (!( ($error = removePublicPage($currentAccount, $id)) === FALSE))
-            return $error;
-
+        
         //////////////
         $connexion = mysqli_connect (
             $GLOBALS["DB_URL"],
@@ -140,15 +137,6 @@
             return "Can't connect to database.";
         }
         mysqli_set_charset($connexion, "utf8");
-
-
-        // supprimer: friends direct_messages
-        $connexion->query( // pas besoin de verifier que c'est privé
-            "DELETE FROM `friends` WHERE `user_id_0`=" . $id . " OR `user_id_1`=" . $id . " ;"
-        );
-        $connexion->query(
-            "DELETE FROM `direct_messages` WHERE `from_id`=" . $id . " OR `to_id`=" . $id . " ;"
-        );
 
         // supprimer le compte: (users)
         $connexion->query(
@@ -199,6 +187,9 @@
         // attention, il y a un ordre de suppression
 
         // pages_liked | parents : | enfants : reports et likes
+        $olds_pages_liked = $connexion->query("SELECT like_id as id FROM pages_liked WHERE user_id=".$id);
+        while ($old = $olds_pages_liked->fetch_assoc()) 
+            $connexion->query("UPDATE users SET likes=(likes-1) WHERE id=".$old["id"]." ;");
         $connexion->query(
             "DELETE FROM `pages_liked` WHERE (".
             "`user_id`=" . $id .
@@ -208,15 +199,32 @@
         );
 
         // posts | parents : | enfants : reports et likes
-        $connexion->query(
-            "DELETE FROM `reports` WHERE `user_id`=" . $id . " ;"
-        );
-        $connexion->query(
-            "DELETE FROM `likes` WHERE `user_id`=" . $id . " ;"
-        );
-        $connexion->query(
-            "DELETE FROM `posts` WHERE `user_id`=" . $id . " ;"
-        );
+        
+        // supprimer les reports venant du compte
+            $olds_reports = $connexion->query("SELECT message_id as id FROM reports WHERE user_id=".$id);
+            while ($old = $olds_reports->fetch_assoc()) 
+                $connexion->query("UPDATE posts SET reportnum=(reportnum-1) WHERE id=".$old["id"]." ;");
+            $connexion->query(
+                "DELETE FROM `reports` WHERE `user_id`=" . $id . " ;"
+            );
+
+        // supprimer les likes venant du compte
+            $olds_likes = $connexion->query("SELECT message_id as id FROM likes WHERE user_id=".$id);
+            while ($old = $olds_likes->fetch_assoc()) 
+                $connexion->query("UPDATE posts SET like_num=(like_num-1) WHERE id=".$old["id"]." ;");
+            $connexion->query(
+                "DELETE FROM `likes` WHERE `user_id`=" . $id . " ;"
+            );
+
+        // supprimer les posts venant du compte
+            $olds_response = $connexion->query(
+                "SELECT id FROM posts WHERE response_id IN (SELECT id FROM posts WHERE user_id=".$id.")"
+            );
+            while ($old = $olds_reports->fetch_assoc()) 
+                $connexion->query("UPDATE posts SET responses_id=NULL WHERE id=".$old["id"]." ;");
+            $connexion->query(
+                "DELETE FROM `posts` WHERE `user_id`=" . $id . " ;"
+            );
 
         // direct_messages
         $connexion->query(

@@ -20,7 +20,7 @@ $addFriends     = TRUE;
 $addBotFriends  = TRUE;
 $addPageLikes   = TRUE;
 $addBotMessages = TRUE;
-$nBots = 10; // nombre de bots auto générés
+$nBots = 20; // nombre de bots auto générés
 $botPassword = "BotPassword";
 $users = [   // vrais comptes
     [
