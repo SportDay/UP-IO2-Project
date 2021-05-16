@@ -128,7 +128,7 @@
         "specie"        => $new_user["specie"],
         "class"         => $new_user["class"],
         "image"         => getImagePath($new_user["public_image"], false, "", true),
-        "desc"          => $new_user["description"],
+        "desc"          => htmlentities($new_user["description"]),
         "like_token_1"  => $new_user["like_token_1"]
     ]);
     

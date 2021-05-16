@@ -84,7 +84,7 @@
                             otp_title   .innerHTML  = "Titre: "  + feedback["title"];
                             otp_specie  .innerHTML  = "Espece: " + feedback["specie"];
                             otp_class   .innerHTML  = "Classe: " + feedback["class"];
-                            otp_desc    .innerHTML  = feedback["desc"];
+                            otp_desc    .innerHTML  = feedback["desc"].length > 0 ? feedback["desc"] : "Sans description.";
 
                             likeToken = feedback["like_token_1"];
                         }

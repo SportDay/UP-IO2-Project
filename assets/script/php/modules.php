@@ -347,11 +347,9 @@ function search_profil($profile){
         </div>
 
         <?php if (strlen($profile["description"]) > 0) { ?>
-
-        <div class="container_desc border" style="border-radius: 15px">
-            <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= htmlentities(trim($profile["description"]))?></p>
-        </div>
-
+            <div class="container_desc border" style="border-radius: 15px">
+                <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= htmlentities(trim($profile["description"]))?></p>
+            </div>
         <?php } ?>
 
     </div>
