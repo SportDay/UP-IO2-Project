@@ -7,9 +7,8 @@ $global_params = [
     "root_public" => "../../../../root_public/",
 ];
 
-require($global_params["root"] . "assets/script/php/constants.php");
-require($global_params["root"] . "assets/script/php/functions.php");
-require($global_params["root"] . "assets/script/php/security.php");
+require_once($global_params["root"] . "assets/script/php/constants.php");
+require_once($global_params["root"] . "assets/script/php/functions.php");
 
 ////////////////////////////////////////////////////////////////////
 // ETABLISSEMENT DE LA CONNECTION
@@ -22,7 +21,7 @@ if (
 
     /*
          quelqu'un qui veut utiliser ce fichier doit obligatoirement
-         recevoir un code attribué sur la page de paramètre
+         recevoir un code attribué sur la page
     */
 )
 {
@@ -39,6 +38,7 @@ if (!isset($_POST["post_id"])) {
     ]); exit();
 }
 
+//// SQL
 $connexion = mysqli_connect (
     $db_conf["DB_URL"],
     $db_conf["DB_ACCOUNT"],
@@ -68,16 +68,15 @@ if($post["user_id"] !== $_SESSION["id"] && !(isset($_SESSION["admin"]) && $_SESS
 }
 
 
+// remove the post
 $connexion->query(
     "DELETE FROM `reports` WHERE `message_id`=" . $post["id"] . " ;"
 );
-
 $connexion->query(
     "DELETE FROM `likes` WHERE `message_id`=" . $post["id"] . " ;"
 );
-
 $connexion->query(
-    "DELETE FROM posts WHERE (id=\"".$post["id"]."\");"
+    "DELETE FROM posts WHERE (id=".$post["id"].");"
 );
 
 ////////////////////////////////////////////////////////////////////

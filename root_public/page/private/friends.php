@@ -16,13 +16,11 @@
 
 <!-- Ajout d'amis -->
 <div class="add_friend_bar border">
-    <div id="search_container">
         <div class="request_and_searchbtn_friend">
             <input  id="add_friend_input" type="search" class="search_request_friend_bar search_input" autocomplete="off" placeholder="Pseudo à ajouter">
             <button class="send_request_friend_bar btn_button_btn" onclick="addFriend();">Ajouter en amis</button>
         </div>
         <p id="add_friend_debug" style="display:none">Debug</p>
-    </div>
 </div>
 
 <!-- Accepte demande d'amis -->

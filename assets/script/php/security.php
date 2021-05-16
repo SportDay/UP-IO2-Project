@@ -199,6 +199,9 @@
         // attention, il y a un ordre de suppression
 
         // pages_liked | parents : | enfants : reports et likes
+        $olds_pages_liked = $connexion->query("SELECT like_id as id FROM pages_liked WHERE user_id=".$id);
+        while ($old = $olds_pages_liked->fetch_assoc()) 
+            $connexion->query("UPDATE users SET likes=(likes-1) WHERE id=".$old["id"]." ;");
         $connexion->query(
             "DELETE FROM `pages_liked` WHERE (".
             "`user_id`=" . $id .
@@ -208,12 +211,25 @@
         );
 
         // posts | parents : | enfants : reports et likes
+        $olds_reports = $connexion->query("SELECT message_id as id FROM reports WHERE user_id=".$id);
+        while ($old = $olds_reports->fetch_assoc()) 
+            $connexion->query("UPDATE posts SET reportnum=(reportnum-1) WHERE id=".$old["id"]." ;");
         $connexion->query(
             "DELETE FROM `reports` WHERE `user_id`=" . $id . " ;"
         );
+
+        $olds_likes = $connexion->query("SELECT message_id as id FROM likes WHERE user_id=".$id);
+        while ($old = $olds_likes->fetch_assoc()) 
+            $connexion->query("UPDATE posts SET like_num=(like_num-1) WHERE id=".$old["id"]." ;");
         $connexion->query(
             "DELETE FROM `likes` WHERE `user_id`=" . $id . " ;"
         );
+
+        $olds_response = $connexion->query(
+            "SELECT id FROM posts WHERE response_id IN (SELECT id FROM posts WHERE user_id=".$id.")"
+        );
+        while ($old = $olds_reports->fetch_assoc()) 
+            $connexion->query("UPDATE posts SET responses_id=NULL WHERE id=".$old["id"]." ;");
         $connexion->query(
             "DELETE FROM `posts` WHERE `user_id`=" . $id . " ;"
         );

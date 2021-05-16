@@ -1,7 +1,5 @@
 <?php
 
-// ATTENTION
-// LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
 $global_params = [
     "root"        => "../../../../",
     "root_public" => "../../../../root_public/",
@@ -21,7 +19,7 @@ if (
 
     /*
          quelqu'un qui veut utiliser ce fichier doit obligatoirement
-         recevoir un code attribué sur la page de paramètre
+         recevoir un code attribué sur la page
     */
 )
 {
@@ -38,25 +36,22 @@ if (!isset($_POST["public_name"])) {
     ]); exit();
 }
 
+/// SQL
 $connexion = mysqli_connect (
     $db_conf["DB_URL"],
     $db_conf["DB_ACCOUNT"],
     $db_conf["DB_PASSWORD"],
     $db_conf["DB_NAME"]
-);
-
+); 
 if (!$connexion) {
-    // data base error
     echo json_encode([
         "success" => false,
         "error"   => "Base de donnée hors d'accès."
     ]); exit();
 }
-
 ////////////////////////////////////////////////////////////////////
 
 $profile    = $connexion->query("SELECT id, likes FROM users WHERE public_name=\"".$connexion->real_escape_string($_POST["public_name"])."\"");
-
 if ($profile->num_rows==0) {
     echo json_encode([
         "success" => false,
@@ -64,9 +59,12 @@ if ($profile->num_rows==0) {
     ]); exit();
 } $profile = $profile->fetch_assoc();
 
-$page_liked = $connexion->query("SELECT id FROM pages_liked WHERE user_id=".$_SESSION["id"]." AND like_id=".$profile["id"] )->num_rows == 1;
+// on check est ce que la page a été like
+$page_liked = $connexion->query(
+    "SELECT id FROM pages_liked WHERE user_id=".$_SESSION["id"]." AND like_id=".$profile["id"] 
+    )->num_rows != 0;
 
-if ($page_liked) {
+if ($page_liked) { // si elle a été like on la dislike
     $connexion->query(
         "DELETE FROM pages_liked WHERE user_id=".$_SESSION["id"]." AND like_id=".$profile["id"]
     );
@@ -75,7 +73,9 @@ if ($page_liked) {
     );
 
     $profile["likes"]--;
-} else {
+
+} else { // si elle n'a pas été like on la like
+    
     $connexion->query(
         "INSERT INTO pages_liked (user_id, like_id) VALUES (".$_SESSION["id"].", ".$profile["id"].")"
     );

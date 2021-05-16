@@ -78,6 +78,8 @@
     grid-template-columns: auto 125px;
     grid-template-rows: auto;
     gap: 0px 20px;
+    margin-left:    20px;
+    margin-right:   20px;
     grid-template-areas:
     "search_request_friend_bar send_request_friend_bar";
 }

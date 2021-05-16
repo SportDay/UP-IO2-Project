@@ -78,7 +78,6 @@ CREATE TABLE `posts` (
     `public_image`  INT             DEFAULT 0,
     `public_name`   varchar(32)     DEFAULT NULL,
     
-    `reported`      BOOLEAN         DEFAULT FALSE,
     `reportnum`     INT             DEFAULT 0,
     `last_report`   INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),
     `creation_date` INT UNSIGNED    DEFAULT unix_timestamp(CURRENT_TIMESTAMP),

@@ -595,7 +595,7 @@ function match_js_bloc() {
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
-            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/toggle_like.php");
+            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/toggle_page_like.php");
             xmlhttp.send( data );
             
             xmlhttp.onreadystatechange = function () {
@@ -708,7 +708,7 @@ function profile_js_bloc() {
             
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
-            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/toggle_like.php");
+            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/toggle_page_like.php");
             xmlhttp.send( data );
             
             xmlhttp.onreadystatechange = function () {
@@ -810,7 +810,7 @@ function post_js_add(){
     <?php
 }
 
-function post_bloc($post){
+function post_bloc($post, $admin_option = false){
     $connexion = $GLOBALS["connexion"];
 
     $like = false;
@@ -845,16 +845,24 @@ function post_bloc($post){
                 <span class="post_auteur" style="color: white; font-size: 20px"><?= htmlentities($post["public_name"]) ?></span><br>
                 <span class="post_date" style="color: lightgray; font-size: 14px"><?= htmlentities(date('d/m/Y H:i', $post["creation_date"])); ?></span>
             </a>
+            
             <?php
-                if($_SESSION["connected"] && $_SESSION["id"] === $post["user_id"]) {
+            if($_SESSION["connected"] && ($_SESSION["id"] === $post["user_id"] || $admin_option)) {
             ?>
-            <div class="post_menu">
-                <button class="btn_menu_post">&#8226;&#8226;&#8226;</button>
-                <div class="supp_post border">
-                    <button class="btn_sup_post" onclick="removePost('<?= $post['id'] ?>');">Supprimer</button>
-                </div>
-            </div>
+                <div class="post_menu">
+                    <button class="btn_menu_post">&#8226;&#8226;&#8226;</button>
+                    <div class="supp_post border">
+                    <?php if ($admin_option) { ?>
+                        <button class="btn_ignr_post" onclick="ignoreReport('<?= htmlentities($post['id']) ?>');">Ignorer</button>
+                        <button class="btn_sup_post" onclick="removeReportedPost('<?= htmlentities($post['id']) ?>');">Supprimer</button>
+                        <button class="btn_def_ban_user" onclick="banDefinitif('<?= htmlentities($post['user_id']) ?>');">Ban définitif</button>
+                        <button class="btn_tmp_ban_user" onclick="showTempBanBlock('<?= htmlentities($post['user_id']) ?>');">Ban temporaire</button>
+                    <?php } else  { ?>
+                        <button class="btn_sup_post" onclick="removePost('<?= $post['id'] ?>');">Supprimer</button>
                     <?php } ?>
+                    </div>
+                </div>
+            <?php } ?>
         </div>
 
 
@@ -958,7 +966,6 @@ function post_js_bloc() {
                     }
             }
         }
-
         function reportSystemPost(post_id) {
             let data = new FormData();
             data.append("post_id", post_id);
@@ -970,10 +977,10 @@ function post_js_bloc() {
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
+                if (xmlhttp.readyState === 4)
+                    if (xmlhttp.status === 200)
                     {
-                        //alert(xmlhttp.responseText);
+                        alert(xmlhttp.responseText);
                         const feedback = JSON.parse(xmlhttp.responseText);
 
                         if (feedback["success"]) {
@@ -989,62 +996,6 @@ function post_js_bloc() {
         }
     </script><?php
 }
-
-function post_reported_bloc($post, $like = false, $reported = false){?>
-    <div id = "post_id_<?= htmlentities(trim($post["id"])) ?>" class="mid_content" style="text-align: initial;">
-    <div class="posts">
-
-        <!-- USER -->
-        <a href="<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($post["public_name"]) ?>">
-            <img class="profile_img_posts" src="<?= getImagePath( $post["public_image"])  ?>">
-        </a>
-        <div class="info_containt border" style="border-radius: 15px; padding: 10px 10px;">
-            <a href="<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($post["public_name"]) ?>">
-                <span class="post_auteur"><?= htmlentities($post["public_name"]) ?></span><br>
-                <span class="post_date"><?= date('d/m/Y H:i', htmlentities(trim($post["creation_date"]))); ?></span>
-            </a>
-            <div class="post_menu">
-                <button class="btn_menu_post">&#8226;&#8226;&#8226;</button>
-                <div class="supp_post border">
-                        <button class="btn_ignr_post" onclick="ignoreReport('<?= htmlentities($post['id']) ?>');">Ignorer</button>
-                        <button class="btn_sup_post" onclick="removeReportedPost('<?= htmlentities($post['id']) ?>');">Supprimer</button>
-                        <button class="btn_def_ban_user" onclick="banDefinitif('<?= htmlentities($post['user_id']) ?>');">Ban définitif</button>
-                        <button class="btn_tmp_ban_user" onclick="showTempBanBlock('<?= htmlentities($post['user_id']) ?>');">Ban temporaire</button>
-                </div>
-            </div>
-        </div>
-        <!-- CONTENT -->
-        <div class="post_content border">
-            <p style="color: white; font-size: 18px"><?= htmlentities($post["content"]) ?></p>
-        </div>
-
-        <!-- INTERACT -->
-                <button id="btn_like_id_<?= htmlentities($post["id"])?>" class="btn_like btn_button_btn">
-                <?php
-                if (!$like)
-                {  ?>
-                    <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/like.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= htmlentities($post["like_num"]) ?></span>
-                    <?php }else{?>
-                    <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/liked.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= htmlentities($post["like_num"]) ?></span>
-                <?php } ?>
-                </button>
-
-        <div class="post_btn_espace" style="grid-area: post_btn_espace;"></div>
-                    <div class="btn_report">
-                        <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>" class="report_ref btn_button_btn">
-                            <?php if (!$reported) {?>
-                                <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
-                            <?php } else {?>
-                                <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/reported.png"?>">
-                            <?php }?>
-                    </button>
-                    </div>
-        </div>
-    </div>
-
-
-
-<?php }
 
 function post_reported_js_bloc(){?>
     <script>

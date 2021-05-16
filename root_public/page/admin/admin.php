@@ -7,18 +7,13 @@
   "redirect"    => TRUE,
   "admin_req"   => TRUE
 ];?>
-
-<?php
-    // INCLURE UN CODE DE REDIRECTION SI COMPTE NON ADMIN
-    // if (!not_admin)
-    //    header(accueil)
-?>
-
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
-<?php // FUNCTIONS (specific à cette page)
+<?php
+
+///////////// SQL
 $connexion = mysqli_connect (
     $db_conf["DB_URL"],
     $db_conf["DB_ACCOUNT"],
@@ -29,35 +24,23 @@ $connexion = mysqli_connect (
 if (!$connexion) {
     echo "connection_error"; exit();
 }
-/*
-if(isset($_SESSION["admin"]) && $_SESSION["admin"] == "0"){
-    ?>
-    <script>window.location.href = "<?=$global_params["root_public"] . "/page/public/home_page.php"?>";</script>
-    <?php
-}*/
+/////////////
 
+$reported_post = $connexion->query("SELECT * FROM posts WHERE reportnum>0 ORDER BY reportnum DESC LIMIT 60");
 
-$reported_post = $connexion->query("SELECT * FROM posts WHERE reported=\"1\" ORDER BY reportnum DESC;");
-while($report_post=$reported_post->fetch_assoc()) {
+if ($reported_post->num_rows==0) { ?>
+    <div class="mid_content">
+        <p>Aucun signalement en attente.</p>
+    </div>
+<?php }
 
-    $like_query =
-        "SELECT id FROM likes WHERE ".
-        " user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) .
-        "\" AND message_id=\"" . $connexion->real_escape_string($report_post["id"]) . "\";";
-    $like = $connexion->query($like_query)->num_rows != 0;
-
-    $report_query =
-        "SELECT id FROM reports WHERE ".
-        " user_id=\"" . $connexion->real_escape_string($_SESSION["id"]) .
-        "\" AND message_id=\"" . $connexion->real_escape_string($report_post["id"]) . "\";";
-    $reported = $connexion->query($report_query)->num_rows != 0;
-
-    post_reported_bloc($report_post, $like, $reported);
-}
+while($report_post=$reported_post->fetch_assoc())
+    post_bloc($report_post, true);
 
 mysqli_close($connexion);
 
 ?>
+
 <!-- ------------------------------------------ -->
     <div id="tmp_ban" class="tmp_ban_model">
         <div class="modal-content animate">
@@ -79,6 +62,6 @@ mysqli_close($connexion);
 <!-- ------------------------------------------ -->
 
 <?php
-post_reported_js_bloc();
+    post_reported_js_bloc();
 ?>
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
