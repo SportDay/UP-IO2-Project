@@ -1,15 +1,13 @@
 <?php
 
-// ATTENTION
-// LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
 $global_params = [
     "root"        => "../../../../",
     "root_public" => "../../../../root_public/",
 ];
 
-require($global_params["root"] . "assets/script/php/constants.php");
-require($global_params["root"] . "assets/script/php/functions.php");
-require($global_params["root"] . "assets/script/php/security.php");
+require_once($global_params["root"] . "assets/script/php/constants.php");
+require_once($global_params["root"] . "assets/script/php/functions.php");
+require_once($global_params["root"] . "assets/script/php/security.php");
 
 ////////////////////////////////////////////////////////////////////
 // ETABLISSEMENT DE LA CONNECTION
@@ -18,28 +16,23 @@ session_start();
 
 if (
     !isset($_POST["update_desc"]) || !isset($_SESSION["update_desc"]) ||
-    ($_POST["update_desc"]  !=        $_SESSION["update_desc"])
-
-    /*
-         quelqu'un qui veut utiliser ce fichier doit obligatoirement
-         recevoir un code attribué sur la page de paramètre
-    */
+          ($_POST["update_desc"]  !=        $_SESSION["update_desc"])
 )
 {
     echo json_encode([
         "success" => false,
-        "error"   => "Requête incorrecte."
+        "error"   => "token_error."
     ]); exit();
 }
 
-if (!isset($_POST["user_id"]) || !isset($_POST["old_desc"]) || !isset($_POST["new_desc"])) {
+if (!isset($_POST["new_desc"])) {
     echo json_encode([
         "success" => false,
         "error"   => "Requête incorrecte."
     ]); exit();
 }
 
-if(($_POST["old_desc"] === $_POST["new_desc"]) || $_POST["new_desc"] === "" || strlen($_POST["new_desc"]) >= 50){
+if( $_POST["new_desc"] === "" || strlen($_POST["new_desc"]) >= 50) {
     echo json_encode([
         "success" => false,
         "error"   => "Requête incorrecte."
@@ -64,9 +57,8 @@ if (!$connexion) {
 ////////////////////////////////////////////////////////////////////
 
 $connexion->query(
-    "UPDATE users set description = \"" . $connexion->real_escape_string($_POST["new_desc"]) . "\" WHERE id=\"" . $connexion->real_escape_string($_POST["user_id"]) . "\";"
+    "UPDATE users SET description = \"" . $connexion->real_escape_string($_POST["new_desc"]) . "\" WHERE id=\"" . $_SESSION["id"] . "\";"
 );
-
 
 ////////////////////////////////////////////////////////////////////
 

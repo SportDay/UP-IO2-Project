@@ -5,8 +5,8 @@
         "root_public" => "../../../../root_public/",
     ];
 
-    require($global_params["root"] . "assets/script/php/constants.php");
-    require($global_params["root"] . "assets/script/php/functions.php");
+    require_once($global_params["root"] . "assets/script/php/constants.php");
+    require_once($global_params["root"] . "assets/script/php/functions.php");
     
     ////////////////////////////////////////////////////////////////////
     // ETABLISSEMENT DE LA CONNECTION
@@ -69,18 +69,37 @@
         }
     }
 
-    // donner une nouvelle personne à like
-    $new_user = $connexion->query(
-        "SELECT * FROM users WHERE (".
-        "    enable_public AND id NOT IN (".
-        "        SELECT like_id FROM pages_liked WHERE (user_id=".$_SESSION["id"].")".
-        "    )".
-        ")".
-        "ORDER BY RAND()".
-        "LIMIT 1"
+    // trouver une nouvelle personne à like
+    $new_user = $connexion->query( // essayer avec un profile qui nous a liké
+        "
+        SELECT *
+        FROM
+        (
+            SELECT user_id FROM pages_liked WHERE like_id=".$_SESSION["id"]." AND user_id NOT IN (
+                SELECT like_id FROM pages_liked WHERE (user_id=".$_SESSION["id"].")
+            )
+        ) as t1
+        inner join users
+        on t1.user_id=users.id
+
+        ORDER BY RAND()
+        LIMIT 1
+        "
     );
 
-    if ($new_user->num_rows != 0) // si on peut trouver un profile
+    if ($new_user->num_rows == 0) // si on ne trouve personne ressayer mais avec un profile qui ne nous a pas liké
+        $new_user = $connexion->query(
+            "SELECT * FROM users WHERE (".
+            "    enable_public AND (NOT id=".$_SESSION["id"].") AND id NOT IN (".
+            "        SELECT like_id FROM pages_liked WHERE (user_id=".$_SESSION["id"].")".
+            "    )".
+            ")".
+            "ORDER BY RAND()".
+            "LIMIT 1"
+        );
+    
+
+    if ($new_user->num_rows != 0) // si on a réussi à trouver un profile
     {
         $new_user = $new_user->fetch_assoc();
 
@@ -89,7 +108,7 @@
         ];
         $_SESSION["like_cache_id"] = $new_user["id"];
     }
-    else
+    else // si il n'y a personne à liker
         $new_user = [
             "public_name"   => "",
             "title"         => "",

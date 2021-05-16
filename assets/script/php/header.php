@@ -8,8 +8,8 @@
 
 */
 
-require($global_params["root"] . "assets/script/php/security.php");
-require($global_params["root"] . "assets/script/php/modules.php");
+require_once($global_params["root"] . "assets/script/php/security.php");
+require_once($global_params["root"] . "assets/script/php/modules.php");
 
 // IMPERATIF POUR LE FONCTIONNEMENT DU HEADER
 if (!isset($global_params["root_public"]) || !isset($global_params["root"]))
@@ -33,7 +33,7 @@ Liste des cookies :
 /*///////////////////////////////////////////
 // CONSTANTES :
 
-require($global_params["root"] . "assets/script/php/constants.php");
+require_once($global_params["root"] . "assets/script/php/constants.php");
 
 //////////////////////
 
@@ -64,7 +64,7 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
 <head>
 
     <meta charset="utf-8">
-    <link rel="icon" href=<?php echo $global_params["root_public"] . "/assets/image/logo-rond.ico" ; ?> />
+    <link rel="icon" href=<?php echo $global_params["root_public"] . "assets/image/logo-rond.ico" ; ?> />
 
     <title>
         <?php

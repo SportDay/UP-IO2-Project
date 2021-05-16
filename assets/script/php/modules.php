@@ -316,7 +316,7 @@ function search_bar(){
     ?>
 
     <div id="search_container">
-        <form action=<?= $GLOBALS["global_params"]["root_public"]."/page/public/search.php"?> method="get">
+        <form action=<?= $GLOBALS["global_params"]["root_public"]."page/public/search.php"?> method="get">
             <div class="search_grid">
                 <input class="search_input" type="search" autocomplete="off" placeholder="Recherche" name="search" required >
                 <button id="btn_search" class="btn_search btn_button_btn" onclick="">
@@ -550,15 +550,9 @@ function match_bloc($friend, $specific_root=FALSE, $root_public="") { // necessi
         <div id="friend_bloc_<?=htmlentities($friend["public_name"])?>" class="mid_content" style="text-align: initial;">
             <div id = "profile">
 
-
-                <?php if($friend["enable_public"]) { ?>
                 <a href="<?=$root_public?>page/public/public_page.php?user=<?=urlencode($friend["public_name"])?>">
                     <img class="profile_img_profile" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
                 </a>
-                <?php } else { ?>
-                    <img class="profile_img_profile" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
-                <?php } ?>
-
 
                 <div class="info_profile">
                     
@@ -590,36 +584,43 @@ function match_bloc($friend, $specific_root=FALSE, $root_public="") { // necessi
 function match_js_bloc() {
     ?> <script>
         function removeMatch(username) {
+            
             let friendBloc = document.getElementById("friend_bloc_"+username);
 
             let data = new FormData();
-            data.append("username", username);
+            data.append("public_name", username);
             data.append("toggle_like", "<?= $_SESSION["toggle_like"] = randomString() ?>");
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
             "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/toggle_like.php");
             xmlhttp.send( data );
-
+            
             xmlhttp.onreadystatechange = function () {
                 if (xmlhttp.readyState === 4)   // request done
                     if (xmlhttp.status === 200) // successful return
                     {
-                        //alert(xmlhttp.responseText);
+                        alert(xmlhttp.responseText);
                         const feedback = JSON.parse(xmlhttp.responseText);
 
                         if (feedback["success"])
-                            friendBloc.parentNode.removeChild(friendBloc);
+                            if (!feedback["isLiked"]) friendBloc.parentNode.removeChild(friendBloc);
 
                     }
-            }
+            };
         }
     </script><?php
 }
 
 ////////////////////////////////////////////////
 // PROFILES BLOC
-function profile_bloc($profile, $friend = null){
+function profile_bloc($profile){
+    $page_liked = $_SESSION["connected"] ?
+                    (
+                        $GLOBALS["connexion"]->query(
+                        "SELECT id FROM pages_liked WHERE user_id=".$_SESSION["id"]." AND like_id=".$profile["id"]
+                    )->num_rows == 1) : false;
+
     ?>
         <div class = "mid_content" style="text-align: initial;">
         <div id = "profile">
@@ -627,33 +628,38 @@ function profile_bloc($profile, $friend = null){
             <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
             </a>
             <div class="info_profile">
-                <span class="profile_nickname" >Nom: <?= htmlentities($profile["public_name"])?></span>
-                <span class="profile_titre"    >Titre: <?= htmlentities($profile["title"])?></span>
-                <span class="profile_espece"   >Espece: <?= htmlentities($profile["specie"])?></span>
-                <span class="profile_classe"   >Classe: <?= htmlentities($profile["class"])?></span>
-                <span class="profile_nlikes"   >Likes: <?= htmlentities($profile["likes"])?></span>
-                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #41bb41;" onclick=''>Liker la page</button>
+                <span                       class="profile_nickname" >Nom: <?=      htmlentities($profile["public_name"])?></span>
+                <span                       class="profile_titre"    >Titre: <?=    htmlentities($profile["title"])?></span>
+                <span                       class="profile_espece"   >Espece: <?=   htmlentities($profile["specie"])?></span>
+                <span                       class="profile_classe"   >Classe: <?=   htmlentities($profile["class"])?></span>
+                <span id="profile_likes"    class="profile_nlikes"   >Likes: <?=    htmlentities($profile["likes"])?></span>
+
+                <?php if ($_SESSION["connected"] && $profile["id"] != $_SESSION["id"]) { ?>
+                    <button id="friend_add_btn" class="btn_button_btn btn_friend_profile_add <?= $page_liked ? "btn_friend_profile_add_dislike" : "btn_friend_profile_add_like" ?>" 
+                    onclick="togglePageLike();"><?= $page_liked ? "Ne plus suivre" : "Suivre" ?></button>
+                <?php } ?>
+
             </div>
         </div>
             <?php
-            if(isset($_SESSION["id"]) && $_SESSION["id"] === $profile["id"]){
+            if($_SESSION["connected"] && $_SESSION["id"] === $profile["id"]){
                 ?>
                     <div class="desc_container">
                         <textarea id="description" class="post_add" name="desc" style="font-size: 18px;" placeholder="<?= trim(htmlentities($profile["description"]))?>" rows="2" maxlength="50"></textarea><br>
-                        <button class="submit_add" onclick='updateDesc(<?= json_encode($profile['description'])?>);'>Changer</button>
+                        <button class="submit_add" onclick='updateDesc();'>Changer</button>
                     </div>
                     <div id="container_add">
-                        <textarea id="post_content" class="post_add" name="post_content" placeholder="Quel serait votre nouveau post?" rows="5" maxlength="735"></textarea><br>
+                        <textarea id="post_content" class="post_add" name="post_content" placeholder="Quel sera votre nouveau post?" rows="5" maxlength="735"></textarea><br>
                         <button class="submit_add" onclick="postAdd();">Poster</button>
                         <button id="inspirate" onclick="inspiration();">Inspiration</button>
                     </div>
-        <?php
+            <?php
             }else{
-        ?>
+            ?>
                 <div class="container_desc border" style="border-radius: 15px">
                     <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= htmlentities(trim($profile["description"]))?></p>
                 </div>
-        <?php
+            <?php
             }
         ?>
 
@@ -662,37 +668,75 @@ function profile_bloc($profile, $friend = null){
 
 }
 
-function profile_js_bloc($me) {
+function profile_js_bloc() {
+    ?> <script>
+        function updateDesc() {
+            let textZone = document.getElementById("description");
 
-            ?> <script>
-                function updateDesc(old_desc) {
-                    let textZone = document.getElementById("description");
+            let data = new FormData();
+            data.append("new_desc", textZone.value);
+            data.append("update_desc", "<?= $_SESSION["update_desc"] = randomString()?>");
 
-                    let data = new FormData();
-                    data.append("user_id", <?= $_SESSION["id"] ?>);
-                    data.append("old_desc", old_desc);
-                    data.append("new_desc", textZone.value);
-                    data.append("update_desc", "<?= $_SESSION["update_desc"] = randomString()?>");
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST',
+                "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/change_desc.php");
+            xmlhttp.send( data );
 
-                    let xmlhttp = new XMLHttpRequest();
-                    xmlhttp.open('POST',
-                        "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/change_desc.php");
-                    xmlhttp.send( data );
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4) // request done
+                    if (xmlhttp.status === 200) // successful return
+                    {
+                        //alert(xmlhttp.responseText);
+                        const feedback = JSON.parse(xmlhttp.responseText);
 
-                    xmlhttp.onreadystatechange = function () {
-                        if (xmlhttp.readyState === 4) // request done
-                            if (xmlhttp.status === 200) // successful return
-                            {
-                                //alert(xmlhttp.responseText);
-                                const feedback = JSON.parse(xmlhttp.responseText);
+                        if (feedback["success"])
+                            document.location.reload();
 
-                                if (feedback["success"])
-                                    document.location.reload();
-
-                            }
                     }
-                }
-        </script><?php
+            };
+        }
+
+        function togglePageLike() {
+            let button  = document.getElementById("friend_add_btn");
+            let nLikes  = document.getElementById("profile_likes");
+
+            let data = new FormData();
+            data.append("public_name", <?= json_encode($_GET["user"]) ?>);
+            data.append("toggle_like", <?= json_encode($_SESSION["toggle_like"] = randomString()) ?>);
+            
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.open('POST',
+            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/toggle_like.php");
+            xmlhttp.send( data );
+            
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState === 4)
+                    if (xmlhttp.status === 200)
+                    {
+                        //alert(xmlhttp.responseText);
+                        const feedback = JSON.parse(xmlhttp.responseText);
+
+                        if (feedback["success"])
+                        {
+                            if (feedback["isLiked"]) {
+                                button.classList.add   ("btn_friend_profile_add_dislike");
+                                button.classList.remove("btn_friend_profile_add_like");
+                                button.innerHTML="Ne plus suivre";
+                            } else {
+                                button.classList.remove("btn_friend_profile_add_dislike");
+                                button.classList.add   ("btn_friend_profile_add_like");
+                                button.innerHTML="Suivre";
+                            }
+
+                            nLikes.innerHTML = "Likes : " + feedback["nLikes"];
+                        }
+
+                    }
+            };
+        }
+
+            
+    </script> <?php
 }
 
 ////////////////////////////////////////////////
@@ -764,13 +808,27 @@ function post_js_add(){
     <?php
 }
 
-function post_bloc($post, $like = false, $reported = false, $connected = false){
+function post_bloc($post){
+    $connexion = $GLOBALS["connexion"];
 
-        $connected = isset($_SESSION["connected"]) && $_SESSION["connected"]; 
+    $like = false;
+    $reported = false;
+    if ($_SESSION["connected"])
+    {
+        $like_query = "SELECT * FROM likes WHERE user_id=".$_SESSION["id"]." AND message_id=".$post["id"].";";
+        if ($connexion->query($like_query)->num_rows != 0) {
+            $like = true;
+        }
+
+        $report_query = "SELECT * FROM reports WHERE user_id=".$_SESSION["id"]." AND message_id=".$post["id"].";";
+        if ($connexion->query($report_query)->num_rows != 0) {
+            $reported = true;
+        }
+    }
 
     ?>
     
-    <div id = "post_id_<?= htmlentities(trim($post["id"])) ?>" class="mid_content" style="text-align: initial;">
+    <div id = "post_id_<?= $post["id"] ?>" class="mid_content" style="text-align: initial;">
     <div class="posts">
 
         <!-- USER -->
@@ -783,15 +841,15 @@ function post_bloc($post, $like = false, $reported = false, $connected = false){
         <div class="info_containt border" style="border-radius: 15px; padding: 10px 10px;">
             <a href="<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($post["public_name"]) ?>">
                 <span class="post_auteur" style="color: white; font-size: 20px"><?= htmlentities($post["public_name"]) ?></span><br>
-                <span class="post_date" style="color: lightgray; font-size: 14px"><?= date('d/m/Y H:i', htmlentities(trim($post["creation_date"]))); ?></span>
+                <span class="post_date" style="color: lightgray; font-size: 14px"><?= htmlentities(date('d/m/Y H:i', $post["creation_date"])); ?></span>
             </a>
             <?php
-                if(isset($_SESSION["id"]) && $_SESSION["id"] === $post["user_id"]){
+                if($_SESSION["connected"] && $_SESSION["id"] === $post["user_id"]) {
             ?>
             <div class="post_menu">
                 <button class="btn_menu_post">&#8226;&#8226;&#8226;</button>
                 <div class="supp_post border">
-                    <button class="btn_sup_post" onclick="removePost('<?= htmlentities($post['id']) ?>');">Supprimer</button>
+                    <button class="btn_sup_post" onclick="removePost('<?= $post['id'] ?>');">Supprimer</button>
                 </div>
             </div>
                     <?php } ?>
@@ -804,46 +862,36 @@ function post_bloc($post, $like = false, $reported = false, $connected = false){
         </div>
 
         <!-- INTERACT -->
-        <?php if($connected) {?>
-                <button id="btn_like_id_<?= htmlentities($post["id"])?>" class="btn_like btn_button_btn" onclick="likeSystemPost('<?= $post['id']?>');">
-                <?php
-                if (!$like)
-                {  ?>
-                    <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/like.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= htmlentities($post["like_num"]) ?></span>
-                    <?php }else{?>
-                    <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/liked.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= htmlentities($post["like_num"]) ?></span>
-                <?php } ?>
-                </button>
-            <?php
-            } else { ?>
-                <button id="btn_like_id_<?= htmlentities($post["id"])?>" class="btn_like btn_button_btn">
-                    <img id="img_like_<?= htmlentities($post["id"])?>" class="like_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/like.png"?>"><span id="like_id_<?= htmlentities(trim($post["id"])) ?>" class="like_num"><?= trim(htmlentities($post["like_num"])) ?></span>
-                </button>
-        <?php } ?>
+        <button 
+            id="btn_like_id_<?= $post["id"]?>" class="btn_like btn_button_btn" 
+            <?= $_SESSION["connected"] ? "onclick=\"likeSystemPost('".$post['id']."');\"" : ""?> 
+            >
+
+            <img 
+                id="img_like_<?= $post["id"]?>" 
+                class="like_img" width="32" height="32" 
+                src="<?= $GLOBALS["global_params"]["root_public"]."assets/image/". ($like ? "liked": "like") .".png"?>"
+                >
+            <span id="like_id_<?= $post["id"] ?>" class="like_num"><?= $post["like_num"] ?></span>
+        </button>
 
         <div class="post_btn_espace" style="grid-area: post_btn_espace;"></div>
 
-            <?php if($connected){?>
-                <dfn title="<?php if(!$reported){ echo "Voulez-vous signaler?";}else{ echo "Vous avez deja signaler";}?>">
-                    <div class="btn_report">
-                        <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>" onclick="reportSystemPost('<?= $post['id']?>');" class="report_ref btn_button_btn">
-                            <?php if (!$reported) {?>
-                                <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
-                            <?php } else {?>
-                                <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/reported.png"?>">
-                            <?php }?>
-                    </button>
-                    </div>
-                </dfn>
-                    <?php }else{?>
+        <dfn title="<?= $reported ? "Vous avez deja signaler" : "Voulez-vous signaler?" ?>">
             <div class="btn_report">
-                <button id="btn_report_id_<?= htmlentities(trim($post["id"]))?>" class="report_ref btn_button_btn">
-                    <img id="img_report_like_<?= htmlentities(trim($post["id"]))?>" class="report_img" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/report.png"?>">
-                </button>
+            <button 
+                id="btn_report_id_<?= $post["id"]?>" class="report_ref btn_button_btn"
+                <?= $_SESSION["connected"] ? "onclick=\"reportSystemPost('".$post['id']."');\"" : ""?>
+                >
+                
+                <img 
+                    id="img_report_like_<?= $post["id"]?>" class="report_img" width="32" height="32" 
+                    src="<?= $GLOBALS["global_params"]["root_public"]."assets/image/". ($reported ? "reported": "report") .".png"?>"
+                    >
+            </button>
             </div>
-        <?php
-                }
-            ?>
+        </dfn>
+            
 
 
 
