@@ -343,7 +343,6 @@ function search_profil($profile){
                 <span class="profile_espece"   >Espece: <?= htmlentities($profile["specie"])?></span>
                 <span class="profile_classe"   >Classe: <?= htmlentities($profile["class"])?></span>
                 <span class="profile_nlikes"   >Likes: <?= htmlentities($profile["likes"])?></span>
-                <button id="friend_add_btn" class="btn_friend_porfile_add btn_button_btn" style="background-color: #41bb41;" onclick=''>Liker la page</button>
             </div>
         </div>
         <div class="container_desc border" style="border-radius: 15px">
