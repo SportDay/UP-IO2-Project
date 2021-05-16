@@ -64,8 +64,8 @@ CREATE TABLE pages_liked (
     `priority`     BOOLEAN  DEFAULT TRUE,
 
     PRIMARY KEY(id),
-    FOREIGN KEY (`user_id`) REFERENCES users(`id`),
-    FOREIGN KEY (`like_id`) REFERENCES users(`id`)
+    FOREIGN KEY (`user_id`) REFERENCES users(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`like_id`) REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- ##########################################################
@@ -87,7 +87,7 @@ CREATE TABLE `posts` (
     `response_id`   bigint UNSIGNED DEFAULT NULL,
 
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id)      REFERENCES users(id),
+    FOREIGN KEY (user_id)      REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (response_id)  REFERENCES posts(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
@@ -97,8 +97,8 @@ CREATE TABLE likes (
     `user_id`        bigint UNSIGNED NOT NULL,
 
     PRIMARY KEY(id),
-    FOREIGN KEY (`message_id`) REFERENCES posts(`id`),
-    FOREIGN KEY (`user_id`)    REFERENCES users(`id`)
+    FOREIGN KEY (`message_id`) REFERENCES posts(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`)    REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 CREATE TABLE reports (
@@ -107,8 +107,8 @@ CREATE TABLE reports (
     `user_id`        bigint UNSIGNED NOT NULL,
 
     PRIMARY KEY(id),
-    FOREIGN KEY (`message_id`) REFERENCES posts(`id`),
-    FOREIGN KEY (`user_id`)    REFERENCES users(`id`)
+    FOREIGN KEY (`message_id`) REFERENCES posts(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`)    REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- ##########################################################
@@ -121,8 +121,8 @@ CREATE TABLE friends (
     `accepted`         BOOLEAN         DEFAULT FALSE,
 
     PRIMARY KEY(id),
-    FOREIGN KEY (`user_id_1`)   REFERENCES users(`id`),
-    FOREIGN KEY (`user_id_0`)   REFERENCES users(`id`)
+    FOREIGN KEY (`user_id_1`)   REFERENCES users(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id_0`)   REFERENCES users(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
 -- ##########################################################
@@ -137,6 +137,6 @@ CREATE TABLE direct_messages (
     `private`       BOOLEAN         DEFAULT TRUE, -- Pour differencier les messages de match et d'amis
 
     PRIMARY KEY(id),
-    FOREIGN KEY(from_id) REFERENCES users(id),
-    FOREIGN KEY(to_id)   REFERENCES users(id)
+    FOREIGN KEY(from_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(to_id)   REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;

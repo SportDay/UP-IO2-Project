@@ -7,9 +7,9 @@ $global_params = [
     "root_public" => "../../../../root_public/",
 ];
 
-require($global_params["root"] . "assets/script/php/constants.php");
-require($global_params["root"] . "assets/script/php/functions.php");
-require($global_params["root"] . "assets/script/php/security.php");
+require_once($global_params["root"] . "assets/script/php/constants.php");
+require_once($global_params["root"] . "assets/script/php/functions.php");
+require_once($global_params["root"] . "assets/script/php/security.php");
 
 ////////////////////////////////////////////////////////////////////
 // ETABLISSEMENT DE LA CONNECTION
@@ -17,13 +17,8 @@ require($global_params["root"] . "assets/script/php/security.php");
 session_start();
 
 if (
-    !isset($_POST["bandef"]) || !isset($_SESSION["bandef"]) ||
-    ($_POST["bandef"]  !=        $_SESSION["bandef"])
-
-    /*
-         quelqu'un qui veut utiliser ce fichier doit obligatoirement
-         recevoir un code attribué sur la page de paramètre
-    */
+    !isset($_POST["bandef"]) || !isset($_SESSION["bandef"]) &&
+          ($_POST["bandef"]  !=        $_SESSION["bandef"])
 )
 {
     echo json_encode([
@@ -55,43 +50,17 @@ if (!$connexion) {
 }
 
 ////////////////////////////////////////////////////////////////////
-/*
-if(isset($_SESSION["admin"]) && $_SESSION["admin"] === true){
+
+$id = $connexion->query("SELECT id FROM users WHERE id=\"".$connexion->real_escape_string($_POST["user_id"])."\"");
+
+if ($id->num_rows == 0) {
     echo json_encode([
         "success" => false,
-        "error"   => "Base de donnée hors d'accès."
+        "error"   => "Utilisateur incorrect."
     ]); exit();
-}*/
+}
 
-
-// pages_liked | parents : | enfants : reports et likes
-$connexion->query(
-    "DELETE FROM `pages_liked` WHERE `user_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
-);
-
-// posts | parents : | enfants : reports et likes
-$connexion->query(
-    "DELETE FROM `reports` WHERE `user_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
-);
-$connexion->query(
-    "DELETE FROM `likes` WHERE `user_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
-);
-$connexion->query(
-    "DELETE FROM `posts` WHERE `user_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
-);
-
-// supprimer: friends direct_messages
-$connexion->query( // pas besoin de verifier que c'est privé
-    "DELETE FROM `friends` WHERE `user_id_0`=" . $connexion->real_escape_string($_POST["user_id"]) . " OR `user_id_1`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
-);
-$connexion->query(
-    "DELETE FROM `direct_messages` WHERE `from_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " OR `to_id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
-);
-
-// supprimer le compte: (users)
-$connexion->query(
-    "DELETE FROM `users` WHERE `id`=" . $connexion->real_escape_string($_POST["user_id"]) . " ;"
-);
+removeAccount(false, $id->fetch_assoc()["id"]);
 
 ////////////////////////////////////////////////////////////////////
 
