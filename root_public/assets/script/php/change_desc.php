@@ -32,13 +32,6 @@ if (!isset($_POST["new_desc"])) {
     ]); exit();
 }
 
-if( $_POST["new_desc"] === "") {
-    echo json_encode([
-        "success" => false,
-        "error"   => "Requête incorrecte."
-    ]); exit();
-}
-
 $connexion = mysqli_connect (
     $db_conf["DB_URL"],
     $db_conf["DB_ACCOUNT"],
