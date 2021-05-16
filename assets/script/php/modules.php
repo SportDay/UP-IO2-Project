@@ -345,9 +345,14 @@ function search_profil($profile){
                 <span class="profile_nlikes"   >Likes: <?= htmlentities($profile["likes"])?></span>
             </div>
         </div>
+
+        <?php if (strlen($profile["description"]) > 0) { ?>
+
         <div class="container_desc border" style="border-radius: 15px">
             <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= htmlentities(trim($profile["description"]))?></p>
         </div>
+
+        <?php } ?>
 
     </div>
     <?php
@@ -653,7 +658,7 @@ function profile_bloc($profile){
                         <button id="inspirate" onclick="inspiration();">Inspiration</button>
                     </div>
             <?php
-            }else{
+            } else if (strlen($profile["description"]) > 0){
             ?>
                 <div class="container_desc border" style="border-radius: 15px">
                     <p style="color: white; font-size: 18px; margin-top: 0px; margin-bottom: 0px;"><?= htmlentities(trim($profile["description"]))?></p>
