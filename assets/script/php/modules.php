@@ -548,7 +548,6 @@ function match_bloc($friend, $specific_root=FALSE, $root_public="") { // necessi
         $root_public = $GLOBALS["global_params"]["root_public"];
 
     ?>
-
         <div id="friend_bloc_<?=htmlentities($friend["public_name"])?>" class="mid_content" style="text-align: initial;">
             <div id = "profile">
 
@@ -743,6 +742,7 @@ function profile_js_bloc() {
 
 ////////////////////////////////////////////////
 // POSTS
+
 function post_add(){
     ?>
     <div class = "mid_content" style="text-align: initial;">
@@ -865,15 +865,14 @@ function post_bloc($post, $admin_option = false){
             <?php } ?>
         </div>
 
-
         <!-- CONTENT -->
         <div class="post_content border">
             <p style="color: white; font-size: 18px"><?= htmlentities($post["content"]) ?></p>
         </div>
 
         <!-- INTERACT -->
-        <button 
-            id="btn_like_id_<?= $post["id"]?>" class="btn_like btn_button_btn" 
+        <button id="btn_like_id_<?= $post["id"]?>" 
+            class="btn_like btn_button_btn" 
             <?= $_SESSION["connected"] ? "onclick=\"likeSystemPost('".$post['id']."');\"" : ""?> 
             >
 
@@ -902,9 +901,6 @@ function post_bloc($post, $admin_option = false){
             </div>
         </dfn>
             
-
-
-
     </div>
     </div>
 
@@ -997,8 +993,8 @@ function post_js_bloc() {
     </script><?php
 }
 
-function post_reported_js_bloc(){?>
-    <script>
+function post_reported_js_bloc(){
+    ?> <script>
         function ignoreReport(post_id) {
             let postBlock = document.getElementById("post_id_"+post_id);
 
@@ -1128,9 +1124,7 @@ function post_reported_js_bloc(){?>
             }
         }
 
-    </script>
-
-    <?php
+    </script> <?php
 }
 
 ?>
