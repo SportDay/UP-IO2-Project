@@ -1,6 +1,0 @@
-{
-	"DB_URL" 		: "127.0.0.1",
-	"DB_ACCOUNT" 	: "root",
-	"DB_NAME" 		: "hrp_project",
-	"DB_PASSWORD"	: ""
-}

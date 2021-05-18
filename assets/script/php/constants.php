@@ -7,24 +7,26 @@
 
   */
 
-  date_default_timezone_set("Etc/GMT-2");
+  $CONSTANTS_CONFIG = parse_ini_file($global_params["root"] . "assets/config/config.ini", false);
 
-  $db_conf = json_decode( file_get_contents($global_params["root"] . "assets/script/sql/db_config.json") , true );
-  $DB_URL       = $db_conf["DB_URL"];
-  $DB_ACCOUNT   = $db_conf["DB_ACCOUNT"];
-  $DB_NAME      = $db_conf["DB_NAME"];
-  $DB_PASSWORD  = $db_conf["DB_PASSWORD"];
+  date_default_timezone_set($CONSTANTS_CONFIG["DEFAULT_TIMEZONE"]);
 
-  $TIME_SESS_END        = 1 * 60 * 120;       // session prends fin au bout de 120 minutes (=> connection par cookie)
-  $TIME_SESS_INACTIVE   = 1 * 60 * 15;        // session prends fin au bout de 15 minutes  (=> connection par cookie)
-  $TIME_COOKIE_CONNECT  = 1 * (24*3600) * 7;  // cookie de connection expire au bout de 7 jours
+  $DB_URL       = $CONSTANTS_CONFIG["DB_URL"];
+  $DB_ACCOUNT   = $CONSTANTS_CONFIG["DB_ACCOUNT"];
+  $DB_NAME      = $CONSTANTS_CONFIG["DB_NAME"];
+  $DB_PASSWORD  = $CONSTANTS_CONFIG["DB_PASSWORD"];
+  $db_conf      = [ // de base je stockais ça dans un json, et c'était cette variable qui en sortait
+    "DB_URL"      => $DB_URL,
+    "DB_ACCOUNT"  => $DB_ACCOUNT,
+    "DB_NAME"     => $DB_NAME,
+    "DB_PASSWORD" => $DB_PASSWORD
+  ];
 
-  $COOKIE_PATH = "/"; 
-  // Je me prendrai la tête plus tard sur pourquoi ça ne fonctionne pas avec un relative_path
-  //str_replace('\\', '/', dirname(__FILE__)) . "/" . $global_params["root_public"];
-  //$debuging = true;
-  //debug("=> " . dirname(__FILE__));
+  $TIME_SESS_END        = $CONSTANTS_CONFIG["TIME_SESSION_END"];
+  $TIME_SESS_INACTIVE   = $CONSTANTS_CONFIG["TIME_SESSION_INACTIVE"];
+  $TIME_COOKIE_CONNECT  = $CONSTANTS_CONFIG["TIME_COOKIE_CONNECT"];
 
-  $TIME_REROLL = 1 * (24*3600) * 1;
+  $COOKIE_PATH = $CONSTANTS_CONFIG["COOKIE_PATH"]; 
+  $TIME_REROLL = $CONSTANTS_CONFIG["TIME_REROLL"];
 
 ?>

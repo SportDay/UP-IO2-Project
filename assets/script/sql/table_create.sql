@@ -1,5 +1,7 @@
 -- #########################################################
--- POUR INITIALISER LA BASE DE DONNER (ALLEZ DANS : /public_root/init_database.php)
+-- POUR INITIALISER LA BASE DE DONNER
+-- ALLEZ DANS : /assets/db_init                 POUR LES REGLAGES
+-- ALLEZ DANS : /public_root/init_database.php  POUR LANCER L'INITIALISATION
 
 drop database if exists hrp_project;
 create database hrp_project;

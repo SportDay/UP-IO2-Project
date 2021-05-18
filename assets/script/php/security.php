@@ -275,21 +275,6 @@
             );
 
             exit();
-
-            /* SI BESOIN D'UN POST
-            ?>
-                <html><header></header><body>
-                    <form id="myForm" action="URL.php" method="post">
-                    <?php
-                        echo '<input type="hidden" name="'.htmlentities(KEY).'" value="'.htmlentities(VALEUR)).'">';
-                    ?>
-                    </form>
-                </body></html>
-                <script type="text/javascript">
-                    document.getElementById('myForm').submit();
-                </script>      
-            <?php
-            */
         }
     }
 

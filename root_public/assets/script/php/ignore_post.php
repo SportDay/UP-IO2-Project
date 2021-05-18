@@ -18,12 +18,7 @@ session_start();
 
 if (
     !isset($_POST["ignore_post"]) || !isset($_SESSION["ignore_post"]) ||
-    ($_POST["ignore_post"]  !=        $_SESSION["ignore_post"])
-
-    /*
-         quelqu'un qui veut utiliser ce fichier doit obligatoirement
-         recevoir un code attribué sur la page de paramètre
-    */
+          ($_POST["ignore_post"]  !=        $_SESSION["ignore_post"])
 )
 {
     echo json_encode([
@@ -55,14 +50,6 @@ if (!$connexion) {
 }
 
 ////////////////////////////////////////////////////////////////////
-/*
-if(isset($_SESSION["admin"]) && $_SESSION["admin"] === true){
-    echo json_encode([
-        "success" => false,
-        "error"   => "Base de donnée hors d'accès."
-    ]); exit();
-}*/
-
 
 $connexion->query(
     "UPDATE posts set reported =\"0\", reportnum=\"0\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
