@@ -111,8 +111,7 @@ function menu_when_not_connected () {
 
                 let xmlhttp = new XMLHttpRequest();
                 
-                xmlhttp.open('POST', 
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/login.php");
+                xmlhttp.open('POST', root_public + "assets/script/php/login.php");
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
@@ -153,8 +152,7 @@ function menu_when_not_connected () {
 
                 let xmlhttp = new XMLHttpRequest();
                 
-                xmlhttp.open('POST', 
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/signup.php");
+                xmlhttp.open('POST', root_public+"assets/script/php/signup.php");
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
@@ -270,8 +268,7 @@ function menu_when_connected () {
                 data.append("token_id", token_id);
                 let xmlhttp = new XMLHttpRequest();
                 
-                xmlhttp.open('POST', 
-                "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/disconnect.php");
+                xmlhttp.open('POST', root_public+"assets/script/php/disconnect.php");
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
@@ -396,8 +393,7 @@ function add_friend_js_bloc() {
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/accept_friend.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/accept_friend.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -430,8 +426,7 @@ function add_friend_js_bloc() {
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/refuse_friend.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/refuse_friend.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -516,8 +511,7 @@ function friend_js_bloc() {
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/remove_friend.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/remove_friend.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -590,8 +584,7 @@ function match_js_bloc() {
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/toggle_page_like.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/toggle_page_like.php");
             xmlhttp.send( data );
             
             xmlhttp.onreadystatechange = function () {
@@ -676,8 +669,7 @@ function profile_js_bloc() {
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/change_desc.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/change_desc.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -703,8 +695,7 @@ function profile_js_bloc() {
             data.append("token_id", token_id);
             
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/toggle_page_like.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/toggle_page_like.php");
             xmlhttp.send( data );
             
             xmlhttp.onreadystatechange = function () {
@@ -763,8 +754,7 @@ function post_js_add(){
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/add_posts.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/add_posts.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -784,8 +774,7 @@ function post_js_add(){
         function inspiration() {
             let textZone = document.getElementById("post_content");
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"]?>assets/script/php/inspiration.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/inspiration.php");
             xmlhttp.send();
 
             xmlhttp.onreadystatechange = function () {
@@ -912,8 +901,7 @@ function post_js_bloc() {
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/remove_post.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/remove_post.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -935,8 +923,7 @@ function post_js_bloc() {
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/like_system_post.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/like_system_post.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -963,8 +950,7 @@ function post_js_bloc() {
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/report_system_post.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/report_system_post.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -998,8 +984,7 @@ function post_reported_js_bloc(){
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/ignore_post.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/ignore_post.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -1024,8 +1009,7 @@ function post_reported_js_bloc(){
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/remove_post.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/remove_post.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -1049,8 +1033,7 @@ function post_reported_js_bloc(){
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/ban_def_user.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/ban_def_user.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
@@ -1096,8 +1079,7 @@ function post_reported_js_bloc(){
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-                "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/ban_tmp_user.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/ban_tmp_user.php");
             xmlhttp.send( data );
             xmlhttp.onreadystatechange = function () {
                 if (xmlhttp.readyState === 4) // request done

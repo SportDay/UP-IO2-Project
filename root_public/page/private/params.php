@@ -106,8 +106,7 @@
 
         let xmlhttp = new XMLHttpRequest();
         
-        xmlhttp.open('POST',
-        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/make_public.php");
+        xmlhttp.open('POST',root_public+"assets/script/php/make_public.php");
         xmlhttp.send( data );
 
         xmlhttp.onreadystatechange = function () {
@@ -144,8 +143,7 @@
 
         let xmlhttp = new XMLHttpRequest();
         
-        xmlhttp.open('POST',
-        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/remove_public.php");
+        xmlhttp.open('POST',root_public+"assets/script/php/remove_public.php");
         xmlhttp.send( data );
 
         xmlhttp.onreadystatechange = function () {
@@ -177,8 +175,7 @@
         //////////
 
         let xmlhttp = new XMLHttpRequest();
-        xmlhttp.open('POST',
-        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/reactivate_public.php");
+        xmlhttp.open('POST',root_public+"assets/script/php/reactivate_public.php");
         xmlhttp.send( data );
 
         xmlhttp.onreadystatechange = function () {
@@ -219,8 +216,7 @@
 
         let xmlhttp = new XMLHttpRequest();
 
-        xmlhttp.open('POST',
-        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/change_password.php");
+        xmlhttp.open('POST',root_public+"assets/script/php/change_password.php");
         xmlhttp.send( data );
 
 
@@ -271,8 +267,7 @@
 
         let xmlhttp = new XMLHttpRequest();
 
-        xmlhttp.open('POST',
-        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/remove_account.php");
+        xmlhttp.open('POST',root_public+"assets/script/php/remove_account.php");
         xmlhttp.send( data );
 
         xmlhttp.onreadystatechange = function () {

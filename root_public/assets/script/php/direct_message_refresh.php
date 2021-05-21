@@ -76,8 +76,6 @@
 
 
     // on recherche tout les messages entre les 2
-    $newLast = time();
-    $html = "";
 
     $new_messages = $connexion->query(
         "SELECT t1.creation_date, t1.content, username, public_name " .
@@ -93,6 +91,9 @@
         "ORDER BY t1.creation_date DESC ".
         "LIMIT 30 " // On prends pas les messages trop vieux
     );
+
+    $newLast = time();
+    $html = "";
 
     while ($message = $new_messages->fetch_assoc()) {
         ob_start();
@@ -113,8 +114,7 @@
     echo json_encode([
         "success"     => true,
         "html"        => $html,
-        "last"        => $newLast,
-        "test"        => ""
+        "last"        => $newLast
     ]);
     
     mysqli_close($connexion);

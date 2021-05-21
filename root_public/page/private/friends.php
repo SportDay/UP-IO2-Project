@@ -94,8 +94,7 @@
             data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/add_friend.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/add_friend.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {

@@ -73,8 +73,7 @@
         data.append("isLike",       isLike ? "true" : "false");
 
         let xmlhttp = new XMLHttpRequest();
-        xmlhttp.open('POST',
-        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/match_choice.php");
+        xmlhttp.open('POST',root_public+"assets/script/php/match_choice.php");
         xmlhttp.send( data );
 
         xmlhttp.onreadystatechange = function () {

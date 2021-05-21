@@ -57,7 +57,7 @@
                 
                 <!-- Messages -->
                 <div class="all_message_container border" id="all_message_container">
-
+                        
                 </div>
 
                 <!-- Send Messages -->
@@ -81,11 +81,11 @@
                     const private       = <?= $private ? "true" :  "false" ?>;
                     var   lastUpdate    = 0;
 
-                    // auto refresh (5s)
                     // j'ai verifié, js est single threaded, 
                     // donc pas de problème d'effets de bords à refresh 2x en même temps
                     window.setInterval( refreshMessages, <?= $GLOBALS["CONSTANTS_CONFIG"]["TIME_UPDATE_DM"] ?> );
                     refreshMessages(); // first iter
+                    messagesArea.scrollTop = messagesArea.scrollHeight;
 
                     //////////////////
                     // fonctions 
@@ -100,70 +100,64 @@
                         data.append("message",      sender.value);
 
                         let xmlhttp = new XMLHttpRequest();
-                        xmlhttp.open('POST',
-                        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/direct_message_send.php");
+                        xmlhttp.open('POST',root_public+"assets/script/php/direct_message_send.php");
                         xmlhttp.send( data );
 
                         xmlhttp.onreadystatechange = function () {
-                            if (xmlhttp.readyState === 4) // request done
-                                if (xmlhttp.status === 200) // successful return
+                            if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
+                                
+                                if (feedback["success"])
                                 {
-                                    //alert(xmlhttp.responseText);
-                                    const feedback = JSON.parse(xmlhttp.responseText);
-                                    
-                                    if (feedback["success"])
-                                    {
-                                        refreshMessages();
-                                        sender.value = "";
-                                        sender.focus();
+                                    refreshMessages();
+                                    sender.value = "";
+                                    sender.focus();
 
-                                    }
-                                    else
-                                    {
-                                        if (feedback["error"] == "token_error")
-                                        {
-                                            window.open(window.location.href, "_self");
-                                        }
-                                    }
                                 }
-                        }
-                    }
-
-                    //var cnt = 0;
-                    function refreshMessages() {
-                        //cnt++; if (cnt>5) return;
-                        
-                        let data = new FormData();
-                        data.append("token_id", token_id);
-                        data.append("private",      private);
-                        data.append("friend",       friend);
-                        data.append("last",         lastUpdate);
-
-                        let xmlhttp = new XMLHttpRequest();
-                        xmlhttp.open('POST',
-                        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/direct_message_refresh.php");
-                        xmlhttp.send( data );
-
-                        xmlhttp.onreadystatechange = function () {
-                            if (xmlhttp.readyState === 4) // request done
-                                if (xmlhttp.status === 200) // successful return
+                                else
                                 {
-                                    //alert(xmlhttp.responseText);
-                                    const feedback = JSON.parse(xmlhttp.responseText);
-                                    
-                                    if (feedback["success"])
-                                    {
-                                        lastUpdate = feedback["last"];
-                                        messagesArea.innerHTML = messagesArea.innerHTML + feedback["html"];
-                                    }
-
                                     if (feedback["error"] == "token_error")
                                     {
                                         window.open(window.location.href, "_self");
                                     }
                                 }
-                            
-                            messagesArea.scrollTop = messagesArea.scrollHeight;
+                            }
+                        }
+                    }
+
+                    function refreshMessages() {
+                        
+                        let data = new FormData();
+                        data.append("token_id",     token_id);
+                        data.append("private",      private);
+                        data.append("friend",       friend);
+                        data.append("last",         lastUpdate);
+
+                        let xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open('POST',root_public+"assets/script/php/direct_message_refresh.php");
+                        xmlhttp.send( data );
+
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
+                                
+                                if (feedback["success"])
+                                {
+                                    lastUpdate = feedback["last"];
+                                    
+                                    messagesArea.innerHTML = messagesArea.innerHTML + feedback["html"];
+                                    if (feedback["html"] != "") messagesArea.scrollTop = messagesArea.scrollHeight;
+                                }
+
+                                if (feedback["error"] == "token_error")
+                                {
+                                    window.open(window.location.href, "_self");
+                                }
+                            }
                         }
                     }
 

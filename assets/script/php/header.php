@@ -106,7 +106,10 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
 <!-- ------------------------------------------ -->
 
         <script>
-            const token_id = <?=json_encode($_SESSION["connected"] ? $_SESSION["token_id"] : "none")?>;
+            // variable globals
+            const token_id      = <?=json_encode($_SESSION["connected"] ? $_SESSION["token_id"] : "none")?>;
+            const root          = <?=json_encode($global_params["root"])?>;
+            const root_public   = <?=json_encode($global_params["root_public"])?>;
 
             function openPage(relLink) {
                 relLink = "<?php echo $global_params["root_public"] ?>" + "page/" + relLink;
