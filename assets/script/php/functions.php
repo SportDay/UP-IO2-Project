@@ -26,6 +26,10 @@
         return preg_split("/\r\n|\n|\r/", $str);
     }
 
+    function newline_for_html($str) {
+        return preg_replace("/\r\n|\r|\n/", '<br/>', $str);
+    }
+
     ////////////////////////
     // Debug
 

@@ -39,10 +39,10 @@ function menu_when_not_connected () {
             <div class="reg_log_form_container">
                 <span onclick="document.getElementById('login').style.display='none'" class="close" title="Fermer">&times;</span>
                 <label class="popup_form_title" for="pseudo"><b>Pseudo</b></label>
-                <input id="login_name" type="text" placeholder="Pseudo" name="pseudo" >
+                <input id="login_name" type="text" placeholder="Pseudo" name="pseudo" onkeypress="loginNameHandle(event)">
 
                 <label class="popup_form_title" for="password"><b>Mot de passe</b></label>
-                <input id="login_password" type="password" placeholder="Mot de passe" name="password">
+                <input id="login_password" type="password" placeholder="Mot de passe" name="password" onkeypress="loginPasswordHandle(event)">
 
                 <p id="login_error" class="popup_text" style="display:none"> ERROR </p>
                 <button type="submit" onclick="login();">Se connecter</button>
@@ -63,10 +63,14 @@ function menu_when_not_connected () {
             <div class="reg_log_form_container">
                 <span onclick="document.getElementById('register').style.display='none'" class="close" title="Fermer">&times;</span>
                 <label class="popup_form_title" for="pseudo"><b>Pseudo</b></label>
-                <input id="register_name" type="text" placeholder="Pseudo | 2-16 charactères : A-z et 0-9 et tiret et tiret bas" name="pseudo" >
+                <input id="register_name" type="text" 
+                placeholder="Pseudo | 2-16 charactères : A-z et 0-9 et tiret et tiret bas" 
+                name="pseudo" onkeypress="registerNameHandle(event)">
 
                 <label class="popup_form_title" for="password"><b>Mot de passe</b></label>
-                <input id="register_password" type="password" placeholder="Mot de passe | 6-26 charactères : A-z et 0-9 et _*+-()[]" name="password">
+                <input id="register_password" type="password" 
+                placeholder="Mot de passe | 6-26 charactères : A-z et 0-9 et _*+-()[]" 
+                name="password" onkeypress="registerPasswordHandle(event)">
                 
                 <p id="register_error" class="popup_text" style="display:none"> ERROR </p>
 
@@ -88,6 +92,12 @@ function menu_when_not_connected () {
 
             ////////////////////////
 
+            function loginNameHandle(e) {
+                if (e.keyCode==13) document.getElementById("login_password").focus();
+            }
+            function loginPasswordHandle(e) {
+                if (e.keyCode==13) login();
+            }
             function login() {
                 
                 nickname = document.getElementById("login_name");
@@ -108,30 +118,36 @@ function menu_when_not_connected () {
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
-                    if (xmlhttp.readyState === 4)
-                        if (xmlhttp.status === 200)
-                        {
-                            const feedback = JSON.parse(xmlhttp.responseText);
+                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+                    {
+                        const feedback = JSON.parse(xmlhttp.responseText);
 
-                            if (feedback["success"]) {
-                                debug.innerHTML = "Connection réussie.";
-                                debug.style.display = "block";
-                                redirection();
-                            }
-                            else {
-                                password.value = "";
-                                debug.innerHTML = feedback["error"];
-                                debug.style.display = "block";
-                            }
-                        }
-                        else
-                        {
-                            debug.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                        if (feedback["success"]) {
+                            debug.innerHTML = "Connection réussie.";
                             debug.style.display = "block";
+                            redirection();
                         }
+                        else {
+                            password.value = "";
+                            debug.innerHTML = feedback["error"];
+                            debug.style.display = "block";
+                            password.focus();
+                        }
+                    }
+                    else
+                    {
+                        debug.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                        debug.style.display = "block";
+                    }
                 }
             }
 
+            function registerNameHandle(e) {
+                if (e.keyCode==13) document.getElementById("register_password").focus();
+            }
+            function registerPasswordHandle(e) {
+                if (e.keyCode==13) register();
+            }
             function register() {
                 nickname = document.getElementById("register_name");
                 password = document.getElementById("register_password");
@@ -163,6 +179,7 @@ function menu_when_not_connected () {
                             password.value = "";
                             debug   .innerHTML = feedback["error"];
                             debug.style.display = "block";
+                            password.focus();
                         }
                     }
                     else

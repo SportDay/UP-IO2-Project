@@ -62,8 +62,7 @@
 
                 <!-- Send Messages -->
                 <div class="send_container">
-
-                    <textarea id="msg_send_content" placeholder="Votre Message" rows="3"></textarea>
+                    <textarea id="msg_send_content" placeholder="Votre Message" rows="3" onkeypress="sendMessageHandle(event)"></textarea>
                     <button class="btn_send btn_button_btn" onclick='sendMessage()'>
                         <img height="32" width="32" src="<?= $root_public ?>assets/image/send.png">
                     </button>
@@ -89,7 +88,10 @@
 
                     //////////////////
                     // fonctions 
-                    
+
+                    function sendMessageHandle(event) {
+                        if (event.keyCode==13) sendMessage();
+                    }
                     function sendMessage() {
                         let sender = document.getElementById("msg_send_content");
 
