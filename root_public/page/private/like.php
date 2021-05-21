@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Rencontres",
-  "css"         => "all.css",
   "css_add"     => ["admin.css","friends.css","like.css"],
   "redirect"    => TRUE
 ];?>

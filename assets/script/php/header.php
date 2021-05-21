@@ -79,12 +79,8 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
     </title>
 
     <!-- global css -->
-    <link rel="stylesheet" type="text/css" href=<?php
-    echo $global_params["root_public"] . "assets/css/";
-    if (isset($global_params["css"])) echo $global_params["css"];
-    else                              echo "all.css";
-    ?>>
-    <link rel="stylesheet" type="text/css" href="<?= $global_params["root_public"]."assets/css/search.css"?>">
+    <link rel="stylesheet" type="text/css" href="<?=$global_params["root_public"]."assets/css/all.css"?>">
+    <link rel="stylesheet" type="text/css" href="<?=$global_params["root_public"]."assets/css/search.css"?>">
     <!-- additionnal css and style -->
     <?php
     if (!$_SESSION["connected"])
@@ -92,6 +88,7 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
     else
         echo "<link rel=\"stylesheet\" type=\"text/css\" href=" . $global_params["root_public"] . "assets/css/menu.css>";
 
+        
     if (isset($global_params["css_add"]))
         foreach($global_params["css_add"] as $css)
             echo "<link rel=\"stylesheet\" type=\"text/css\" href=" . $global_params["root_public"] . "assets/css/" . $css.">";

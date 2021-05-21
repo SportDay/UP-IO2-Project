@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Admin Panel",
-  "css"         => "all.css",
   "css_add"     => ["public_page.css","posts.css","admin.css"],
   "redirect"    => TRUE,
   "admin_req"   => TRUE

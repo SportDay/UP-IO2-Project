@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Vos rencontres",
-  "css"         => "all.css",
   "css_add"     => [
       "posts.css", "public_page.css","admin.css",
       "friends.css","login.css"

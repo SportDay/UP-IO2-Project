@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Page Public",
-  "css"         => "all.css",
   "css_add"     => ["public_page.css", "posts.css"],
   "redirect"    => FALSE // J'hésite à mettre ça en true
 ];?>

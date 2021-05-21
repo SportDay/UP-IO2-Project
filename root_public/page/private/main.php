@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Coeur de poudlard",
-  "css"         => "all.css",
   "css_add"     => ["posts.css","search.css"],
   "redirect"    => TRUE
 ];?>

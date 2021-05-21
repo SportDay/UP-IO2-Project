@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Messages Directs",
-  "css"         => "all.css",
   "css_add"     => ["posts.css", "public_page.css", "dm.css"],
   "redirect"    => TRUE
 ];?>

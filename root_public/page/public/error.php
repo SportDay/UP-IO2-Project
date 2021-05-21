@@ -2,7 +2,6 @@
     "root"        => "../../../",
     "root_public" => "../../",
     "title"       => "Vous êtes perdu?",
-    "css"         => "all.css",
     "redirect"    => FALSE
 ];?>
 <!-- ------------------------------------------ -->

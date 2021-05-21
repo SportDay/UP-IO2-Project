@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Paramètres",
-  "css"         => "all.css",
   "css_add"     => ["params.css"],
   "redirect"    => TRUE
 ];?>
