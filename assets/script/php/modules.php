@@ -387,7 +387,7 @@ function add_friend_bloc($friend) {
     <?php
 }
 
-function friend_bloc($friend, $specific_root=FALSE, $root_public="") { // necessite un friend_js_bloc sur la même page
+function friend_bloc($friend, $specific_root=FALSE, $root_public="") {
 
     if (!$specific_root)
         $root_public = $GLOBALS["global_params"]["root_public"];
@@ -441,7 +441,7 @@ function friend_bloc($friend, $specific_root=FALSE, $root_public="") { // necess
 ////////////////////////////////////////////////
 // MATCHS
 
-function match_bloc($friend, $specific_root=FALSE, $root_public="") { // necessite un friend_js_bloc sur la même page
+function match_bloc($friend, $specific_root=FALSE, $root_public="") {
 
     if (!$specific_root)
         $root_public = $GLOBALS["global_params"]["root_public"];
