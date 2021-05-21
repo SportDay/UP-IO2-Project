@@ -21,19 +21,8 @@ if (!isset($_POST["public_name"])) {
     ]); exit();
 }
 
-/// SQL
-$connexion = mysqli_connect (
-    $db_conf["DB_URL"],
-    $db_conf["DB_ACCOUNT"],
-    $db_conf["DB_PASSWORD"],
-    $db_conf["DB_NAME"]
-); 
-if (!$connexion) {
-    echo json_encode([
-        "success" => false,
-        "error"   => "Base de donnée hors d'accès."
-    ]); exit();
-}
+$connexion = makeConnection();
+
 ////////////////////////////////////////////////////////////////////
 
 $profile    = $connexion->query(

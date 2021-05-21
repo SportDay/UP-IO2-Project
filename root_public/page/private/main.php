@@ -13,23 +13,12 @@
 <?php
     
     search_bar();
-
-    //////////////////////////////////////////////////////////
-    // connexion sql
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-    );
-    if (!$connexion) {
-        echo "connection_error"; exit();
-    }
-
     
     //////////////////
     // ajout des posts
 
+    $connexion = makeConnection(3);
+    
     $posts = $connexion->query(
         "select * from ( ".
         "          (SELECT like_id as poster FROM `pages_liked` WHERE (user_id=".$connexion->real_escape_string($_SESSION["id"])."))".

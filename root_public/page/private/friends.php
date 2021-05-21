@@ -25,17 +25,8 @@
 
 <!-- Accepte demande d'amis -->
 <?php
-    $connexion = mysqli_connect (
-        $GLOBALS["DB_URL"],
-        $GLOBALS["DB_ACCOUNT"],
-        $GLOBALS["DB_PASSWORD"],
-        $GLOBALS["DB_NAME"]
-    );
 
-    if (!$connexion) { 
-        echo "connection_error"; exit(); 
-    }    
-
+    $connexion = makeConnection(3);
 
     $friends = $connexion->query( // enfin ça fonctionne !!
         "select *

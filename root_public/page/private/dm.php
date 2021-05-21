@@ -26,14 +26,7 @@
     $friend  = isset($_GET["user"])    ? $_GET["user"]    : invalidPage("Requête invalide.");
     $private = isset($_GET["private"]) ? $_GET["private"] == "true" : invalidPage("Requête invalide.");
 
-    $connexion = mysqli_connect (
-        $GLOBALS["DB_URL"],
-        $GLOBALS["DB_ACCOUNT"],
-        $GLOBALS["DB_PASSWORD"],
-        $GLOBALS["DB_NAME"]
-    );
-
-    if (!$connexion) invalidPage("connection_error");
+    $connexion = makeConnection(3);
 
     //////////////////////////////
     // CONTENU MODULABLE DE PAGE
@@ -91,7 +84,7 @@
                     // auto refresh (5s)
                     // j'ai verifié, js est single threaded, 
                     // donc pas de problème d'effets de bords à refresh 2x en même temps
-                    window.setInterval( refreshMessages, 5000 );
+                    window.setInterval( refreshMessages, <?= $GLOBALS["CONSTANTS_CONFIG"]["TIME_UPDATE_DM"] ?> );
                     refreshMessages(); // first iter
 
                     //////////////////
@@ -185,7 +178,6 @@
 ?>
 <!-- ------------------------------------------ -->
 </br>
-
 <?php
 
     if ($private) { // check private friend   

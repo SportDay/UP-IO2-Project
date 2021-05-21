@@ -13,18 +13,7 @@
 <!-- ------------------------------------------ -->
 <?php
 
-///////////// SQL
-$connexion = mysqli_connect (
-    $db_conf["DB_URL"],
-    $db_conf["DB_ACCOUNT"],
-    $db_conf["DB_PASSWORD"],
-    $db_conf["DB_NAME"]
-);
-
-if (!$connexion) {
-    echo "connection_error"; exit();
-}
-/////////////
+$connexion = makeConnection(3);
 
 $reported_post = $connexion->query("SELECT * FROM posts WHERE reportnum>0 ORDER BY reportnum DESC LIMIT 60");
 

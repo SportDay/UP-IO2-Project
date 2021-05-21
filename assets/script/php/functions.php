@@ -61,14 +61,25 @@
         );
 
         if (!$connexion) { // error manager
-            if ($type == 2) return false;
-            
+            if ($type == 3) {
+                ?>
+                <div class="mid_content">
+                    <?php write("Base de donnée indisponible."); ?>
+                </div>
+                <?php
+                require($GLOBALS["global_params"]["root"] . "assets/script/php/footer.php");
+                exit();
+            }
+
+            if ($type == 2) 
+                return false;
+
             if ($type == 1)
-                write("connection_error"); 
+                write("Base de donnée indisponible."); 
             if ($type == 0)
                 echo json_encode([
                     "success"   =>  false,
-                    "error"     =>  "database is not availible"
+                    "error"     =>  "Base de donnée indisponible."
                 ]);
             
             exit();

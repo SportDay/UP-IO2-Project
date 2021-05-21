@@ -24,20 +24,7 @@ if (!isset($_POST["post_id"])) {
 }
 
 //// SQL
-$connexion = mysqli_connect (
-    $db_conf["DB_URL"],
-    $db_conf["DB_ACCOUNT"],
-    $db_conf["DB_PASSWORD"],
-    $db_conf["DB_NAME"]
-);
-
-if (!$connexion) {
-    // data base error
-    echo json_encode([
-        "success" => false,
-        "error"   => "Base de donnée hors d'accès."
-    ]); exit();
-}
+$connexion = makeConnection();
 
 ////////////////////////////////////////////////////////////////////
 

@@ -36,20 +36,7 @@
     }
 
     // CONNECTION A LA BASE DE DONNEE
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-    );
-
-    if (!$connexion) { 
-        // data base error
-        echo json_encode([
-            "success" => false,
-            "error"   => "Base de donnée indisponible."
-        ]); exit();
-    }
+    $connexion = makeConnection();
 
     $result = $connexion->query(
         "SELECT * FROM users WHERE username=\"". $connexion->real_escape_string($username) . "\";"

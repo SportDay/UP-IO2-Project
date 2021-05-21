@@ -10,18 +10,9 @@
 <?php // verification de l'existence de la page
 
     require_once($global_params["root"] . "assets/script/php/constants.php");
-    //////////////////////////////////////////////////////////
-    // connexion sql
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-        );
+    require_once($global_params["root"] . "assets/script/php/functions.php");
 
-    if (!$connexion) {
-        echo "connection_error"; exit();
-    }
+    $connexion = makeConnection(1);
 
     //////////////////////////////////////////////////////////
     // generation page en fonction du get
@@ -40,11 +31,8 @@
         exit();
     }
 
+    require($global_params["root"] . "assets/script/php/header.php");
 ?>
-
-<!-- ------------------------------------------ -->
-<?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
-<?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
 <?php search_bar(); ?>
 <!-- ------------------------------------------ -->

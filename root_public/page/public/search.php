@@ -16,15 +16,7 @@
 
     /////////////////////
 
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-    );
-    if (!$connexion) {
-        echo "connection_error"; exit();
-    }
+    $connexion = makeConnection(3);
 
     if(!isset($_GET["search"]))
         $_GET["search"] = "Voldemort";

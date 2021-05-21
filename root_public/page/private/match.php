@@ -14,29 +14,22 @@
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
 
-    <!-- Liste de matchs -->
-
-    <div id="friend_blocs_area" >
     <?php
-
         if (!$_SESSION["enable_public"]) {
             ?> <div class="mid_content" > <?php
             write("You don't have a public profile");
-            ?> </div></div> <?php
+            ?> </div> <?php
             require($global_params["root"] . "assets/script/php/footer.php");
             exit();
         }
 
-        $connexion = mysqli_connect (
-            $GLOBALS["DB_URL"],
-            $GLOBALS["DB_ACCOUNT"],
-            $GLOBALS["DB_PASSWORD"],
-            $GLOBALS["DB_NAME"]
-        );
-    
-        if (!$connexion) { 
-            echo "connection_error"; exit(); 
-        }
+        $connexion = makeConnection(3);
+    ?>
+
+    <!-- Liste de matchs -->
+
+    <div id="friend_blocs_area" >
+    <?php
 
         $matchs = $connexion->query( 
             "

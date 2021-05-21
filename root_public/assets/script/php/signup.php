@@ -1,7 +1,5 @@
 <?php 
 
-    // ATTENTION
-    // LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
     $global_params = [
         "root"        => "../../../../",
         "root_public" => "../../../../root_public/",
@@ -45,20 +43,7 @@
     }
 
     // CONNECTION A LA BASE DE DONNEE
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-    );
-
-    if (!$connexion) { 
-        // data base error
-        echo json_encode([
-            "success" => false,
-            "error"   => "Base de donnée hors d'accès."
-        ]); exit(); 
-    }
+    $connexion = makeConnection();
 
     // VERIFIER QUE LE COMPTE EST LIBRE
 
