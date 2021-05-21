@@ -49,8 +49,6 @@ mysqli_close($connexion);
         </div>
     </div>
 <!-- ------------------------------------------ -->
-
-<?php
-    post_reported_js_bloc();
-?>
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
+
+<script type="text/javascript" src="../../assets/script/js/post_reported_bloc.js"></script>

@@ -97,7 +97,6 @@
     $html = "";
 
     while ($message = $new_messages->fetch_assoc()) {
-        $cntr++;
         ob_start();
         ?>
 

@@ -83,7 +83,9 @@
     ?>
     </div>
 
-<?php friend_js_bloc(); add_friend_js_bloc(); ?>
+<!-- ------------------------------------------ -->
+<?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
+
 <script>
         function addFriend() {
             let requestFriend = document.getElementById("add_friend_input");
@@ -98,19 +100,17 @@
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-                        
-                        requestFriend.value = "";
-                        debugHtml.style.display="block";
-                        debugHtml.innerHTML = feedback["error"];
-                    }
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+                {
+                    //alert(xmlhttp.responseText);
+                    const feedback = JSON.parse(xmlhttp.responseText);
+                    
+                    requestFriend.value = "";
+                    debugHtml.style.display="block";
+                    debugHtml.innerHTML = feedback["error"];
+                }
             }
         }
 </script>
-
-<!-- ------------------------------------------ -->
-<?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
+<script type="text/javascript" src="../../assets/script/js/friend_bloc.js"></script>
+<script type="text/javascript" src="../../assets/script/js/add_friend_bloc.js"></script>

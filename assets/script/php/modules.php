@@ -6,13 +6,6 @@
     Les modules correspondent à un ensemble de fonctions qui générent des élements html procéduraux.
     Ces fonctions produisent donc effets de bords sur les pages ou elles sont appelés.
 
-    A noter que les scripts (javascript) prennent beaucoup de place.
-    Il est à envisager de créer des fichiers .js dans root_public/assets/script/js/*.js
-    Et d'y mettre tout ces scripts.
-    Pour garder la compatibilité avec
-    les variables de pages, 
-    on pourrait utiliser des var qui serait set dans un <script></script> au préalable
-
 */
 
 ////////////////////////////////////////////////
@@ -272,30 +265,26 @@ function menu_when_connected () {
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
-                    let DONE = 4; // readyState 4 means the request is done.
-                    let OK = 200; // status 200 is a successful return.
+                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+                    {
+                        const feedback = JSON.parse(xmlhttp.responseText);
 
-                    if (xmlhttp.readyState === DONE)
-                        if (xmlhttp.status === OK)
-                        {
-                            const feedback = JSON.parse(xmlhttp.responseText);
+                        if (feedback["success"]) {
+                            if (<?php echo $GLOBALS["global_params"]["redirect"] ? "true" : "false" ; ?>)
+                                openPage('public/home_page.php?to_connect&q=' + encodeURIComponent(window.location.href)); // SI PAGE PRIVE
+                            else
+                            { // SI PAGE PUBLIC
+                                let url = window.location.href.split('?');
 
-                            if (feedback["success"]) {
-                                if (<?php echo $GLOBALS["global_params"]["redirect"] ? "true" : "false" ; ?>)
-                                    openPage('public/home_page.php?to_connect&q=' + encodeURIComponent(window.location.href)); // SI PAGE PRIVE
+                                if (url.length == 1)
+                                    window.open(url[0] + '?' +           'to_connect&q=' + encodeURIComponent(window.location.href)
+                                    , "_self");
                                 else
-                                { // SI PAGE PUBLIC
-                                    let url = window.location.href.split('?');
-
-                                    if (url.length == 1)
-                                        window.open(url[0] + '?' +           'to_connect&q=' + encodeURIComponent(window.location.href)
-                                        , "_self");
-                                    else
-                                        window.open(url[0] + '?' + url[1] + '&to_connect&q=' + encodeURIComponent(window.location.href)
-                                        , "_self");
-                                }
+                                    window.open(url[0] + '?' + url[1] + '&to_connect&q=' + encodeURIComponent(window.location.href)
+                                    , "_self");
                             }
                         }
+                    }
                 }
             }
         </script>
@@ -381,75 +370,6 @@ function add_friend_bloc($friend) {
     <?php
 }
 
-function add_friend_js_bloc() {
-    ?> <script>
-        function acceptFriend(friend) {
-            let friendBlocs = document.getElementById("friend_blocs_area");
-            let requestBloc = document.getElementById("friend_bloc_" + friend);
-
-            let data = new FormData();
-            data.append("username", friend);
-            data.append("from_root", "<?=$GLOBALS["global_params"]["root_public"]?>");
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/accept_friend.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-                        
-                        if (feedback["success"])
-                        {
-                            parentBloc = requestBloc.parentNode;
-
-                            if (parentBloc.childElementCount < 3)
-                                parentBloc.parentNode.removeChild(parentBloc);
-                            else
-                                parentBloc.removeChild(requestBloc);
-
-                            friendBlocs.innerHTML = feedback["html"] + friendBlocs.innerHTML;
-                        }
-                    }
-            }
-        }
-
-        function refuseFriend(friend) {
-            let requestBloc = document.getElementById("friend_bloc_" + friend);
-
-            let data = new FormData();
-            data.append("username", $friend);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/refuse_friend.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-                        
-                        if (feedback["success"])
-                        {
-                            requestBloc.parentNode.removeChild(requestBloc);
-                            let elements_list = document.getElementById("friends_request_list");
-                            if(elements_list.children.length === 1){
-                                elements_list.parentNode.removeChild(elements_list);;
-                            }
-                        }
-                    }
-            }
-        }
-    </script><?php
-}
-
 function friend_bloc($friend, $specific_root=FALSE, $root_public="") { // necessite un friend_js_bloc sur la même page
 
     if (!$specific_root)
@@ -501,35 +421,6 @@ function friend_bloc($friend, $specific_root=FALSE, $root_public="") { // necess
 
 }
 
-function friend_js_bloc() {
-    ?> <script>
-        function removeFriend(username) {
-            let friendBloc = document.getElementById("friend_bloc_"+username);
-
-            let data = new FormData();
-            data.append("username", username);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/remove_friend.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                            friendBloc.parentNode.removeChild(friendBloc);
-
-                    }
-            }
-        }
-    </script><?php
-}
-
 ////////////////////////////////////////////////
 // MATCHS
 
@@ -571,36 +462,6 @@ function match_bloc($friend, $specific_root=FALSE, $root_public="") { // necessi
         </div>
     <?php
 
-}
-
-function match_js_bloc() {
-    ?> <script>
-        function removeMatch(username) {
-            
-            let friendBloc = document.getElementById("friend_bloc_"+username);
-
-            let data = new FormData();
-            data.append("public_name", username);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/toggle_page_like.php");
-            xmlhttp.send( data );
-            
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4)   // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                            if (!feedback["isLiked"]) friendBloc.parentNode.removeChild(friendBloc);
-
-                    }
-            };
-        }
-    </script><?php
 }
 
 ////////////////////////////////////////////////
@@ -659,75 +520,6 @@ function profile_bloc($profile){
 
 }
 
-function profile_js_bloc() {
-    ?> <script>
-        function updateDesc() {
-            let textZone = document.getElementById("description");
-
-            let data = new FormData();
-            data.append("new_desc", textZone.value);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/change_desc.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                            document.location.reload();
-
-                    }
-            };
-        }
-
-        function togglePageLike() {
-            let button  = document.getElementById("friend_add_btn");
-            let nLikes  = document.getElementById("profile_likes");
-
-            let data = new FormData();
-            data.append("public_name", <?= json_encode($_GET["user"]) ?>);
-            data.append("token_id", token_id);
-            
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/toggle_page_like.php");
-            xmlhttp.send( data );
-            
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4)
-                    if (xmlhttp.status === 200)
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                        {
-                            if (feedback["isLiked"]) {
-                                button.classList.add   ("btn_friend_profile_add_dislike");
-                                button.classList.remove("btn_friend_profile_add_like");
-                                button.innerHTML="Ne plus suivre";
-                            } else {
-                                button.classList.remove("btn_friend_profile_add_dislike");
-                                button.classList.add   ("btn_friend_profile_add_like");
-                                button.innerHTML="Suivre";
-                            }
-
-                            nLikes.innerHTML = "Likes : " + feedback["nLikes"];
-                        }
-
-                    }
-            };
-        }
-
-            
-    </script> <?php
-}
-
 ////////////////////////////////////////////////
 // POSTS
 
@@ -740,57 +532,6 @@ function post_add(){
             <button id="inspirate" onclick="inspiration();">Inspiration</button>
         </div>
     </div>
-    <?php
-}
-
-function post_js_add(){
-    ?>
-    <script>
-        function postAdd() {
-            let textZone = document.getElementById("post_content");
-            if(textZone.value === "") return;
-            let data = new FormData();
-            data.append("post_content", textZone.value);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/add_posts.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
-                {
-                    const feedback = JSON.parse(xmlhttp.responseText);
-
-                    if (feedback["success"]) {
-                        document.location.reload();
-                    }else{
-                        textZone.value = feedback["error"];
-                    }
-
-                }
-            }
-        }
-        function inspiration() {
-            let textZone = document.getElementById("post_content");
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/inspiration.php");
-            xmlhttp.send();
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"]) {
-                            textZone.value = feedback["message"].trim();
-                        }
-                    }
-            }
-        }
-    </script>
     <?php
 }
 
@@ -889,219 +630,6 @@ function post_bloc($post, $admin_option = false){
     </div>
 
     <?php
-}
-
-function post_js_bloc() {
-    ?> <script>
-        function removePost(post_id) {
-            let postBlock = document.getElementById("post_id_"+post_id);
-
-            let data = new FormData();
-            data.append("post_id", post_id);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/remove_post.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                            postBlock.parentNode.removeChild(postBlock);
-
-                    }
-            }
-        }
-        function likeSystemPost(post_id) {
-            let data = new FormData();
-            data.append("post_id", post_id);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/like_system_post.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"]) {
-                            if(feedback["liked"]) {
-                                document.getElementById("img_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"] . "assets/image/liked.png"?>";
-                            }else{
-                                document.getElementById("img_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"] . "assets/image/like.png"?>";
-                            }
-                            document.getElementById("like_id_" + post_id).textContent  = feedback["nbr_like"];
-                        }
-                    }
-            }
-        }
-        function reportSystemPost(post_id) {
-            let data = new FormData();
-            data.append("post_id", post_id);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/report_system_post.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4)
-                    if (xmlhttp.status === 200)
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"]) {
-                            if(feedback["report"]) {
-                                document.getElementById("img_report_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"]."assets/image/reported.png"?>";
-                            }else{
-                                document.getElementById("img_report_like_" + post_id).src = "<?= $GLOBALS["global_params"]["root_public"]."assets/image/report.png"?>";
-                            }
-                        }
-
-                    }
-            }
-        }
-    </script><?php
-}
-
-function post_reported_js_bloc(){
-    ?> <script>
-        function ignoreReport(post_id) {
-            let postBlock = document.getElementById("post_id_"+post_id);
-
-            let data = new FormData();
-            data.append("post_id", post_id);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/ignore_post.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                            postBlock.parentNode.removeChild(postBlock);
-
-                    }
-            }
-        }
-
-        function removeReportedPost(post_id) {
-            let postBlock = document.getElementById("post_id_"+post_id);
-
-            let data = new FormData();
-            data.append("post_id", post_id);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/remove_post.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                            postBlock.parentNode.removeChild(postBlock);
-
-                    }
-            }
-        }
-
-        function banDefinitif(user_id) {
-
-            let data = new FormData();
-            data.append("user_id", user_id);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/ban_def_user.php");
-            xmlhttp.send( data );
-
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                            document.location.reload();
-
-                    }
-            }
-        }
-
-        function showTempBanBlock(user_id){
-            document.getElementById('tmp_ban').style.display='block';
-            document.getElementById('ban_btn').setAttribute( "onClick", "banTemporaire("+user_id+");");
-        }
-
-        function hideTempBanBlock(){
-            document.getElementById('tmp_ban').style.display='none'
-            document.getElementById("ban_btn").removeAttribute("onClick");
-        }
-
-        function banTemporaire(user_id) {
-
-            let checked;
-            let radios = document.getElementsByName('time');
-
-            for (let i = 0; i < radios.length; i++) {
-                if (radios[i].checked) {
-                    checked = radios[i].value;
-                    break;
-                }
-            }
-
-            let data = new FormData();
-            data.append("user_id", user_id);
-            data.append("time", document.getElementById("time_input").value);
-            data.append("type", checked);
-            data.append("token_id", token_id);
-
-            let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',root_public+"assets/script/php/ban_tmp_user.php");
-            xmlhttp.send( data );
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-
-                        if (feedback["success"])
-                            document.location.reload();
-                    }
-            }
-        }
-
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('tmp_ban')) {
-                document.getElementById('tmp_ban').style.display = "none";
-                document.getElementById("ban_btn").removeAttribute("onClick");
-            }
-        }
-
-    </script> <?php
 }
 
 ?>

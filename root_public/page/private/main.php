@@ -46,10 +46,10 @@
     /////////////////////////////
     // fonctions en javascript
 
-    if(isset($_SESSION["id"])){
-        post_js_bloc();
-        post_js_add();
-    }
+    if(isset($_SESSION["id"])){ ?>
+        <script type="text/javascript" src="../../assets/script/js/post_bloc.js"></script>
+        <script type="text/javascript" src="../../assets/script/js/post_add.js"></script>
+    <?php }
 ?>
 
 <!-- ------------------------------------------ -->

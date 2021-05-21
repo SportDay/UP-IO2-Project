@@ -63,7 +63,7 @@
     ?>
     </div>
 
-<?php match_js_bloc(); ?>
-
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
+
+<script type="text/javascript" src="../../assets/script/js/match_bloc.js"></script>

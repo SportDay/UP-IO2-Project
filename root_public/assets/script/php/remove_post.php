@@ -1,7 +1,5 @@
 <?php
 
-// ATTENTION
-// LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
 $global_params = [
     "root"        => "../../../../",
     "root_public" => "../../../../root_public/",
@@ -41,10 +39,10 @@ if($post["user_id"] !== $_SESSION["id"] && !(isset($_SESSION["admin"]) && $_SESS
 
 
 // remove the post
-$connexion->query(
+$connexion->query( // avec les foreign en cascade ça peut être supprimé normalement
     "DELETE FROM `reports` WHERE `message_id`=" . $post["id"] . " ;"
 );
-$connexion->query(
+$connexion->query( // avec les foreign en cascade ça peut être supprimé normalement
     "DELETE FROM `likes` WHERE `message_id`=" . $post["id"] . " ;"
 );
 $connexion->query(

@@ -63,11 +63,11 @@
     // fonctions en javascript
 
     mysqli_close($connexion);
-    if($_SESSION["connected"]){
-        profile_js_bloc($page_user);
-        post_js_bloc();
-        post_js_add();
-    }
+    if($_SESSION["connected"]){ ?>
+        <script type="text/javascript" src="../../assets/script/js/profile_bloc.js"></script>
+        <script type="text/javascript" src="../../assets/script/js/post_bloc.js"></script>
+        <script type="text/javascript" src="../../assets/script/js/post_add.js"></script>
+    <?php }
 
 ?>
 <!-- ------------------------------------------ -->
