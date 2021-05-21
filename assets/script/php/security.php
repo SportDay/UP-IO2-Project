@@ -9,6 +9,14 @@
 
     // ACTUALISATION DE LA SESSION (s'execute avant l'execution de chaque page)
 
+    function sessionDisconnect() {
+        session_destroy();
+        session_unset();
+        session_start();
+        $_SESSION["connected"] = false;
+        $_SESSION["admin"]     = false;    
+    }
+
     function tryConnect () {
         $connexion = makeConnection(1);
         if (!$connexion) return false;
@@ -47,15 +55,12 @@
 
         }
 
-        $_SESSION["connected"] = false;
-        $_SESSION["admin"]     = false;
-
         //////////////////////////////////////
         // TRY TO CONNECT USING COOKIES
         
         if (!isset($_COOKIE["cookie_id"])  || !isset($_COOKIE["cookie_pass"])) {
-            mysqli_close($connexion);
-            return;
+            sessionDisconnect();
+            mysqli_close($connexion); return;
         }
         
         $result = $connexion->query(
@@ -67,7 +72,10 @@
             !($result = $result->fetch_assoc())["cookie_enabled"] ||
             $_COOKIE["cookie_pass"] != $result["cookie_pass"] ||
             $_COOKIE["cookie_expire"] < time()            
-            ) { mysqli_close($connexion); return; }
+            ) { 
+                sessionDisconnect();
+                mysqli_close($connexion); return; 
+            }
 
         //////////////////////////////////////////////
         // NOW CONNECT
@@ -97,8 +105,8 @@
         $connexion->query( 
             "UPDATE users SET " .
             "last_join="    . $_SESSION["last_time"] . ", " .
-            "banned="       . $_SESSION["banned"]       . " "  .
-            "WHERE `id`="   . $_SESSION["id"]       . " ;"
+            "banned="       . $_SESSION["banned"]    . " "  .
+            "WHERE `id`="   . $_SESSION["id"]        . " ;"
         );
         
         mysqli_close($connexion);

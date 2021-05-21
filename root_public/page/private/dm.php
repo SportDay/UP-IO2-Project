@@ -118,17 +118,17 @@
                                 }
                                 else
                                 {
-                                    if (feedback["error"] == "token_error")
-                                    {
-                                        window.open(window.location.href, "_self");
-                                    }
+                                    if (feedback["error"] == "token_error") window.open(window.location.href, "_self");
                                 }
                             }
                         }
                     }
 
+                    var cntr = 0;
                     function refreshMessages() {
-                        
+                        cntr = cntr++ > 5 ? 0 : cntr;
+                        if (cntr == 0) lastUpdate = 0;
+
                         let data = new FormData();
                         data.append("token_id",     token_id);
                         data.append("private",      private);
@@ -149,13 +149,11 @@
                                 {
                                     lastUpdate = feedback["last"];
                                     
-                                    messagesArea.innerHTML = messagesArea.innerHTML + feedback["html"];
+                                    messagesArea.innerHTML = (cntr==0?"":messagesArea.innerHTML) + feedback["html"];
                                     if (feedback["html"] != "") messagesArea.scrollTop = messagesArea.scrollHeight;
                                 }
-
-                                if (feedback["error"] == "token_error")
-                                {
-                                    window.open(window.location.href, "_self");
+                                else {
+                                    if (feedback["error"] == "token_error") window.open(window.location.href, "_self");
                                 }
                             }
                         }

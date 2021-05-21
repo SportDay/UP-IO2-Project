@@ -76,7 +76,6 @@
 
 
     // on recherche tout les messages entre les 2
-
     $new_messages = $connexion->query(
         "SELECT t1.creation_date, t1.content, username, public_name " .
         "FROM ( ".
@@ -89,13 +88,16 @@
         "on t1.from_id=users.id ".
 
         "ORDER BY t1.creation_date DESC ".
-        "LIMIT 30 " // On prends pas les messages trop vieux
+        "LIMIT 21 " 
+        // On prends pas les messages trop vieux
+        // D'ailleurs on pourrait aussi supprimer les trop vieux du coup
     );
 
     $newLast = time();
     $html = "";
 
     while ($message = $new_messages->fetch_assoc()) {
+        $cntr++;
         ob_start();
         ?>
 
@@ -107,7 +109,6 @@
         <?php
         $html = ob_get_clean() . $html;
     }
-
 
     ////////////////////////////////////////////////////////////////////
 

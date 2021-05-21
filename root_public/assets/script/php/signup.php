@@ -89,12 +89,12 @@
     $_SESSION["token_id"]       = randomString();
 
     $connexion->query( 
-                "UPDATE users SET ".
-                "last_join="    .$_SESSION["last_time"]                               ." ".
-                "token_id="     .$connexion->real_escape_string($_SESSION["token_id"])." ".
-                "token_expire=" .$connexion->real_escape_string($cookie_expire)       ." ".
-                "WHERE id="     .$_SESSION["id"]
-            );
+        "UPDATE users SET ".
+        "last_join="    .$_SESSION["last_time"]                                 .", ".
+        "token_id=\""   .$connexion->real_escape_string($_SESSION["token_id"])  ."\", ".
+        "token_expire=" .$cookie_expire                                         ." ".
+        "WHERE id="     .$_SESSION["id"] ." ;"
+    );
 
     setcookie("token_id",  $_SESSION["token_id"], $cookie_expire, $COOKIE_PATH);
 
