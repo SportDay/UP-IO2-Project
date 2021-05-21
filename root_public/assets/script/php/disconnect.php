@@ -1,7 +1,5 @@
 <?php
 
-    // ATTENTION
-    // LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
     $global_params = [
         "root"        => "../../../../",
         "root_public" => "../../../../root_public/",
@@ -11,6 +9,7 @@
     require($global_params["root"] . "assets/script/php/functions.php");
     
     session_start();
+    verifyToken();
 
     $connexion = mysqli_connect (
         $db_conf["DB_URL"],
@@ -33,6 +32,7 @@
         " cookie_enabled=FALSE, " .
         " cookie_pass=NULL," .
         " cookie_expire="     . (time() - 3600) .
+        " token_expire="      . (time() - 3600) .
     
         " WHERE `id`=\"" . $_SESSION["id"] . "\" ;"
     );
@@ -40,6 +40,8 @@
     setcookie("cookie_id",      "", time() - 3600, $COOKIE_PATH);
     setcookie("cookie_pass",    "", time() - 3600, $COOKIE_PATH);
     setcookie("cookie_expire",  "", time() - 3600, $COOKIE_PATH);
+    setcookie("token_id",  "",      time() - 3600, $COOKIE_PATH);
+    
     
     echo json_encode([
         "success" => true,

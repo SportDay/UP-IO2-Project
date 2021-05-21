@@ -15,22 +15,7 @@ require($global_params["root"] . "assets/script/php/security.php");
 // ETABLISSEMENT DE LA CONNECTION
 
 session_start();
-
-if (
-    !isset($_POST["friend"]) || !isset($_SESSION["friend"]) ||
-    ($_POST["friend"]  !=        $_SESSION["friend"])
-
-    /*
-         quelqu'un qui veut utiliser ce fichier doit obligatoirement
-         recevoir un code attribué sur la page de paramètre
-    */
-)
-{
-    echo json_encode([
-        "success" => false,
-        "error"   => "Requête incorrecte."
-    ]); exit();
-}
+verifyToken();
 
 if (!isset($_POST["friend_id"])) {
     echo json_encode([

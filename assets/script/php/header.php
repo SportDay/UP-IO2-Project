@@ -25,10 +25,10 @@ Listes des paramètres de _SESSION:
   id | username | admin
   enable_public | memory_public | banned | public_name | public_image
   init_time | last_time | inactive_time | max_time
-  connected
+  connected | token_id  | token_expire
 
 Liste des cookies :
-  cookie_id | cookie_pass | cookie_expire
+  cookie_id | cookie_pass | cookie_expire | token_id
 
 /*///////////////////////////////////////////
 // CONSTANTES :
@@ -102,10 +102,12 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
 
 <body>
 <header> <div id = "up_panel">
-        <!-- HEADER -->
-        <!-- ------------------------------------------ -->
+<!-- HEADER -->
+<!-- ------------------------------------------ -->
 
         <script>
+            const token_id = <?=json_encode($_SESSION["connected"] ? $_SESSION["token_id"] : "none")?>;
+
             function openPage(relLink) {
                 relLink = "<?php echo $global_params["root_public"] ?>" + "page/" + relLink;
                 window.open(relLink, "_self");
@@ -124,8 +126,8 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
                 let otp = {};
 
                 window.location.href.replace( location.hash, '' ).replace( 
-                    /[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
-                    function( m, key, value ) { // callback
+                    /[?&]+([^=&]+)=?([^&]*)?/gi,
+                    function( m, key, value ) {
                         otp[key] = value !== undefined ? value : '';
                     }
                 );
@@ -142,7 +144,7 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
                         src=<?php echo $global_params["root_public"] . "assets/image/logo.jpg" ?>
                         alt="Harry Play, Role Potter"
                 width="80" height="80"
-                onclick="openPage('public/home_page.php');"
+                onclick="openPage(<?= $_SESSION['connected'] ? '\'private/main.php\'' : '\'public/home_page.php\'' ?>);"
                 ></div>
 
         </div>

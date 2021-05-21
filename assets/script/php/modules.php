@@ -103,6 +103,7 @@ function menu_when_not_connected () {
                 debug    = document.getElementById("login_error");
 
                 let data = new FormData();
+                data.append("token_id", token_id);
                 data.append("username", nickname.value);
                 data.append("password", password.value);
                 data.append("remember", remember.checked);
@@ -115,11 +116,8 @@ function menu_when_not_connected () {
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
-                    let DONE = 4; // readyState 4 means the request is done.
-                    let OK = 200; // status 200 is a successful return.
-                    
-                    if (xmlhttp.readyState === DONE)
-                        if (xmlhttp.status === OK)
+                    if (xmlhttp.readyState === 4)
+                        if (xmlhttp.status === 200)
                         {
                             const feedback = JSON.parse(xmlhttp.responseText);
 
@@ -148,6 +146,7 @@ function menu_when_not_connected () {
                 debug    = document.getElementById("register_error");
 
                 let data = new FormData();
+                data.append("token_id", token_id);
                 data.append("username", nickname.value);
                 data.append("password", password.value);
                 //////////
@@ -159,30 +158,27 @@ function menu_when_not_connected () {
                 xmlhttp.send( data );
 
                 xmlhttp.onreadystatechange = function () {
-                    let DONE = 4; // readyState 4 means the request is done.
-                    let OK = 200; // status 200 is a successful return.
+                    if (xmlhttp.readyState === 4 || xmlhttp.status === 200)
+                    {
+                        //alert(xmlhttp.responseText);
+                        const feedback = JSON.parse(xmlhttp.responseText);
 
-                    if (xmlhttp.readyState === DONE)
-                        if (xmlhttp.status === OK)
-                        {
-                            const feedback = JSON.parse(xmlhttp.responseText);
-
-                            if (feedback["success"]) {
-                                debug.innerHTML = "Création de compte réussie.";
-                                debug.style.display = "block";
-                                redirection();
-                            }
-                            else {
-                                password.value = "";
-                                debug   .innerHTML = feedback["error"];
-                                debug.style.display = "block";
-                            }
+                        if (feedback["success"]) {
+                            debug.innerHTML = "Création de compte réussie.";
+                            debug.style.display = "block";
+                            redirection();
                         }
-                        else
-                        {
-                            debug.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                        else {
+                            password.value = "";
+                            debug   .innerHTML = feedback["error"];
                             debug.style.display = "block";
                         }
+                    }
+                    else
+                    {
+                        debug.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                        debug.style.display = "block";
+                    }
                 }
             }
 
@@ -271,6 +267,7 @@ function menu_when_connected () {
 
             function disconnect() {
                 let data = new FormData();
+                data.append("token_id", token_id);
                 let xmlhttp = new XMLHttpRequest();
                 
                 xmlhttp.open('POST', 
@@ -396,7 +393,7 @@ function add_friend_js_bloc() {
             let data = new FormData();
             data.append("username", friend);
             data.append("from_root", "<?=$GLOBALS["global_params"]["root_public"]?>");
-            data.append("accept_friend", "<?= $_SESSION["accept_friend"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -430,7 +427,7 @@ function add_friend_js_bloc() {
 
             let data = new FormData();
             data.append("username", $friend);
-            data.append("refuse_friend", "<?= $_SESSION["refuse_friend"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -516,7 +513,7 @@ function friend_js_bloc() {
 
             let data = new FormData();
             data.append("username", username);
-            data.append("remove_friend", "<?= $_SESSION["remove_friend"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -590,7 +587,7 @@ function match_js_bloc() {
 
             let data = new FormData();
             data.append("public_name", username);
-            data.append("toggle_like", "<?= $_SESSION["toggle_like"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -676,7 +673,7 @@ function profile_js_bloc() {
 
             let data = new FormData();
             data.append("new_desc", textZone.value);
-            data.append("update_desc", "<?= $_SESSION["update_desc"] = randomString()?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -703,7 +700,7 @@ function profile_js_bloc() {
 
             let data = new FormData();
             data.append("public_name", <?= json_encode($_GET["user"]) ?>);
-            data.append("toggle_like", <?= json_encode($_SESSION["toggle_like"] = randomString()) ?>);
+            data.append("token_id", token_id);
             
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -763,7 +760,7 @@ function post_js_add(){
             if(textZone.value === "") return;
             let data = new FormData();
             data.append("post_content", textZone.value);
-            data.append("post", "<?= $_SESSION["post"] = randomString()?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -771,19 +768,17 @@ function post_js_add(){
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+                {
+                    const feedback = JSON.parse(xmlhttp.responseText);
 
-                        if (feedback["success"]) {
-                            document.location.reload();
-                        }else{
-                            textZone.value = feedback["error"];
-                        }
-
+                    if (feedback["success"]) {
+                        document.location.reload();
+                    }else{
+                        textZone.value = feedback["error"];
                     }
+
+                }
             }
         }
         function inspiration() {
@@ -914,7 +909,7 @@ function post_js_bloc() {
 
             let data = new FormData();
             data.append("post_id", post_id);
-            data.append("remove_post", "<?= $_SESSION["remove_post"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -937,7 +932,7 @@ function post_js_bloc() {
         function likeSystemPost(post_id) {
             let data = new FormData();
             data.append("post_id", post_id);
-            data.append("like_post", "<?= $_SESSION["like_post"] = randomString()?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -965,7 +960,7 @@ function post_js_bloc() {
         function reportSystemPost(post_id) {
             let data = new FormData();
             data.append("post_id", post_id);
-            data.append("report_post", "<?= $_SESSION["report_post"] = randomString()?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -1000,7 +995,7 @@ function post_reported_js_bloc(){
 
             let data = new FormData();
             data.append("post_id", post_id);
-            data.append("ignore_post", "<?= $_SESSION["ignore_post"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -1026,7 +1021,7 @@ function post_reported_js_bloc(){
 
             let data = new FormData();
             data.append("post_id", post_id);
-            data.append("remove_post", "<?= $_SESSION["remove_post"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -1051,7 +1046,7 @@ function post_reported_js_bloc(){
 
             let data = new FormData();
             data.append("user_id", user_id);
-            data.append("bandef", "<?= $_SESSION["bandef"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',
@@ -1098,7 +1093,7 @@ function post_reported_js_bloc(){
             data.append("user_id", user_id);
             data.append("time", document.getElementById("time_input").value);
             data.append("type", checked);
-            data.append("bantemp", "<?= $_SESSION["bantemp"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',

@@ -100,7 +100,7 @@
         let error = document.getElementById("error_public_page");
 
         let data = new FormData();
-        data.append("make_public", "<?= $_SESSION["make_public"] = randomString() ?>");
+        data.append("token_id", token_id);
         // je pourrai aussi rajouter un checkup de securité sur la création de ce code
         //////////
 
@@ -111,30 +111,27 @@
         xmlhttp.send( data );
 
         xmlhttp.onreadystatechange = function () {
-            let DONE = 4; // readyState 4 means the request is done.
-            let OK = 200; // status 200 is a successful return.
             
-            if (xmlhttp.readyState === DONE)
-                if (xmlhttp.status === OK)
-                {
-                    //alert(xmlhttp.responseText);
-                    const feedback = JSON.parse(xmlhttp.responseText);
+            if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+            {
+                //alert(xmlhttp.responseText);
+                const feedback = JSON.parse(xmlhttp.responseText);
 
-                    if (feedback["success"])
-                    {
-                        openProfile(feedback["public_name"]);
-                        //window.open( feedback["newPage"], "_self");
-                    }
-                    else {
-                        error.innerHTML = feedback["error"];
-                        error.style.display = "block";
-                    }
-                }
-                else
+                if (feedback["success"])
                 {
-                    error.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                    openProfile(feedback["public_name"]);
+                    //window.open( feedback["newPage"], "_self");
+                }
+                else {
+                    error.innerHTML = feedback["error"];
                     error.style.display = "block";
                 }
+            }
+            else
+            {
+                error.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                error.style.display = "block";
+            }
         }
     }
 
@@ -142,7 +139,7 @@
         let error = document.getElementById("error_public_page");
 
         let data = new FormData();
-        data.append("remove_public", "<?= $_SESSION["remove_public"] = randomString() ?>");
+        data.append("token_id", token_id);
         //////////
 
         let xmlhttp = new XMLHttpRequest();
@@ -152,24 +149,23 @@
         xmlhttp.send( data );
 
         xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState === 4)
-                if (xmlhttp.status === 200)
-                {
-                    alert(xmlhttp.responseText);
-                    const feedback = JSON.parse(xmlhttp.responseText);
+            if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+            {
+                //alert(xmlhttp.responseText);
+                const feedback = JSON.parse(xmlhttp.responseText);
 
-                    if (feedback["success"])
-                        window.open(window.location.href.split('?')[0], "_self");
-                    else {
-                        error.innerHTML = feedback["error"];
-                        error.style.display = "block";
-                    }
-                }
-                else
-                {
-                    error.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                if (feedback["success"])
+                    window.open(window.location.href.split('?')[0], "_self");
+                else {
+                    error.innerHTML = feedback["error"];
                     error.style.display = "block";
                 }
+            }
+            else
+            {
+                error.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                error.style.display = "block";
+            }
         }
     }
 
@@ -177,37 +173,32 @@
         let error = document.getElementById("error_public_page");
 
         let data = new FormData();
-        data.append("reactivate_public", "<?= $_SESSION["reactivate_public"] = randomString() ?>");
+        data.append("token_id", token_id);
         //////////
 
         let xmlhttp = new XMLHttpRequest();
-        
         xmlhttp.open('POST',
         "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/reactivate_public.php");
         xmlhttp.send( data );
 
         xmlhttp.onreadystatechange = function () {
-            let DONE = 4; // readyState 4 means the request is done.
-            let OK = 200; // status 200 is a successful return.
+            if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+            {
+                //alert(xmlhttp.responseText);
+                const feedback = JSON.parse(xmlhttp.responseText);
 
-            if (xmlhttp.readyState === DONE)
-                if (xmlhttp.status === OK)
-                {
-                    //alert(xmlhttp.responseText);
-                    const feedback = JSON.parse(xmlhttp.responseText);
-
-                    if (feedback["success"])
-                        openProfile(feedback["public_name"]);
-                    else {
-                        error.innerHTML = feedback["error"];
-                        error.style.display = "block";
-                    }
-                }
-                else
-                {
-                    error.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                if (feedback["success"])
+                    openProfile(feedback["public_name"]);
+                else {
+                    error.innerHTML = feedback["error"];
                     error.style.display = "block";
                 }
+            }
+            else
+            {
+                error.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                error.style.display = "block";
+            }
         }
     }
 
@@ -220,6 +211,7 @@
         let new_password2 = document.getElementById("change_password_new2");
 
         let data = new FormData();
+        data.append("token_id", token_id);
         data.append("old_password",  old_password.value);
         data.append("new_password",  new_password.value);
         data.append("new_password2", new_password2.value);
@@ -271,6 +263,7 @@
         let password2 = document.getElementById("remove_account_password2");
 
         let data = new FormData();
+        data.append("token_id", token_id);
         data.append("username",  username.value);
         data.append("password",  password.value);
         data.append("password2", password2.value);
@@ -283,31 +276,27 @@
         xmlhttp.send( data );
 
         xmlhttp.onreadystatechange = function () {
-            let DONE = 4; // readyState 4 means the request is done.
-            let OK = 200; // status 200 is a successful return.
-            
-            if (xmlhttp.readyState === DONE)
-                if (xmlhttp.status === OK)
-                {
-                    username .value = "";
-                    password .value = "";
-                    password2.value = "";
+            if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+            {
+                username .value = "";
+                password .value = "";
+                password2.value = "";
 
-                    //alert(xmlhttp.responseText);
-                    const feedback = JSON.parse(xmlhttp.responseText);
+                //alert(xmlhttp.responseText);
+                const feedback = JSON.parse(xmlhttp.responseText);
 
-                    if (feedback["success"])
-                        openPage('public/home_page.php');
-                    else {
-                        error.innerHTML = feedback["error"];
-                        error.style.display = "block";
-                    }
-                }
-                else
-                {
-                    error.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                if (feedback["success"])
+                    openPage('public/home_page.php');
+                else {
+                    error.innerHTML = feedback["error"];
                     error.style.display = "block";
                 }
+            }
+            else
+            {
+                error.innerHTML = "Erreur de connection serveur: " + xmlhttp.status;
+                error.style.display = "block";
+            }
         }
     }
 

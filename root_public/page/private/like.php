@@ -11,6 +11,16 @@
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
 
+<?php
+    if (!$_SESSION["enable_public"]) {
+        ?> <div class="mid_content" > <?php
+        write("You don't have a public profile");
+        ?> </div> <?php
+        require($global_params["root"] . "assets/script/php/footer.php");
+        exit();
+    }
+?>
+
 <div class = "mid_content">
     <div class="img_btn_like">
         <button class="like btn_button_btn" onclick="matchChoice(true)" 
@@ -43,7 +53,6 @@
 <script>
 
     // init
-    var pageToken   = <?=json_encode($_SESSION["like_token_0"] = randomString())?>;
     var likeToken   = "none";
 
     var otp_image   = document.getElementById("image_profile");
@@ -59,7 +68,7 @@
 
     function matchChoice(isLike) {
         let data = new FormData();
-        data.append("like_token_0", pageToken);
+        data.append("token_id",     token_id);
         data.append("like_token_1", likeToken);
         data.append("isLike",       isLike ? "true" : "false");
 

@@ -1,7 +1,5 @@
 <?php
 
-    // ATTENTION
-    // LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
     $global_params = [
         "root"        => "../../../../",
         "root_public" => "../../../../root_public/",
@@ -15,22 +13,7 @@
     // ETABLISSEMENT DE LA CONNECTION
 
     session_start();
-
-    if (
-        !isset($_POST["accept_friend"]) || !isset($_SESSION["accept_friend"]) ||
-              ($_POST["accept_friend"]  !=        $_SESSION["accept_friend"])
-               
-               /*
-                    quelqu'un qui veut utiliser ce fichier doit obligatoirement
-                    recevoir un code attribué sur la page de paramètre
-               */
-        )
-    {
-        echo json_encode([
-            "success" => false,
-            "error"   => "Requête incorrecte."
-        ]); exit();
-    }
+    verifyToken();
 
     if (!isset($_POST["username"]) || !isset($_POST["from_root"])) {
         echo json_encode([

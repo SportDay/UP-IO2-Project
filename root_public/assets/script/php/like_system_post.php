@@ -1,4 +1,5 @@
 <?php
+
 $global_params = [
     "root"        => "../../../../",
     "root_public" => "../../../../root_public/",
@@ -11,17 +12,7 @@ require_once($global_params["root"] . "assets/script/php/functions.php");
 // ETABLISSEMENT DE LA CONNECTION
 
 session_start();
-
-if (
-    !isset($_POST["like_post"]) || !isset($_SESSION["like_post"]) ||
-          ($_POST["like_post"]  !=        $_SESSION["like_post"])
-)
-{
-    echo json_encode([
-        "success" => false,
-        "error"   => "token_error."
-    ]); exit();
-}
+verifyToken();
 
 if (!isset($_POST["post_id"])) {
     echo json_encode([

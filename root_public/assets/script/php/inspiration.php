@@ -13,7 +13,7 @@ require($global_params["root"] . "assets/script/php/functions.php");
 
 session_start();
 
-if (!$_SESSION["connected"]) {
+if (!isset($_SESSION["connected"]) || !$_SESSION["connected"] || !$_SESSION["enable_public"]) {
     echo json_encode([
         "success" => false,
         "error"   => "Requête incorrecte."

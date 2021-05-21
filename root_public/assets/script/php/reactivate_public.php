@@ -1,7 +1,5 @@
 <?php
 
-    // ATTENTION
-    // LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
     $global_params = [
         "root"        => "../../../../",
         "root_public" => "../../../../root_public/",
@@ -15,23 +13,7 @@
     // ETABLISSEMENT DE LA CONNECTION
 
     session_start();
-
-    if (
-        !isset($_POST["reactivate_public"]) || !isset($_SESSION["reactivate_public"]) ||
-              ($_POST["reactivate_public"]  !=        $_SESSION["reactivate_public"])
-               
-               /*
-                    quelqu'un qui veut utiliser ce fichier doit obligatoirement
-                    recevoir un code attribué sur la page de paramètre
-               */
-        )
-    {
-        unset($_SESSION["reactivate_public"]);
-        echo json_encode([
-            "success" => false,
-            "error"   => "Requête incorrecte."
-        ]); exit();
-    }
+    verifyToken();
 
     $connexion = mysqli_connect (
         $db_conf["DB_URL"],

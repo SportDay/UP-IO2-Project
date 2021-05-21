@@ -12,17 +12,7 @@ require_once($global_params["root"] . "assets/script/php/functions.php");
 // ETABLISSEMENT DE LA CONNECTION
 
 session_start();
-
-if (
-    !isset($_POST["update_desc"]) || !isset($_SESSION["update_desc"]) ||
-          ($_POST["update_desc"]  !=        $_SESSION["update_desc"])
-)
-{
-    echo json_encode([
-        "success" => false,
-        "error"   => "token_error"
-    ]); exit();
-}
+verifyToken();
 
 if (!isset($_POST["new_desc"])) {
     echo json_encode([

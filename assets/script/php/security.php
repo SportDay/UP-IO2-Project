@@ -9,31 +9,9 @@
 
     // ACTUALISATION DE LA SESSION (s'execute avant l'execution de chaque page)
 
-    function simple_disconnect () { // reset de session
-        
-        /*
-        session_unset();
-        session_destroy();
-        session_start();
-        */
-
-        $_SESSION["connected"] = false;
-        $_SESSION["admin"]     = false;
-    }
-
     function tryConnect () {
-        $connexion = mysqli_connect (
-            $GLOBALS["DB_URL"],
-            $GLOBALS["DB_ACCOUNT"],
-            $GLOBALS["DB_PASSWORD"],
-            $GLOBALS["DB_NAME"]
-        );
-
-        if (!$connexion) { 
-            echo "connection_error"; exit(); 
-        }
-
-        mysqli_set_charset($connexion, "utf8");
+        $connexion = makeConnection(1);
+        if (!$connexion) return false;
 
         //////////////////////////////////////
         // TRY TO CONNECT USING SESSION
@@ -50,8 +28,8 @@
                     (time() + $GLOBALS["TIME_SESS_INACTIVE"])
                 );
 
-                $_SESSION["last_time"]     = time();
-                $_SESSION["banned"]        = $result["banned_to"] > time();
+                $_SESSION["last_time"]      = time();
+                $_SESSION["banned"]         = $result["banned_to"] > time();
                 $_SESSION["banned_to"]      = $result["banned_to"];
 
                 mysqli_query($connexion, 
@@ -69,7 +47,8 @@
 
         }
 
-        simple_disconnect();
+        $_SESSION["connected"] = false;
+        $_SESSION["admin"]     = false;
 
         //////////////////////////////////////
         // TRY TO CONNECT USING COOKIES
@@ -111,11 +90,15 @@
 
         $_SESSION["connected"]      = true;
 
-        mysqli_query($connexion, 
+        $_SESSION["token_id"]       = $result["token_id"];
+        $_SESSION["token_expire"]   = $result["token_expire"];
+        setcookie("token_id",   $result["token_id"], $result["token_expire"], $GLOBALS["COOKIE_PATH"]);
+        
+        $connexion->query( 
             "UPDATE users SET " .
-            "last_join=" . $_SESSION["last_time"] . ", " .
-            "banned=" . $_SESSION["banned"]       . " "  .
-            "WHERE `id`=" . $_SESSION["id"]       . " ;"
+            "last_join="    . $_SESSION["last_time"] . ", " .
+            "banned="       . $_SESSION["banned"]       . " "  .
+            "WHERE `id`="   . $_SESSION["id"]       . " ;"
         );
         
         mysqli_close($connexion);
@@ -127,16 +110,8 @@
         if ($currentAccount) $id = $_SESSION["id"];
         
         //////////////
-        $connexion = mysqli_connect (
-            $GLOBALS["DB_URL"],
-            $GLOBALS["DB_ACCOUNT"],
-            $GLOBALS["DB_PASSWORD"],
-            $GLOBALS["DB_NAME"]
-        );
-        if (!$connexion) {
-            return "Can't connect to database.";
-        }
-        mysqli_set_charset($connexion, "utf8");
+        $connexion = makeConnection(2);
+        if (!$connexion) return false;
 
         // supprimer le compte: (users)
         $connexion->query(
@@ -149,6 +124,7 @@
             setcookie("cookie_id",      "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
             setcookie("cookie_pass",    "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
             setcookie("cookie_expire",  "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
+            setcookie("token_id",       "", time() - 3600, $GLOBALS["COOKIE_PATH"]);
 
             session_unset();
             session_destroy();
@@ -164,16 +140,8 @@
         if ($currentAccount) $id = $_SESSION["id"];
 
         //////////////
-        $connexion = mysqli_connect (
-            $GLOBALS["DB_URL"],
-            $GLOBALS["DB_ACCOUNT"],
-            $GLOBALS["DB_PASSWORD"],
-            $GLOBALS["DB_NAME"]
-        );
-        if (!$connexion) {
-            return "Can't connect to database.";
-        }
-        mysqli_set_charset($connexion, "utf8");
+        $connexion = makeConnection(2);
+        if (!$connexion) return false;
 
         $userData = $connexion->query("SELECT * FROM `users` WHERE id=" . $id . " ;")->fetch_assoc();
 

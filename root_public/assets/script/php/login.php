@@ -1,10 +1,5 @@
 <?php 
     
-    // SORTIE : echo true|false; | true si connection réussis, false sinon
-    // plus tard on sortira un json avec plus d'information en cas de problème
-
-    // ATTENTION
-    // LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
     $global_params = [
         "root"        => "../../../../",
         "root_public" => "../../../../root_public/",
@@ -108,10 +103,20 @@
 
     $_SESSION["connected"]      = true;
 
+    $cookie_expire = time() + $TIME_COOKIE_CONNECT;
+
+    $_SESSION["token_expire"]   = $cookie_expire;
+    $_SESSION["token_id"]       = randomString();
+
     $connexion->query( 
-                "UPDATE users SET last_join=" . $_SESSION["last_time"] 
-                . " WHERE `id`=" . $_SESSION["id"]
+                "UPDATE users SET ".
+                "last_join="    .$_SESSION["last_time"]                               ." ".
+                "token_id="     .$connexion->real_escape_string($_SESSION["token_id"])." ".
+                "token_expire=" .$connexion->real_escape_string($cookie_expire)       ." ".
+                "WHERE id="     .$_SESSION["id"]
             );
+
+    setcookie("token_id",  $_SESSION["token_id"], $cookie_expire, $COOKIE_PATH);
 
     // AJOUT DU COOKIE SI REMEMBER
     if ($remember) {
@@ -125,8 +130,8 @@
         $cookie_id       = randomString();
         $cookie_password = randomString();
 
-        for ($i = 0; $i < 21; $i++) { // une pour eviter une boucle infinie
-            if ($i==20) {
+        for ($i = 0; $i < 101; $i++) { // une pour eviter une boucle infinie
+            if ($i==100) {
                 echo json_encode([
                     "success" => true,
                     "error"   => "Erreur de cookie."
@@ -144,13 +149,10 @@
                 continue;
             }
 
-            $i = 20;
-            // on peut break
+            break;
         }
 
         // store cookie_id and pass
-
-        $cookie_expire = time() + $TIME_COOKIE_CONNECT;
 
         setcookie("cookie_id",      $cookie_id,       $cookie_expire, $COOKIE_PATH);
         setcookie("cookie_pass",    $cookie_password, $cookie_expire, $COOKIE_PATH);

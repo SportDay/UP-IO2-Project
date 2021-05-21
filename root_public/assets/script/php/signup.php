@@ -9,6 +9,7 @@
 
     require($global_params["root"] . "assets/script/php/constants.php");
     require($global_params["root"] . "assets/script/php/functions.php");
+    
     session_start();
 
     if (
@@ -96,11 +97,21 @@
     $_SESSION["max_time"]       = time() + $TIME_SESS_END;
 
     $_SESSION["connected"]      = true;
+    
+    $cookie_expire = time() + $TIME_COOKIE_CONNECT;
 
-    $connexion->query(
-                "UPDATE users SET last_join=" . $_SESSION["last_time"] 
-                . " WHERE `id`=" . $_SESSION["id"]
+    $_SESSION["token_expire"]   = $cookie_expire;
+    $_SESSION["token_id"]       = randomString();
+
+    $connexion->query( 
+                "UPDATE users SET ".
+                "last_join="    .$_SESSION["last_time"]                               ." ".
+                "token_id="     .$connexion->real_escape_string($_SESSION["token_id"])." ".
+                "token_expire=" .$connexion->real_escape_string($cookie_expire)       ." ".
+                "WHERE id="     .$_SESSION["id"]
             );
+
+    setcookie("token_id",  $_SESSION["token_id"], $cookie_expire, $COOKIE_PATH);
 
     // remove old cookie
 
@@ -112,8 +123,8 @@
     $cookie_id       = randomString();
     $cookie_password = randomString();
 
-    for ($i = 0; $i < 21; $i++) { // pas plus de 20x pour eviter une boucle infinie
-        if ($i==20) {
+    for ($i = 0; $i < 101; $i++) { // pas plus de 20x pour eviter une boucle infinie
+        if ($i==100) {
             echo json_encode([
                 "success" => true,
                 "error"   => "Cookie indisponible."
@@ -131,11 +142,10 @@
             continue;
         }
 
-        $i = 20; // break (cookie_id dispo trouvé)
+        break;
     }
 
     // store cookie_id and pass
-    $cookie_expire = time() + $TIME_COOKIE_CONNECT;
 
     setcookie("cookie_id",      $cookie_id,       $cookie_expire, $COOKIE_PATH);
     setcookie("cookie_pass",    $cookie_password, $cookie_expire, $COOKIE_PATH);

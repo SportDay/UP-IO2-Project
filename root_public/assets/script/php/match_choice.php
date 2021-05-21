@@ -12,17 +12,7 @@
     // ETABLISSEMENT DE LA CONNECTION
 
     session_start();
-
-    if (
-        !isset($_POST["like_token_0"]) || !isset($_SESSION["like_token_0"]) ||
-              ($_POST["like_token_0"]  !=        $_SESSION["like_token_0"])
-        )
-    {
-        echo json_encode([
-            "success" => false,
-            "error"   => "token_error"
-        ]); exit();
-    }
+    verifyToken();
 
     $connexion = mysqli_connect (
         $db_conf["DB_URL"],

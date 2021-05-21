@@ -18,6 +18,15 @@
 
     <div id="friend_blocs_area" >
     <?php
+
+        if (!$_SESSION["enable_public"]) {
+            ?> <div class="mid_content" > <?php
+            write("You don't have a public profile");
+            ?> </div></div> <?php
+            require($global_params["root"] . "assets/script/php/footer.php");
+            exit();
+        }
+
         $connexion = mysqli_connect (
             $GLOBALS["DB_URL"],
             $GLOBALS["DB_ACCOUNT"],

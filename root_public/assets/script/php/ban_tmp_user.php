@@ -1,7 +1,5 @@
 <?php
 
-// ATTENTION
-// LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
 $global_params = [
     "root"        => "../../../../",
     "root_public" => "../../../../root_public/",
@@ -15,18 +13,10 @@ require($global_params["root"] . "assets/script/php/security.php");
 // ETABLISSEMENT DE LA CONNECTION
 
 session_start();
+verifyToken();
 
-if (
-    !isset($_POST["bantemp"]) || !isset($_SESSION["bantemp"]) ||
-          ($_POST["bantemp"]  !=        $_SESSION["bantemp"])
-
-)
-{
-    echo json_encode([
-        "success" => false,
-        "error"   => "Requête incorrecte."
-    ]); exit();
-}
+if (!isset($_SESSION["admin"]) || !$_SESSION["admin"]) // intrusion
+    exit();
 
 if (!isset($_POST["type"]) || !isset($_POST["user_id"])) {
     echo json_encode([

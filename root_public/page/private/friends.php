@@ -100,7 +100,7 @@
 
             let data = new FormData();
             data.append("username", requestFriend.value);
-            data.append("add_friend", "<?= $_SESSION["add_friend"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.open('POST',

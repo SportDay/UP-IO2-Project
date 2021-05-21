@@ -1,4 +1,5 @@
 <?php
+
 $global_params = [
     "root"        => "../../../../",
     "root_public" => "../../../../root_public/",
@@ -12,17 +13,7 @@ require($global_params["root"] . "assets/script/php/security.php");
 // ETABLISSEMENT DE LA CONNECTION
 
 session_start();
-
-if (
-    !isset($_POST["dm_token"]) || !isset($_SESSION["dm_token"]) ||
-          ($_POST["dm_token"]  !=        $_SESSION["dm_token"])
-    )
-{
-    echo json_encode([
-        "success" => false,
-        "error"   => "token_error"
-    ]); exit();
-}
+verifyToken();
 
 if (
     !isset($_POST["private"]) || !isset($_POST["friend"]) || !isset($_POST["message"])

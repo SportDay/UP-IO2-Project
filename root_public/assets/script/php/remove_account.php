@@ -11,10 +11,11 @@
     require($global_params["root"] . "assets/script/php/functions.php");
     require($global_params["root"] . "assets/script/php/security.php");
     
-    session_start();
-
     ////////////////////////////////////////////////////////////////////
     // ETABLISSEMENT DE LA CONNECTION
+
+    session_start();
+    verifyToken();
 
     if (
         !isset($_POST["username"]) || 

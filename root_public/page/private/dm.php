@@ -34,21 +34,6 @@
     );
 
     if (!$connexion) invalidPage("connection_error");
-    
-    // Token
-    // pour utiliser les fonctionnalités de la page il faut son token
-    // imaginons que l'utilisateur ouvre 2 fois la page (pour dm 2 personnes).
-    // alors le token va être ré-écrit
-    // le moyens de fixer ça que j'ai trouvé
-    // lors d'un erreur de token, envoyé un client une erreur de token
-    // le client va alors recharger sa page pour actualiser son token (javascript)
-    // ajouter en post le messages en cours de redaction 
-    $page_token   = $_SESSION["dm_token"] = randomString(); // base64 string
-    
-    if (isset($_POST["last_message"])) { ?> <script>
-        //send le message maintenant
-    </script> <?php }
-
 
     //////////////////////////////
     // CONTENU MODULABLE DE PAGE
@@ -99,7 +84,6 @@
                     var messagesArea = document.getElementById("all_message_container");
 
                     //persistents data
-                    const page_token    = "<?=$GLOBALS["page_token"]?>";
                     const friend        = <?= json_encode($private ? $friend["username"] : $friend["public_name"]) ?>;
                     const private       = <?= $private ? "true" :  "false" ?>;
                     var   lastUpdate    = 0;
@@ -117,7 +101,7 @@
                         let sender = document.getElementById("msg_send_content");
 
                         let data = new FormData();
-                        data.append("dm_token",     page_token);
+                        data.append("token_id",     token_id);
                         data.append("private",      private);
                         data.append("friend",       friend);
                         data.append("message",      sender.value);
@@ -145,10 +129,6 @@
                                     {
                                         if (feedback["error"] == "token_error")
                                         {
-                                            // normalement on reload cette page avec le message en post
-                                            // en attendant de trouver coment faire un post en js
-                                            // je reload juste la page
-
                                             window.open(window.location.href, "_self");
                                         }
                                     }
@@ -161,7 +141,7 @@
                         //cnt++; if (cnt>5) return;
                         
                         let data = new FormData();
-                        data.append("dm_token",     page_token);
+                        data.append("token_id", token_id);
                         data.append("private",      private);
                         data.append("friend",       friend);
                         data.append("last",         lastUpdate);
@@ -186,10 +166,6 @@
 
                                     if (feedback["error"] == "token_error")
                                     {
-                                        // normalement on reload cette page avec le message en post
-                                        // en attendant de trouver coment faire un post en js
-                                        // je reload juste la page
-
                                         window.open(window.location.href, "_self");
                                     }
                                 }

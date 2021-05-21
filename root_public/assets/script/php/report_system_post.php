@@ -12,17 +12,7 @@ require($global_params["root"] . "assets/script/php/functions.php");
 // ETABLISSEMENT DE LA CONNECTION
 
 session_start();
-
-if (
-    !isset($_POST["report_post"]) || !isset($_SESSION["report_post"]) ||
-          ($_POST["report_post"]  !=        $_SESSION["report_post"])
-)
-{
-    echo json_encode([
-        "success" => false,
-        "error"   => "token_error"
-    ]); exit();
-}
+verifyToken();
 
 if (!isset($_POST["post_id"])) {
     echo json_encode([
