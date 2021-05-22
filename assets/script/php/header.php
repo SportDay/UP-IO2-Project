@@ -64,7 +64,6 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
 <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.5">
     <link rel="icon" href=<?php echo $global_params["root_public"] . "assets/image/logo-rond.ico" ; ?> />
 
     <title>
