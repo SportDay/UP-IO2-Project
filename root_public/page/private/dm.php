@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Messages Directs",
-  "css"         => "all.css",
   "css_add"     => ["posts.css", "public_page.css", "dm.css"],
   "redirect"    => TRUE
 ];?>
@@ -26,29 +25,7 @@
     $friend  = isset($_GET["user"])    ? $_GET["user"]    : invalidPage("Requête invalide.");
     $private = isset($_GET["private"]) ? $_GET["private"] == "true" : invalidPage("Requête invalide.");
 
-    $connexion = mysqli_connect (
-        $GLOBALS["DB_URL"],
-        $GLOBALS["DB_ACCOUNT"],
-        $GLOBALS["DB_PASSWORD"],
-        $GLOBALS["DB_NAME"]
-    );
-
-    if (!$connexion) invalidPage("connection_error");
-    
-    // Token
-    // pour utiliser les fonctionnalités de la page il faut son token
-    // imaginons que l'utilisateur ouvre 2 fois la page (pour dm 2 personnes).
-    // alors le token va être ré-écrit
-    // le moyens de fixer ça que j'ai trouvé
-    // lors d'un erreur de token, envoyé un client une erreur de token
-    // le client va alors recharger sa page pour actualiser son token (javascript)
-    // ajouter en post le messages en cours de redaction 
-    $page_token   = $_SESSION["dm_token"] = randomString(); // base64 string
-    
-    if (isset($_POST["last_message"])) { ?> <script>
-        //send le message maintenant
-    </script> <?php }
-
+    $connexion = makeConnection(3);
 
     //////////////////////////////
     // CONTENU MODULABLE DE PAGE
@@ -79,13 +56,12 @@
                 
                 <!-- Messages -->
                 <div class="all_message_container border" id="all_message_container">
-
+                        
                 </div>
 
                 <!-- Send Messages -->
                 <div class="send_container">
-
-                    <textarea id="msg_send_content" placeholder="Votre Message" rows="3"></textarea>
+                    <textarea id="msg_send_content" placeholder="Votre Message" rows="3" onkeypress="sendMessageHandle(event)"></textarea>
                     <button class="btn_send btn_button_btn" onclick='sendMessage()'>
                         <img height="32" width="32" src="<?= $root_public ?>assets/image/send.png">
                     </button>
@@ -99,102 +75,88 @@
                     var messagesArea = document.getElementById("all_message_container");
 
                     //persistents data
-                    const page_token    = "<?=$GLOBALS["page_token"]?>";
                     const friend        = <?= json_encode($private ? $friend["username"] : $friend["public_name"]) ?>;
                     const private       = <?= $private ? "true" :  "false" ?>;
                     var   lastUpdate    = 0;
 
-                    // auto refresh (5s)
                     // j'ai verifié, js est single threaded, 
                     // donc pas de problème d'effets de bords à refresh 2x en même temps
-                    window.setInterval( refreshMessages, 5000 );
+                    window.setInterval( refreshMessages, <?= $GLOBALS["CONSTANTS_CONFIG"]["TIME_UPDATE_DM"] ?> );
                     refreshMessages(); // first iter
+                    messagesArea.scrollTop = messagesArea.scrollHeight;
 
                     //////////////////
                     // fonctions 
-                    
+
+                    function sendMessageHandle(event) {
+                        if (event.keyCode==13) sendMessage();
+                    }
                     function sendMessage() {
                         let sender = document.getElementById("msg_send_content");
 
                         let data = new FormData();
-                        data.append("dm_token",     page_token);
+                        data.append("token_id",     token_id);
                         data.append("private",      private);
                         data.append("friend",       friend);
                         data.append("message",      sender.value);
 
                         let xmlhttp = new XMLHttpRequest();
-                        xmlhttp.open('POST',
-                        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/direct_message_send.php");
+                        xmlhttp.open('POST',root_public+"assets/script/php/direct_message_send.php");
                         xmlhttp.send( data );
 
                         xmlhttp.onreadystatechange = function () {
-                            if (xmlhttp.readyState === 4) // request done
-                                if (xmlhttp.status === 200) // successful return
+                            if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
+                                
+                                if (feedback["success"])
                                 {
-                                    //alert(xmlhttp.responseText);
-                                    const feedback = JSON.parse(xmlhttp.responseText);
-                                    
-                                    if (feedback["success"])
-                                    {
-                                        refreshMessages();
-                                        sender.value = "";
-                                        sender.focus();
+                                    refreshMessages();
+                                    sender.value = "";
+                                    sender.focus();
 
-                                    }
-                                    else
-                                    {
-                                        if (feedback["error"] == "token_error")
-                                        {
-                                            // normalement on reload cette page avec le message en post
-                                            // en attendant de trouver coment faire un post en js
-                                            // je reload juste la page
-
-                                            window.open(window.location.href, "_self");
-                                        }
-                                    }
                                 }
+                                else
+                                {
+                                    if (feedback["error"] == "token_error") window.open(window.location.href, "_self");
+                                }
+                            }
                         }
                     }
 
-                    //var cnt = 0;
+                    var cntr = 0;
                     function refreshMessages() {
-                        //cnt++; if (cnt>5) return;
-                        
+                        cntr = cntr++ > 5 ? 0 : cntr;
+                        if (cntr == 0) lastUpdate = 0;
+
                         let data = new FormData();
-                        data.append("dm_token",     page_token);
+                        data.append("token_id",     token_id);
                         data.append("private",      private);
                         data.append("friend",       friend);
                         data.append("last",         lastUpdate);
 
                         let xmlhttp = new XMLHttpRequest();
-                        xmlhttp.open('POST',
-                        "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/direct_message_refresh.php");
+                        xmlhttp.open('POST',root_public+"assets/script/php/direct_message_refresh.php");
                         xmlhttp.send( data );
 
                         xmlhttp.onreadystatechange = function () {
-                            if (xmlhttp.readyState === 4) // request done
-                                if (xmlhttp.status === 200) // successful return
+                            if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+                            {
+                                //alert(xmlhttp.responseText);
+                                const feedback = JSON.parse(xmlhttp.responseText);
+                                
+                                if (feedback["success"])
                                 {
-                                    //alert(xmlhttp.responseText);
-                                    const feedback = JSON.parse(xmlhttp.responseText);
+                                    lastUpdate = feedback["last"];
                                     
-                                    if (feedback["success"])
-                                    {
-                                        lastUpdate = feedback["last"];
-                                        messagesArea.innerHTML = messagesArea.innerHTML + feedback["html"];
-                                    }
-
-                                    if (feedback["error"] == "token_error")
-                                    {
-                                        // normalement on reload cette page avec le message en post
-                                        // en attendant de trouver coment faire un post en js
-                                        // je reload juste la page
-
-                                        window.open(window.location.href, "_self");
-                                    }
+                                    messagesArea.innerHTML = (cntr==0?"":messagesArea.innerHTML) + feedback["html"];
+                                    if (feedback["html"] != "") messagesArea.scrollTop = messagesArea.scrollHeight;
                                 }
-                            
-                            messagesArea.scrollTop = messagesArea.scrollHeight;
+                                else {
+                                    if (feedback["error"] == "token_error") window.open(window.location.href, "_self");
+                                }
+                            }
                         }
                     }
 
@@ -209,7 +171,6 @@
 ?>
 <!-- ------------------------------------------ -->
 </br>
-
 <?php
 
     if ($private) { // check private friend   

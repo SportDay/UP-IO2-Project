@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Amis",
-  "css"         => "all.css",
   "css_add"     => [
       "posts.css", "public_page.css","admin.css",
       "friends.css","login.css"
@@ -25,17 +24,8 @@
 
 <!-- Accepte demande d'amis -->
 <?php
-    $connexion = mysqli_connect (
-        $GLOBALS["DB_URL"],
-        $GLOBALS["DB_ACCOUNT"],
-        $GLOBALS["DB_PASSWORD"],
-        $GLOBALS["DB_NAME"]
-    );
 
-    if (!$connexion) { 
-        echo "connection_error"; exit(); 
-    }    
-
+    $connexion = makeConnection(3);
 
     $friends = $connexion->query( // enfin ça fonctionne !!
         "select *
@@ -92,7 +82,9 @@
     ?>
     </div>
 
-<?php friend_js_bloc(); add_friend_js_bloc(); ?>
+<!-- ------------------------------------------ -->
+<?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
+
 <script>
         function addFriend() {
             let requestFriend = document.getElementById("add_friend_input");
@@ -100,27 +92,24 @@
 
             let data = new FormData();
             data.append("username", requestFriend.value);
-            data.append("add_friend", "<?= $_SESSION["add_friend"] = randomString() ?>");
+            data.append("token_id", token_id);
 
             let xmlhttp = new XMLHttpRequest();
-            xmlhttp.open('POST',
-            "<?php echo $GLOBALS["global_params"]["root_public"] ?>assets/script/php/add_friend.php");
+            xmlhttp.open('POST',root_public+"assets/script/php/add_friend.php");
             xmlhttp.send( data );
 
             xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState === 4) // request done
-                    if (xmlhttp.status === 200) // successful return
-                    {
-                        //alert(xmlhttp.responseText);
-                        const feedback = JSON.parse(xmlhttp.responseText);
-                        
-                        requestFriend.value = "";
-                        debugHtml.style.display="block";
-                        debugHtml.innerHTML = feedback["error"];
-                    }
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200)
+                {
+                    //alert(xmlhttp.responseText);
+                    const feedback = JSON.parse(xmlhttp.responseText);
+                    
+                    requestFriend.value = "";
+                    debugHtml.style.display="block";
+                    debugHtml.innerHTML = feedback["error"];
+                }
             }
         }
 </script>
-
-<!-- ------------------------------------------ -->
-<?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
+<script type="text/javascript" src="../../assets/script/js/friend_bloc.js"></script>
+<script type="text/javascript" src="../../assets/script/js/add_friend_bloc.js"></script>

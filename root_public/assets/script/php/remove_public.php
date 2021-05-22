@@ -15,38 +15,9 @@
     // ETABLISSEMENT DE LA CONNECTION
 
     session_start();
+    verifyToken();
 
-    if (
-        !isset($_POST["remove_public"]) || !isset($_SESSION["remove_public"]) ||
-              ($_POST["remove_public"]  !=        $_SESSION["remove_public"])
-               
-               /*
-                    quelqu'un qui veut utiliser ce fichier doit obligatoirement
-                    recevoir un code attribué sur la page de paramètre
-               */
-        )
-    {
-        unset($_SESSION["remove_public"]);
-        echo json_encode([
-            "success" => false,
-            "error"   => "Requête incorrecte."
-        ]); exit();
-    }
-
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-    );
-
-    if (!$connexion) { 
-        // data base error
-        echo json_encode([
-            "success" => false,
-            "error"   => "Base de donnée hors d'accès."
-        ]); exit(); 
-    }
+    $connexion = makeConnection();
 
     ///////////////////////////////////////////////////////////////////////////
 

@@ -1,7 +1,5 @@
 <?php
-
-    // ATTENTION
-    // LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
+    
     $global_params = [
         "root"        => "../../../../",
         "root_public" => "../../../../root_public/",
@@ -14,37 +12,9 @@
     // ETABLISSEMENT DE LA CONNECTION
 
     session_start();
+    verifyToken();
 
-    if (
-        !isset($_POST["refuse_friend"]) || !isset($_SESSION["refuse_friend"]) ||
-              ($_POST["refuse_friend"]  !=        $_SESSION["refuse_friend"])
-               
-               /*
-                    quelqu'un qui veut utiliser ce fichier doit obligatoirement
-                    recevoir un code attribué sur la page de paramètre
-               */
-        )
-    {
-        echo json_encode([
-            "success" => false,
-            "error"   => "Requête incorrecte."
-        ]); exit();
-    }
-
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-    );
-
-    if (!$connexion) { 
-        // data base error
-        echo json_encode([
-            "success" => false,
-            "error"   => "Base de donnée hors d'accès."
-        ]); exit(); 
-    }
+    $connexion = makeConnection();
 
     ///////////////////////////////////////////////////////////////////////////
 

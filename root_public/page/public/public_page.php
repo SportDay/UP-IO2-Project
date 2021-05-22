@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Page Public",
-  "css"         => "all.css",
   "css_add"     => ["public_page.css", "posts.css"],
   "redirect"    => FALSE // J'hésite à mettre ça en true
 ];?>
@@ -10,18 +9,9 @@
 <?php // verification de l'existence de la page
 
     require_once($global_params["root"] . "assets/script/php/constants.php");
-    //////////////////////////////////////////////////////////
-    // connexion sql
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-        );
+    require_once($global_params["root"] . "assets/script/php/functions.php");
 
-    if (!$connexion) {
-        echo "connection_error"; exit();
-    }
+    $connexion = makeConnection(1);
 
     //////////////////////////////////////////////////////////
     // generation page en fonction du get
@@ -40,11 +30,8 @@
         exit();
     }
 
+    require($global_params["root"] . "assets/script/php/header.php");
 ?>
-
-<!-- ------------------------------------------ -->
-<?php require($global_params["root"] . "assets/script/php/functions.php"  ); ?>
-<?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
 <?php search_bar(); ?>
 <!-- ------------------------------------------ -->
@@ -75,11 +62,11 @@
     // fonctions en javascript
 
     mysqli_close($connexion);
-    if($_SESSION["connected"]){
-        profile_js_bloc($page_user);
-        post_js_bloc();
-        post_js_add();
-    }
+    if($_SESSION["connected"]){ ?>
+        <script type="text/javascript" src="../../assets/script/js/profile_bloc.js"></script>
+        <script type="text/javascript" src="../../assets/script/js/post_bloc.js"></script>
+        <script type="text/javascript" src="../../assets/script/js/post_add.js"></script>
+    <?php }
 
 ?>
 <!-- ------------------------------------------ -->

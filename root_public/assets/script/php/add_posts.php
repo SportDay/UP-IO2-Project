@@ -1,7 +1,5 @@
 <?php
 
-// ATTENTION
-// LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
 $global_params = [
     "root"        => "../../../../",
     "root_public" => "../../../../root_public/",
@@ -15,22 +13,7 @@ require($global_params["root"] . "assets/script/php/security.php");
 // ETABLISSEMENT DE LA CONNECTION
 
 session_start();
-
-if (
-    !isset($_POST["post"]) || !isset($_SESSION["post"]) ||
-    ($_POST["post"]  !=        $_SESSION["post"])
-
-    /*
-         quelqu'un qui veut utiliser ce fichier doit obligatoirement
-         recevoir un code attribué sur la page de paramètre
-    */
-)
-{
-    echo json_encode([
-        "success" => false,
-        "error"   => "Requête incorrecte."
-    ]); exit();
-}
+verifyToken();
 
 if ((!isset($_POST["post_content"])) || $_POST["post_content"] === "" || strlen($_POST["post_content"]) > 735) {
     echo json_encode([
@@ -39,24 +22,7 @@ if ((!isset($_POST["post_content"])) || $_POST["post_content"] === "" || strlen(
     ]); exit();
 }
 
-if(!isset($_SESSION["connected"])){
-    exit();
-}
-
-$connexion = mysqli_connect (
-    $db_conf["DB_URL"],
-    $db_conf["DB_ACCOUNT"],
-    $db_conf["DB_PASSWORD"],
-    $db_conf["DB_NAME"]
-);
-
-if (!$connexion) {
-    // data base error
-    echo json_encode([
-        "success" => false,
-        "error"   => "Base de donnée hors d'accès."
-    ]); exit();
-}
+$connexion = makeConnection();
 
 ////////////////////////////////////////////////////////////////////
 

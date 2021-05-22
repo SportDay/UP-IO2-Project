@@ -12,17 +12,7 @@ require_once($global_params["root"] . "assets/script/php/functions.php");
 // ETABLISSEMENT DE LA CONNECTION
 
 session_start();
-
-if (
-    !isset($_POST["update_desc"]) || !isset($_SESSION["update_desc"]) ||
-          ($_POST["update_desc"]  !=        $_SESSION["update_desc"])
-)
-{
-    echo json_encode([
-        "success" => false,
-        "error"   => "token_error"
-    ]); exit();
-}
+verifyToken();
 
 if (!isset($_POST["new_desc"])) {
     echo json_encode([
@@ -31,20 +21,7 @@ if (!isset($_POST["new_desc"])) {
     ]); exit();
 }
 
-$connexion = mysqli_connect (
-    $db_conf["DB_URL"],
-    $db_conf["DB_ACCOUNT"],
-    $db_conf["DB_PASSWORD"],
-    $db_conf["DB_NAME"]
-);
-
-if (!$connexion) {
-    // data base error
-    echo json_encode([
-        "success" => false,
-        "error"   => "Base de donnée hors d'accès."
-    ]); exit();
-}
+$connexion = makeConnection();
 
 ////////////////////////////////////////////////////////////////////
 
