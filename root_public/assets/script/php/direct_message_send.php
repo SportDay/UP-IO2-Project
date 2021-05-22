@@ -16,7 +16,9 @@ session_start();
 verifyToken();
 
 if (
+
     !isset($_POST["private"]) || !isset($_POST["friend"]) || !isset($_POST["message"]) || !strlen(trim($_POST["message"]))
+
 )
 {
     echo json_encode([
@@ -28,6 +30,7 @@ if (
 $private     = $_POST["private"] == "true";
 $friend      = $_POST["friend"];
 $message     = trim($_POST["message"]);
+
 
 $connexion = makeConnection();
 
