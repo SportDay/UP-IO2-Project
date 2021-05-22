@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Admin Panel",
-  "css"         => "all.css",
   "css_add"     => ["public_page.css","posts.css","admin.css"],
   "redirect"    => TRUE,
   "admin_req"   => TRUE
@@ -13,18 +12,7 @@
 <!-- ------------------------------------------ -->
 <?php
 
-///////////// SQL
-$connexion = mysqli_connect (
-    $db_conf["DB_URL"],
-    $db_conf["DB_ACCOUNT"],
-    $db_conf["DB_PASSWORD"],
-    $db_conf["DB_NAME"]
-);
-
-if (!$connexion) {
-    echo "connection_error"; exit();
-}
-/////////////
+$connexion = makeConnection(3);
 
 $reported_post = $connexion->query("SELECT * FROM posts WHERE reportnum>0 ORDER BY reportnum DESC LIMIT 60");
 
@@ -60,8 +48,6 @@ mysqli_close($connexion);
         </div>
     </div>
 <!-- ------------------------------------------ -->
-
-<?php
-    post_reported_js_bloc();
-?>
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
+
+<script type="text/javascript" src="../../assets/script/js/post_reported_bloc.js"></script>

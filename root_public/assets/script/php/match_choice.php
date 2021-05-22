@@ -12,32 +12,9 @@
     // ETABLISSEMENT DE LA CONNECTION
 
     session_start();
+    verifyToken();
 
-    if (
-        !isset($_POST["like_token_0"]) || !isset($_SESSION["like_token_0"]) ||
-              ($_POST["like_token_0"]  !=        $_SESSION["like_token_0"])
-        )
-    {
-        echo json_encode([
-            "success" => false,
-            "error"   => "token_error"
-        ]); exit();
-    }
-
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-    );
-
-    if (!$connexion) { 
-        // data base error
-        echo json_encode([
-            "success" => false,
-            "error"   => "Base de donnée hors d'accès."
-        ]); exit(); 
-    }
+    $connexion = makeConnection();
 
     ////////////////////////////////////////////////////////////////////
 

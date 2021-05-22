@@ -26,6 +26,13 @@
         return preg_split("/\r\n|\n|\r/", $str);
     }
 
+    function newline_for_html($str) {
+        return preg_replace("/\r\n|\r|\n/", '<br/>', $str);
+    }
+
+    ////////////////////////
+    // Debug
+
     function consoleLog($succes = null, $code = null){
         if($code != null && $succes != null){
             $name = "HRP";
@@ -47,7 +54,48 @@
     }
 
     //////////////////
-    // FONCTIONS DE SECURITE (sans effets de bords)
+    // Utilitaire
+
+    function makeConnection($type = 0) {
+        $connexion = mysqli_connect (
+            $GLOBALS["DB_URL"],
+            $GLOBALS["DB_ACCOUNT"],
+            $GLOBALS["DB_PASSWORD"],
+            $GLOBALS["DB_NAME"]
+        );
+
+        if (!$connexion) { // error manager
+            if ($type == 3) {
+                ?>
+                <div class="mid_content">
+                    <?php write("Base de donnée indisponible."); ?>
+                </div>
+                <?php
+                require($GLOBALS["global_params"]["root"] . "assets/script/php/footer.php");
+                exit();
+            }
+
+            if ($type == 2) 
+                return false;
+
+            if ($type == 1)
+                write("Base de donnée indisponible."); 
+            if ($type == 0)
+                echo json_encode([
+                    "success"   =>  false,
+                    "error"     =>  "Base de donnée indisponible."
+                ]);
+            
+            exit();
+        }
+
+        mysqli_set_charset($connexion, "utf8");
+
+        return $connexion;
+    }
+
+    //////////////////
+    // Fonctions de sécurité (sans effets de bords)
 
     function isValideName($str) {
         // longueur et charactère
@@ -61,7 +109,9 @@
         // longueur et charactères
         if (strlen($str) > 26 || strlen($str) < 6) return false;
 
-        return !(preg_match("/^[A-z!?\-\*\+\(\)\|\[\]@0-9]*$/" , $str) === 0); // alphanumérique et -_+()[]
+        if ($GLOBALS["CONSTANTS_CONFIG"]["simple_password"])
+            return !(preg_match("/^[A-z!?\-\*\+\(\)\|\[\]@0-9]*$/" , $str) === 0); // alphanumérique et -_+()[]
+        
         return // version qui force l'utilisateur à compliquer le mdp
             !(preg_match("/^[A-z!?\-\*\+\(\)\|\[\]@0-9]*$/" , $str) === 0) &&
             !(preg_match("/[A-z]/"                          , $str) === 0) &&
@@ -69,13 +119,8 @@
             !(preg_match("/!?\-\*\+\(\)\|\[\]@/"            , $str) === 0) ;
     }
 
-    function randomString($length=20) { // mettre en 80 par défaut ??? var(128)
-        //return bin2hex(random_bytes($length)); // faudrait peut être passer en base64??
-        return base64_encode(random_bytes($length)) ;
-        /* str_replace( 
-            ["=" , "/"], ["-", "_"],
-            base64_encode(random_bytes($length))
-        );*/
+    function randomString($length=32) {
+        return substr(base64_encode(random_bytes($length)), 0, $length ) ;
     }
 
     function getImagePath($image, $specific_root=FALSE, $root_public="", $short=false) {
@@ -100,8 +145,24 @@
         return $folder . "default.png";
     }
 
+    function verifyToken() {
+        if (
+            !isset($_SESSION["connected"]) || !$_SESSION["connected"] ||
+            !isset($_POST["token_id"]) || !isset($_SESSION["token_id"]) || !isset($_SESSION["token_expire"]) ||
+                   $_POST["token_id"]  !=        $_SESSION["token_id"]  || $_SESSION["token_expire"] < time()
+        )
+        {
+            echo json_encode([
+                "success" => false,
+                "error"   => "token_error"
+            ]); 
+            
+            exit();
+        }
+    }
+
     //////////////////////////////////
-    // FONCTIONS RELATIVES AU LORE
+    // Fonctions relatives au lore
 
     function generateRandomPublicData() {
         $roles = json_decode( file_get_contents(
@@ -110,16 +171,11 @@
 
         /////////////////////////////////////
 
-        $connexion = mysqli_connect (
-            $GLOBALS["DB_URL"],
-            $GLOBALS["DB_ACCOUNT"],
-            $GLOBALS["DB_PASSWORD"],
-            $GLOBALS["DB_NAME"]
-        );
-        if (!$connexion) { 
-            return "Can't connect to database."; 
-        }
-        mysqli_set_charset($connexion, "utf8");
+        $connexion = makeConnection();
+        if ($connexion === "false") return json_encode([
+            "success"   =>  false,
+            "error"     =>  "database is not availible"
+        ]);
 
         /////////////////////////////////////
 

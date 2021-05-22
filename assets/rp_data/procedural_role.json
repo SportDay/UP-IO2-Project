@@ -2,12 +2,14 @@
     "public_name" : {
         "FirstName":[
             "Harry", "Hermione", "Ron", "Drago", "Neville", "Luna", 
-            "Rubeus", "Voldemort", "Bellatrix", "Malefoy", "Sirius", "Lupin",
-            "Vernon", "Petunia", "Dudley", "Fleur"
+            "Rubeus", "Voldemort", "Bellatrix", "Lucius", "Sirius", "Lupin",
+            "Vernon", "Petunia", "Dudley", "Fleur", "Abraxas", "Brutus",
+            "Bartemius", "Alastor", "Remus", "Lyall"
         ],
         "LastName": [
             "Potter", "Grandger", "Wisley", "Malfoy", "Dumbledore", "Flitwick",
-            "Chourave", "Hagrid", "Maugrey", "Shacklebolt", "Delacour", "Lovegood"
+            "Chourave", "Hagrid", "Maugrey", "Shacklebolt", "Delacour", "Lovegood",
+            "Lestrange", "Lestrange", "Maugrey", "Lupin"
         ]
     },
     "specie":[

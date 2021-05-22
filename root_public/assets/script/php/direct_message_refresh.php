@@ -1,7 +1,5 @@
 <?php
 
-    // ATTENTION
-    // LE FICHIER QUI ACTIONNE CELUI CI SE TROUVE DANS : root_public/assets/script/php/
     $global_params = [
         "root"        => "../../../../",
         "root_public" => "../../../../root_public/",
@@ -15,22 +13,7 @@
     // ETABLISSEMENT DE LA CONNECTION
 
     session_start();
-
-    if (
-        !isset($_POST["dm_token"]) || !isset($_SESSION["dm_token"]) ||
-              ($_POST["dm_token"]  !=        $_SESSION["dm_token"])
-               
-               /*
-                    quelqu'un qui veut utiliser ce fichier doit obligatoirement
-                    recevoir un code attribué sur la page de paramètre
-               */
-        )
-    {
-        echo json_encode([
-            "success" => false,
-            "error"   => "token_error"
-        ]); exit();
-    }
+    verifyToken();
 
     if (
         !isset($_POST["private"]) || !isset($_POST["last"]) || !isset($_POST["friend"]) || is_int($_POST["last"])
@@ -46,20 +29,7 @@
     $last        = $_POST["last"];
     $friend      = $_POST["friend"];
 
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-    );
-
-    if (!$connexion) { 
-        // data base error
-        echo json_encode([
-            "success" => false,
-            "error"   => "Base de donnée hors d'accès."
-        ]); exit(); 
-    }
+    $connexion = makeConnection();
 
     ////////////////////////////////////////////////////////////////////
 
@@ -106,9 +76,6 @@
 
 
     // on recherche tout les messages entre les 2
-    $newLast = time();
-    $html = "";
-
     $new_messages = $connexion->query(
         "SELECT t1.creation_date, t1.content, username, public_name " .
         "FROM ( ".
@@ -121,8 +88,13 @@
         "on t1.from_id=users.id ".
 
         "ORDER BY t1.creation_date DESC ".
-        "LIMIT 30 " // On prends pas les messages trop vieux
+        "LIMIT 21 " 
+        // On prends pas les messages trop vieux
+        // D'ailleurs on pourrait aussi supprimer les trop vieux du coup
     );
+
+    $newLast = time();
+    $html = "";
 
     while ($message = $new_messages->fetch_assoc()) {
         ob_start();
@@ -130,21 +102,19 @@
 
             <div class="message_container">
                 <p class="date"><?= htmlentities($private ? $message['username'] : $message['public_name']) ?><br><span style="font-size: 12px;"><?= htmlentities(date('H:i d/m/Y', $message['creation_date'])) ?></span></p>
-                <p class="message"><?=htmlentities($message["content"])?></p>
+                <p class="message"><?=newline_for_html(htmlentities($message["content"]))?></p>
             </div>
 
         <?php
         $html = ob_get_clean() . $html;
     }
 
-
     ////////////////////////////////////////////////////////////////////
 
     echo json_encode([
         "success"     => true,
         "html"        => $html,
-        "last"        => $newLast,
-        "test"        => ""
+        "last"        => $newLast
     ]);
     
     mysqli_close($connexion);

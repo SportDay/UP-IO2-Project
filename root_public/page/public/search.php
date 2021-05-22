@@ -2,7 +2,6 @@
     "root"        => "../../../",
     "root_public" => "../../",
     "title"       => "Coeur de poudlard",
-    "css"         => "all.css",
     "css_add"     => ["public_page.css"],
     "redirect"    => FALSE
 ];?>
@@ -16,15 +15,7 @@
 
     /////////////////////
 
-    $connexion = mysqli_connect (
-        $db_conf["DB_URL"],
-        $db_conf["DB_ACCOUNT"],
-        $db_conf["DB_PASSWORD"],
-        $db_conf["DB_NAME"]
-    );
-    if (!$connexion) {
-        echo "connection_error"; exit();
-    }
+    $connexion = makeConnection(3);
 
     if(!isset($_GET["search"]))
         $_GET["search"] = "Voldemort";
@@ -37,7 +28,7 @@
                 " EXCEPT (SELECT id as poster FROM `users` WHERE (id=".$connexion->real_escape_string($_SESSION["id"])."))".
                 " EXCEPT (SELECT user_id as poster FROM `pages_liked` WHERE (user_id=".$connexion->real_escape_string($_SESSION["id"]).")) )".
                 " as t1 inner join users on (t1.poster=users.id)".
-                " ORDER BY likes DESC;"
+                " ORDER BY likes DESC LIMIT 30;"
     ) : $connexion->query(
         "select * from ( ".
         " SELECT id as poster FROM `users` WHERE (".
@@ -47,13 +38,13 @@
             ")".
         ")".
         " as t1 inner join users on (t1.poster=users.id)".
-        " ORDER BY likes DESC;"
+        " ORDER BY likes DESC LIMIT 30;"
     );
 
     if ($search_profiles->num_rows==0)
     { ?>
         <div class="mid_content">
-            <p>Je suis désolé mais, je n'ai rien pu trouver</p>
+            <p>Aucun resultat.</p>
         </div>
     <?php }
 

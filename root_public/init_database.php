@@ -3,86 +3,54 @@
 /*
     INTIALISATION DE LA BASE DE DONNEE
     Activez ce fichier ou ouvrez sa page si vous souhaitez reinitialiser la base donnée.
+    Ce fichier est configuré par ../assets/config/db_init.js
 */
-
-if (false) { 
-    // PAR DEFAUT ON NE VEUT PAS QUE QUELQU'UN PUISSE LANCER CE FICHIER PAR ERREUR
-    
-    // Normalement ce fichier devrait être executé uniqument depuis la commande du serveur,
-    // dans notre cas de figure c'est un peu compliqué, donc on l'execute depuis un navigateur
-    // et on le place comme une page
-    exit();
-}
-
-// Paramètres du fichier
-
-$addFriends     = TRUE;
-$addBotFriends  = TRUE;
-$addPageLikes   = TRUE;
-$addBotMessages = TRUE;
-$nBots = 20; // nombre de bots auto générés
-$botPassword = "BotPassword";
-$users = [   // vrais comptes
-    [
-        "username"      =>  "root",
-        "password"      =>  "Vanille1", 
-        "admin"         =>  TRUE,
-        "enable_public" =>  FALSE
-    ],[
-        "username"      =>  "Carl",
-        "password"      =>  "Vanille2", 
-        "admin"         =>  TRUE,
-        "enable_public" =>  TRUE
-    ],[
-        "username"      =>  "SportDay",
-        "password"      =>  "Vanille3", 
-        "admin"         =>  TRUE,
-        "enable_public" =>  TRUE
-    ],[
-        "username"      =>  "Wilfrid",
-        "password"      =>  "Password", 
-        "admin"         =>  FALSE,
-        "enable_public" =>  TRUE
-    ],[
-        "username"      =>  "Leila",
-        "password"      =>  "Password", 
-        "admin"         =>  FALSE,
-        "enable_public" =>  TRUE
-    ],[
-        "username"      =>  "Fred",
-        "password"      =>  "Password", 
-        "admin"         =>  FALSE,
-        "enable_public" =>  FALSE
-    ]
-];
-
-////////////////////////////////////////////////////////
 
 $global_params = [
     "root"        => "../",
     "root_public" => "",
 ];
 
-require($global_params["root"] . "assets/script/php/constants.php");
-require($global_params["root"] . "assets/script/php/functions.php");
+require_once($global_params["root"] . "assets/script/php/constants.php");
+require_once($global_params["root"] . "assets/script/php/functions.php");
+
+$INIT_CONFIG = json_decode( file_get_contents($global_params["root"] . "assets/config/db_init.json") , true );
+
+if (!$INIT_CONFIG["init_database_enabled"]) { 
+    // PAR DEFAUT ON NE VEUT PAS QUE QUELQU'UN PUISSE LANCER CE FICHIER
+    
+    // Normalement ce fichier devrait être executé uniqument depuis la commande du serveur,
+
+    // dans notre cas de figure c'est un peu compliqué, donc on l'execute depuis un navigateur
+    // et on le place comme une page, 
+    // mais pour un vrai site il ne faudrait surtout pas publier cette page à la vue de potentiel utilisateur malveillant, 
+    // mais juste s'en servir en local pour configurer la base de donnée
+
+    write("file disabled");
+    exit();
+}
+
+// Paramètres du fichier
+
+$addFriends     = $INIT_CONFIG["addFriends"     ];
+$addBotFriends  = $INIT_CONFIG["addBotFriends"  ];
+$addPageLikes   = $INIT_CONFIG["addPageLikes"   ];
+$addBotMessages = $INIT_CONFIG["addBotMessages" ];
+$nBots          = $INIT_CONFIG["nBots"          ]; // nombre de bots auto générés
+$botPassword    = $INIT_CONFIG["botPassword"    ]; // Les mots de passe sont pas aléatoire pour que vous puissiez tester les comptes bots
+$users          = $INIT_CONFIG["users"];
 
 //////////////////////////////////////////////
 // CREATION DES TABLES
 
-$connexion = mysqli_connect( $db_conf["DB_URL"], $db_conf["DB_ACCOUNT"], $db_conf["DB_PASSWORD"] );
-if (!$connexion) {
-    echo "data base error";
-    exit();
-}
+$connexion = mysqli_connect( $DB_URL, $DB_ACCOUNT, $DB_PASSWORD );
+if (!$connexion) { echo "data base error"; exit(); }
 
 $table_create = file_get_contents($global_params["root"] . "assets/script/sql/table_create.sql");
 $connexion->multi_query($table_create);
 
-$connexion = mysqli_connect ( $db_conf["DB_URL"], $db_conf["DB_ACCOUNT"], $db_conf["DB_PASSWORD"], $db_conf["DB_NAME"] );
-if (!$connexion) {
-    echo "data base error";
-    exit(); 
-}
+$connexion = mysqli_connect ( $DB_URL, $DB_ACCOUNT, $DB_PASSWORD, $DB_NAME );
+if (!$connexion) { echo "data base error"; exit(); }
 
 //////////////////////////////////////////////
 

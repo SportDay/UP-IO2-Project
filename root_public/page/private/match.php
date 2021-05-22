@@ -2,7 +2,6 @@
   "root"        => "../../../",
   "root_public" => "../../",
   "title"       => "Vos rencontres",
-  "css"         => "all.css",
   "css_add"     => [
       "posts.css", "public_page.css","admin.css",
       "friends.css","login.css"
@@ -14,20 +13,22 @@
 <?php require($global_params["root"] . "assets/script/php/header.php"); ?>
 <!-- ------------------------------------------ -->
 
+    <?php
+        if (!$_SESSION["enable_public"]) {
+            ?> <div class="mid_content" > <?php
+            write("You don't have a public profile");
+            ?> </div> <?php
+            require($global_params["root"] . "assets/script/php/footer.php");
+            exit();
+        }
+
+        $connexion = makeConnection(3);
+    ?>
+
     <!-- Liste de matchs -->
 
     <div id="friend_blocs_area" >
     <?php
-        $connexion = mysqli_connect (
-            $GLOBALS["DB_URL"],
-            $GLOBALS["DB_ACCOUNT"],
-            $GLOBALS["DB_PASSWORD"],
-            $GLOBALS["DB_NAME"]
-        );
-    
-        if (!$connexion) { 
-            echo "connection_error"; exit(); 
-        }
 
         $matchs = $connexion->query( 
             "
@@ -61,7 +62,7 @@
     ?>
     </div>
 
-<?php match_js_bloc(); ?>
-
 <!-- ------------------------------------------ -->
 <?php require($global_params["root"] . "assets/script/php/footer.php"); ?>
+
+<script type="text/javascript" src="../../assets/script/js/match_bloc.js"></script>
