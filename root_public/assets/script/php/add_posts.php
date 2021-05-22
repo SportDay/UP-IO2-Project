@@ -15,7 +15,7 @@ require($global_params["root"] . "assets/script/php/security.php");
 session_start();
 verifyToken();
 
-if ((!isset($_POST["post_content"])) || $_POST["post_content"] === "" || strlen($_POST["post_content"]) >= 735) {
+if ((!isset($_POST["post_content"])) || $_POST["post_content"] === "" || strlen($_POST["post_content"]) > 735) {
     echo json_encode([
         "success" => false,
         "error"   => "Requête incorrecte."

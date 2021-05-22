@@ -39,7 +39,7 @@
     $connexion = makeConnection();
 
     $result = $connexion->query(
-        "SELECT * FROM users WHERE username=\"". $connexion->real_escape_string($username) . "\";"
+        "SELECT * FROM users WHERE username=\"". $connexion->real_escape_string(trim($username)) . "\";"
     );
 
 

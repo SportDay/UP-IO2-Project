@@ -101,7 +101,7 @@
 
 .message_container{
     display: grid;
-    grid-template-columns: 75px auto;
+    grid-template-columns: 100px auto;
     grid-template-rows: auto;
     gap: 0px 20px;
     grid-template-areas:

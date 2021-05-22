@@ -318,7 +318,7 @@ function search_bar(){
     <div id="search_container">
         <form action=<?= $GLOBALS["global_params"]["root_public"]."page/public/search.php"?> method="get">
             <div class="search_grid">
-                <input class="search_input" type="search" autocomplete="off" placeholder="Recherche" name="search" required >
+                <input class="search_input" type="search" autocomplete="off" placeholder="Recherche" name="search" minlength="4" required >
                 <button id="btn_search" class="btn_search btn_button_btn" onclick="">
                     <img id="img_search" class="img_search" width="32" height="32" src="<?= $GLOBALS["global_params"]["root_public"]."/assets/image/search.png"?>">
                 </button>
