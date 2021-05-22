@@ -2,6 +2,9 @@
     display: grid;
     grid-template-columns: auto auto auto 32px;
     grid-template-rows: auto auto;
+    -ms-grid-columns: auto auto auto 32px;
+    -ms-grid-rows: auto auto;
+    grid-gap: 20px 20px;
     gap: 20px 20px;
     grid-area: info_profile;
     grid-template-areas:
@@ -77,6 +80,9 @@
     display: grid;
     grid-template-columns: auto 125px;
     grid-template-rows: auto;
+    -ms-grid-columns: auto 125px;
+    -ms-grid-rows: auto;
+    grid-gap: 0px 20px;
     gap: 0px 20px;
     margin-left:    20px;
     margin-right:   20px;
@@ -91,6 +97,9 @@
     display: grid;
     grid-template-columns: 64px auto;
     grid-template-rows: 64px;
+    -ms-grid-columns: 64px auto;
+    -ms-grid-rows: 64px;
+    grid-gap: 0px 20px;
     gap: 0px 20px;
     grid-template-areas:
     "request_profile_img request_profile_content";
@@ -113,6 +122,9 @@
     display: grid;
     grid-template-columns: auto auto 100px 100px;
     grid-template-rows: auto;
+    -ms-grid-columns: auto auto 100px 100px;
+    -ms-grid-rows: auto;
+    grid-gap: 0px 20px;
     gap: 0px 20px;
     grid-template-areas:
     "username_request espace_request_list btn_accept_friend_btn btn_reject_friend_btn";
