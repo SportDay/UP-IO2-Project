@@ -99,6 +99,7 @@
 
     function isValideName($str) {
         // longueur et charactère
+        $str = trim($str);
         if (strlen($str) > 16 || strlen($str) < 2) 
             return false;
         

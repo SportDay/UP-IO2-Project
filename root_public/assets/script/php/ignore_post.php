@@ -30,7 +30,7 @@ $connexion = makeConnection();
 ////////////////////////////////////////////////////////////////////
 
 $connexion->query(
-    "UPDATE posts set reported =\"0\", reportnum=\"0\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
+    "UPDATE posts set reportnum=\"0\" WHERE id=\"" . $connexion->real_escape_string($_POST["post_id"]) . "\";"
 );
 
 $connexion->query(
