@@ -1,4 +1,5 @@
 <?php
+
     /*
 
     SECURITY:
@@ -7,6 +8,7 @@
 
     */
 
+    /////////////////////////////////////////////////////////////////////////////////
     // ACTUALISATION DE LA SESSION (s'execute avant l'execution de chaque page)
 
     function sessionDisconnect() {
@@ -17,7 +19,8 @@
         $_SESSION["admin"]     = false;    
     }
 
-    function tryConnect () {
+    // Cette fonction sert à actualiser l'état de la session (que l'utilisateur soit connecté ou non)
+    function tryConnect () { // return false en cas d'erreur
         $connexion = makeConnection(1);
         if (!$connexion) return false;
 
@@ -50,7 +53,7 @@
                 $_SESSION["memory_public"] = $result["memory_public"];
                 
                 mysqli_close($connexion);
-                return;
+                return true;
             }
 
         }
@@ -60,7 +63,7 @@
         
         if (!isset($_COOKIE["cookie_id"])  || !isset($_COOKIE["cookie_pass"])) {
             sessionDisconnect();
-            mysqli_close($connexion); return;
+            mysqli_close($connexion); return true;
         }
         
         $result = $connexion->query(
@@ -74,7 +77,7 @@
             $_COOKIE["cookie_expire"] < time()            
             ) { 
                 sessionDisconnect();
-                mysqli_close($connexion); return; 
+                mysqli_close($connexion); return true;
             }
 
         //////////////////////////////////////////////
@@ -110,8 +113,10 @@
         );
         
         mysqli_close($connexion);
+        return true;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////
     // SUPPRESSION DES DONNEES
 
     function removeAccount($currentAccount=TRUE, $id=0) {
@@ -234,6 +239,7 @@
         return false;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////
     // UTILITIES
 
     function redirectHomeConnect () {
@@ -261,6 +267,5 @@
             exit();
         }
     }
-
-//////////////////////////////////////////////////////////////////////
+    
 ?>
