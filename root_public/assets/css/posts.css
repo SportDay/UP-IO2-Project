@@ -1,6 +1,6 @@
 .post_add::placeholder{
     color: white;
-    opacity: 1; /* Firefox */
+    opacity: 1;
 }
 
 .post_add:-ms-input-placeholder{
@@ -39,7 +39,7 @@
     -moz-box-sizing:border-box;
     -webkit-box-sizing:border-box;
     box-sizing:border-box;
-    -ms-overflow-style: none;  /* IE and Edge */
+    -ms-overflow-style: none;
     scrollbar-width: none;
 }
 
@@ -191,6 +191,39 @@
     grid-template-areas:
     ". report_ref";
     grid-area: btn_report;
+}
+
+/* Pour un bon affichage sur Internet Explorer */
+@media all and (-ms-high-contrast:none) {
+
+    .posts {
+        display: -ms-grid;
+        -ms-grid-columns: 64px auto 32px;
+        -ms-grid-rows: 64px auto 32px;
+        gap: 10px 20px;
+    }
+
+    .info_containt {
+        display: -ms-grid;
+        -ms-grid-columns: auto auto 32px;
+        -ms-grid-rows: auto;
+        gap: 0px 0px;
+    }
+
+    .btn_like {
+        display: -ms-grid;
+        -ms-grid-columns: 32px 32px;
+        -ms-grid-rows: auto;
+        gap: 0px 0px;
+    }
+
+    .btn_report {
+        display: -ms-grid;
+        -ms-grid-columns: auto 32px;
+        -ms-grid-rows: auto;
+        gap: 0px 0px;
+    }
+
 }
 
 .like_img {

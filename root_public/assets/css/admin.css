@@ -15,6 +15,18 @@
     "profile_titre profile_nlikes . .";
 }
 
+/* Pour un bon affichage sur Internet Explorer */
+@media all and (-ms-high-contrast:none) {
+
+    .info_profile {
+        display: -ms-grid;
+        -ms-grid-columns: auto auto auto 32px;
+        -ms-grid-rows: auto auto;
+        gap: 20px 20px;
+    }
+
+}
+
 .user_menu{
     grid-area: user_menu;
    /*position: relative;*/
