@@ -103,7 +103,6 @@
 
         $_SESSION["token_id"]       = $result["token_id"];
         $_SESSION["token_expire"]   = $result["token_expire"];
-        setcookie("token_id",   $result["token_id"], $result["token_expire"], $GLOBALS["COOKIE_PATH"]);
         
         $connexion->query( 
             "UPDATE users SET " .
