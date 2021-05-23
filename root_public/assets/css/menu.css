@@ -46,7 +46,7 @@ input[type=text], input[type=password] {
 
 #open_menu {
     border: rgb(59, 61, 63);
-    border-radius: 3;
+    border-radius: 3px;
     padding: 0px;
 }
 
@@ -86,22 +86,22 @@ button:hover {
     opacity: 0.9;
 }
 
-/* Extra styles for menu button */
+
 .login_right_button {
     float: right;
     margin-right: 4px;
 }
 
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+::placeholder {
     color: black;
-    opacity: 1; /* Firefox */
+    opacity: 1;
 }
 
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
+:-ms-input-placeholder {
     color: white;
 }
 
-::-ms-input-placeholder { /* Microsoft Edge */
+::-ms-input-placeholder {
     color: white;
 }
 

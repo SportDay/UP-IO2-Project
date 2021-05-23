@@ -5,23 +5,19 @@
     word-break: break-all;
 }
 
-/* width */
 ::-webkit-scrollbar {
     width: 10px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
     background: #1e1e1e;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
     background: #4e4e4e;
     border-radius: 10px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
@@ -44,7 +40,7 @@
 
 body{
     background-color: #14141a;
-    -ms-overflow-style: none;  /* IE and Edge */
+    -ms-overflow-style: none;
     margin:0%;
     height:100%;
 }
@@ -82,10 +78,7 @@ body{
 #mid_content{
     text-align: center;
 
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
+    margin: 20px auto;
 
     width: 80%;
     min-width: 730px;
@@ -103,10 +96,7 @@ body{
 .mid_content{
     text-align: center;
 
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
+    margin: 20px auto;
 
     width: 80%;
     min-width: 730px;
@@ -129,10 +119,7 @@ body{
 .mid_sub_content {
     text-align: center;
 
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
+    margin: 20px auto;
 
     width: 80%;
     min-width: 500px;
@@ -156,8 +143,7 @@ body{
     display: flex;
     flex-direction: column;
     height: 100vh;
-    margin-top: 7em auto 1em;
-    
+  /*  margin: 7em auto 1em; */
 }
 
 #mid_container{
@@ -235,16 +221,16 @@ body{
     padding: 1em 5px 1em 20px;
 }
 
-.search_input::placeholder{ /* Chrome, Firefox, Opera, Safari 10.1+ */
+.search_input::placeholder{
     color: white;
-    opacity: 1; /* Firefox */
+    opacity: 1;
 }
 
-.search_input:-ms-input-placeholder{ /* Internet Explorer 10-11 */
+.search_input:-ms-input-placeholder{
     color: white;
 }
 
-.search_input::-ms-input-placeholder{ /* Microsoft Edge */
+.search_input::-ms-input-placeholder{
     color: white;
 }
 

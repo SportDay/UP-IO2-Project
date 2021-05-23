@@ -1,13 +1,13 @@
-.post_add::placeholder{ /* Chrome, Firefox, Opera, Safari 10.1+ */
+.post_add::placeholder{
     color: white;
     opacity: 1; /* Firefox */
 }
 
-.post_add:-ms-input-placeholder{ /* Internet Explorer 10-11 */
+.post_add:-ms-input-placeholder{
     color: white;
 }
 
-.post_add::-ms-input-placeholder{ /* Microsoft Edge */
+.post_add::-ms-input-placeholder{
     color: white;
 }
 
@@ -78,6 +78,9 @@
     display: grid;
     grid-template-columns: 64px auto 32px;
     grid-template-rows: 64px auto 32px;
+    -ms-grid-columns: 64px auto 32px;
+    -ms-grid-rows: 64px auto 32px;
+    grid-gap: 10px 20px;;
     gap: 10px 20px;
     margin-left: 20px;
     margin-right: 20px;
@@ -91,6 +94,9 @@
     display: grid;
     grid-template-columns: auto auto 32px;
     grid-template-rows: auto;
+    -ms-grid-columns: auto auto 32px;
+    -ms-grid-rows: auto;
+    grid-gap: 0px 0px;
     gap: 0px 0px;
     grid-template-areas:
     ". . post_menu";
@@ -163,6 +169,9 @@
     display: grid;
     grid-template-columns: 32px 32px;
     grid-template-rows: auto;
+    -ms-grid-columns: 32px 32px;
+    -ms-grid-rows: auto;
+    grid-gap: 0px 0px;
     gap: 0px 0px;
     grid-template-areas:
     "like_img like_num";
@@ -175,6 +184,9 @@
     display: grid;
     grid-template-columns: auto 32px;
     grid-template-rows: auto;
+    -ms-grid-columns: auto 32px;
+    -ms-grid-rows: auto;
+    grid-gap: 0px 0px;
     gap: 0px 0px;
     grid-template-areas:
     ". report_ref";
