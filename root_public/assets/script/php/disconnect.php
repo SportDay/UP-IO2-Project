@@ -27,7 +27,6 @@
     setcookie("cookie_id",      "", time() - 3600, $COOKIE_PATH);
     setcookie("cookie_pass",    "", time() - 3600, $COOKIE_PATH);
     setcookie("cookie_expire",  "", time() - 3600, $COOKIE_PATH);
-    setcookie("token_id",  "",      time() - 3600, $COOKIE_PATH);
     
     
     echo json_encode([
