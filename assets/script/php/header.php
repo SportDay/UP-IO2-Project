@@ -28,7 +28,7 @@ Listes des paramètres de _SESSION:
   connected | token_id  | token_expire
 
 Liste des cookies :
-  cookie_id | cookie_pass | cookie_expire | token_id
+  cookie_id | cookie_pass | cookie_expire
 
 /*///////////////////////////////////////////
 // CONSTANTES :
@@ -38,11 +38,19 @@ require_once($global_params["root"] . "assets/script/php/constants.php");
 //////////////////////
 
 session_start();
-tryConnect(); // update session
+if (!tryConnect()) // update session
+{
+    // au moment du déploiement,
+    // attention à bien configurer le php.ini / .htaccess,
+    // de tel sorte à ce que l'affichage des erreurs soit désactivé
+    // sinon l'identifiant de la base de donnée pourrait fuiter
+    write("Erreur de connection.");
+    exit();
+}
 
 /////////////////////
 
-if (isset($global_params["redirect"]) && $global_params["redirect"])
+if (isset($global_params["redirect"]) && $global_params["redirect"] === TRUE) // page privé
 {
     // si l'utilisateur n'est pas connecté on head vers la page de connection
     // header($global_params["root_public"] + "page/public/login")
@@ -50,7 +58,7 @@ if (isset($global_params["redirect"]) && $global_params["redirect"])
     redirectHomeConnect();
 }
 
-if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
+if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE) // page admin
 {
     redirectNotAdmin();
 }
@@ -73,7 +81,7 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
         else
         {
             echo "unknown page";
-            $global_params["title"] = unknown;
+            $global_params["title"] = "unknown";
         }
         ?>
     </title>
@@ -109,8 +117,12 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
             const root_public   = <?=json_encode($global_params["root_public"])?>;
 
             function openPage(relLink) {
-                relLink = "<?php echo $global_params["root_public"] ?>" + "page/" + relLink;
-                window.open(relLink, "_self");
+                relLink = root_public + "page/" + relLink;
+
+                if (window.event.ctrlKey)
+                    window.open(relLink);
+                else
+                    window.open(relLink, "_self");
             }
 
             function redirection() { // en reference au GET : q=
@@ -119,9 +131,12 @@ if (isset($global_params["admin_req"]) && $global_params["admin_req"] === TRUE)
                     url = window.location.href.split('?')[0];
                 else
                     url = decodeURIComponent(url.replace(/\+/g, ' '));
-                window.open(url,"_self");
+                window.open(url,"_self"); // retour à la page q
             }
 
+            // j'ai trouvé cette version de la fonction GET sur stackoverflow
+            // je voulais pas prendre le risque de la faire moi même
+            // pour éviter d'introduire des bugs
             function GET (param) {
                 let otp = {};
 

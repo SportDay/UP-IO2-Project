@@ -96,8 +96,6 @@
         "WHERE id="     .$_SESSION["id"] ." ;"
     );
 
-    setcookie("token_id",  $_SESSION["token_id"], $cookie_expire, $COOKIE_PATH);
-
     // remove old cookie
 
     setcookie("cookie_id",      "", time() - 3600, $COOKIE_PATH);
