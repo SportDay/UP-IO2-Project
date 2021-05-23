@@ -60,6 +60,25 @@
     "profile_nickname profile_espece profile_classe profile_titre";
 }
 
+/* Pour un bon affichage sur Internet Explorer */
+@media all and (-ms-high-contrast:none) {
+
+    .img_btn_like {
+        display: -ms-grid;
+        -ms-grid-columns: 100px auto 100px;
+        -ms-grid-rows: auto;
+        gap: 0px 20px;
+    }
+
+    .info_profile {
+        display: -ms-grid;
+        -ms-grid-columns: auto auto auto auto;
+        -ms-grid-rows: auto;
+        gap: 20px 20px;
+    }
+
+}
+
 .profile_nickname { grid-area: profile_nickname; }
 .profile_titre { grid-area: profile_titre; }
 .profile_espece { grid-area: profile_espece; }

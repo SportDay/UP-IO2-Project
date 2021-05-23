@@ -117,6 +117,32 @@
     "date message";
 }
 
+/* Pour un bon affichage sur Internet Explorer */
+@media all and (-ms-high-contrast:none) {
+
+    .pofile_container_dm {
+        display: -ms-grid;
+        -ms-grid-columns: 64px auto;
+        -ms-grid-rows: 64px;
+        gap: 10px 20px;
+    }
+
+    .send_container {
+        display: -ms-grid;
+        -ms-grid-columns: auto 32px;
+        -ms-grid-rows: auto;
+        gap: 0px 20px;
+    }
+
+    .message_container {
+        display: -ms-grid;
+        -ms-grid-columns: 100px auto;
+        -ms-grid-rows: auto;
+        gap: 0px 20px;
+    }
+
+}
+
 .message_container p {
     margin-top: 0;
 }
