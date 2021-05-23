@@ -90,6 +90,7 @@
     "search_request_friend_bar send_request_friend_bar";
 }
 
+
 .search_request_friend_bar{grid-area: search_request_friend_bar;}
 .send_request_friend_bar{grid-area: send_request_friend_bar;}
 
@@ -129,6 +130,39 @@
     grid-template-areas:
     "username_request espace_request_list btn_accept_friend_btn btn_reject_friend_btn";
     padding: 10px 10px;
+}
+
+/* Pour un bon affichage sur Internet Explorer */
+@media all and (-ms-high-contrast:none) {
+
+    .info_profile {
+        display: -ms-grid;
+        -ms-grid-columns: auto auto auto 32px;
+        -ms-grid-rows: auto auto;
+        gap: 20px 20px;
+    }
+
+    .request_and_searchbtn_friend {
+        display: -ms-grid;
+        -ms-grid-columns: auto 125px;
+        -ms-grid-rows: auto;
+        gap: 0px 20px;
+    }
+
+    .request_friend_list {
+        display: -ms-grid;
+        -ms-grid-columns: 64px auto;
+        -ms-grid-rows: 64px;
+        gap: 0px 20px;
+    }
+
+    .request_profile_content {
+        display: -ms-grid;
+        -ms-grid-columns: auto auto 100px 100px;
+        -ms-grid-rows: auto;
+        gap: 0px 20px;
+    }
+
 }
 
 .btn_accept_friend_btn{

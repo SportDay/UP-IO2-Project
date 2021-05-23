@@ -18,6 +18,18 @@
     "search_input btn_search";
 }
 
+/* Pour un bon affichage sur Internet Explorer */
+@media all and (-ms-high-contrast:none) {
+
+    .search_grid {
+        display: -ms-grid;
+        -ms-grid-columns: auto 32px;
+        -ms-grid-rows: 40px;
+        gap: 0px 20px;
+    }
+
+}
+
 .search_input{
     grid-area: search_input;
     margin: 0;
