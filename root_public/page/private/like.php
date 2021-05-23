@@ -85,7 +85,7 @@
                     if (feedback["success"])
                     {
                         otp_image           .src  = "<?=$global_params["root_public"] . "assets/profile/"?>" + feedback["image"];
-                        otp_image.parentNode.href = "<?=$global_params["root_public"] . "page/public/public_page.php?user="?>" + encodeURI(feedback["name"]);
+                        otp_image.parentNode.href = "<?=$global_params["root_public"] . "page/public/public_page.php?user="?>" + encodeURI(feedback["name"]).replaceAll("%20", "+");
 
                         otp_name    .innerHTML  = "Nom: "    + feedback["name"];
                         otp_title   .innerHTML  = "Titre: "  + feedback["title"];
