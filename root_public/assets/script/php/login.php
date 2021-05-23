@@ -102,7 +102,6 @@
         "token_expire=" .$cookie_expire                                         ." ".
         "WHERE id="     .$_SESSION["id"] ." ;"
     );
-    setcookie("token_id",  $_SESSION["token_id"], $cookie_expire, $COOKIE_PATH);
 
     // AJOUT DU COOKIE SI REMEMBER
     if ($remember) {

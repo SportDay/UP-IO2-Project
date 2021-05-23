@@ -28,7 +28,7 @@ Listes des paramètres de _SESSION:
   connected | token_id  | token_expire
 
 Liste des cookies :
-  cookie_id | cookie_pass | cookie_expire | token_id
+  cookie_id | cookie_pass | cookie_expire
 
 /*///////////////////////////////////////////
 // CONSTANTES :
