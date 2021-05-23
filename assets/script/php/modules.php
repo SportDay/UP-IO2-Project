@@ -399,7 +399,7 @@ function friend_bloc($friend, $specific_root=FALSE, $root_public="") {
 
 
                 <?php if($friend["enable_public"]) { ?>
-                <a href="<?=$root_public?>page/public/public_page.php?user=<?=urlencode($friend["public_name"])?>">
+                <a href="<?=$root_public?>page/public/public_page.php?user=<?= str_replace("%", "+", urlencode($friend["public_name"])) ?>">
                     <img class="profile_img_profile" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
                 </a>
                 <?php } else { ?>
@@ -450,7 +450,7 @@ function match_bloc($friend, $specific_root=FALSE, $root_public="") {
         <div id="friend_bloc_<?=htmlentities($friend["public_name"])?>" class="mid_content" style="text-align: initial;">
             <div id = "profile">
 
-                <a href="<?=$root_public?>page/public/public_page.php?user=<?=urlencode($friend["public_name"])?>">
+                <a href="<?=$root_public?>page/public/public_page.php?user=<?=str_replace("%", "+", urlencode($friend["public_name"]))?>">
                     <img class="profile_img_profile" src="<?= getImagePath( $friend["enable_public"] ? $friend["public_image"] : "none", true, $root_public)  ?>">
                 </a>
 
@@ -493,7 +493,7 @@ function profile_bloc($profile){
     ?>
         <div class = "mid_content" style="text-align: initial;">
         <div id = "profile">
-            <a href= "<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= urlencode($profile["public_name"]) ?>">
+            <a href= "<?= $GLOBALS['global_params']['root_public'] ?>page/public/public_page.php?user=<?= str_replace("%", "+", urlencode($profile["public_name"])) ?>">
             <img class="profile_img_profile" src="<?= getImagePath( $profile["public_image"])  ?>">
             </a>
             <div class="info_profile">
