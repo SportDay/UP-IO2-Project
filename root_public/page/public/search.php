@@ -22,7 +22,7 @@
 
     $search_profiles = $_SESSION["connected"] ? 
         $connexion->query("select * from ( ".
-                " (SELECT id as poster FROM `users` WHERE (( public_name LIKE \"%".$connexion->real_escape_string($_GET["search"])."%\" ) OR ( description LIKE \"%".$connexion->real_escape_string($_GET["search"])."%\" )))".
+                " (SELECT id as poster FROM `users` WHERE (( public_name LIKE \"%".$connexion->real_escape_string(trim($_GET["search"]))."%\" ) OR ( description LIKE \"%".$connexion->real_escape_string(trim($_GET["search"]))."%\" )))".
                 " EXCEPT (SELECT user_id_1 as poster FROM `friends` WHERE (user_id_0=".$connexion->real_escape_string($_SESSION["id"])." AND accepted))".
                 " EXCEPT (SELECT user_id_0 as poster FROM `friends` WHERE (user_id_1=".$connexion->real_escape_string($_SESSION["id"])." AND accepted))".
                 " EXCEPT (SELECT id as poster FROM `users` WHERE (id=".$connexion->real_escape_string($_SESSION["id"])."))".
@@ -32,9 +32,9 @@
     ) : $connexion->query(
         "select * from ( ".
         " SELECT id as poster FROM `users` WHERE (".
-            "( public_name LIKE \"%".$connexion->real_escape_string($_GET["search"])."%\" )".
+            "( public_name LIKE \"%".$connexion->real_escape_string(trim($_GET["search"]))."%\" )".
             " OR ".
-            "( description LIKE \"%".$connexion->real_escape_string($_GET["search"])."%\" )".
+            "( description LIKE \"%".$connexion->real_escape_string(trim($_GET["search"]))."%\" )".
             ")".
         ")".
         " as t1 inner join users on (t1.poster=users.id)".
